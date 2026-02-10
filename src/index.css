@@ -1,7 +1,58 @@
-@import 'tailwindcss/preflight';
-@import 'tailwindcss/utilities';
-@import 'tailwindcss';
+@import "tailwindcss";
 
-body {
-  height: 100%;
+@theme {
+  --font-outfit: "Outfit", sans-serif;
+  --font-inter: "Inter", sans-serif;
+
+  --color-brand-primary: #ff5200;
+  --color-brand-secondary: #fc8019;
+  --color-brand-dark: #1b1c1e;
+
+  --shadow-elite: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 20px rgba(255, 82, 0, 0.15);
+}
+
+@layer base {
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap");
+
+  body {
+    background-color: #ffffff;
+    color: #1b1c1e;
+    font-family: var(--font-outfit);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-elite);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #ff5200 0%, #ff8a00 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.badge-glow {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 82, 0, 0.1) 0%,
+    rgba(255, 138, 0, 0.1) 100%
+  );
+  border: 1px solid rgba(255, 82, 0, 0.2);
+  box-shadow: var(--shadow-glow);
 }
