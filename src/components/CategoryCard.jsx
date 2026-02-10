@@ -2,15 +2,16 @@ import React from "react";
 
 const CategoryCard = ({ image, title }) => {
   return (
-    <div className="flex flex-col items-center gap-4 cursor-pointer group shrink-0">
-      <div className="w-24 h-24 md:w-36 md:h-36 rounded-full overflow-hidden border-4 border-white shadow-lg group-hover:shadow-2xl transition-all duration-500 transform group-hover:-translate-y-2 ring-1 ring-gray-100 group-hover:ring-orange-200">
+    <div className="flex flex-col items-center gap-5 cursor-pointer group shrink-0">
+      <div className="relative w-32 h-32 md:w-44 md:h-44 rounded-full overflow-hidden border-8 border-white shadow-xl group-hover:shadow-2xl group-hover:border-brand-primary transition-all duration-500 transform group-hover:-translate-y-3">
         <img
           src={image}
           alt={title}
           className="w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700"
         />
+        <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors" />
       </div>
-      <span className="text-[13px] font-black text-gray-900 group-hover:text-brand-primary transition-colors tracking-tight uppercase">
+      <span className="text-[14px] font-black text-gray-900 group-hover:text-brand-primary transition-all uppercase tracking-tight">
         {title}
       </span>
     </div>

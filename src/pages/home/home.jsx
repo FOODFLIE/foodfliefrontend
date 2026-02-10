@@ -2,53 +2,36 @@ import React from "react";
 import Navbar from "../../components/Navbar";
 import CategoryCard from "../../components/CategoryCard";
 import RestaurantCard from "../../components/RestaurantCard";
-import {
-  Filter,
-  ChevronRight,
-  SlidersHorizontal,
-  ArrowRight,
-} from "lucide-react";
+import { ArrowRight, Zap, Target, ShieldCheck, Timer } from "lucide-react";
 
 const CATEGORIES = [
   {
     id: 1,
-    title: "Burgers",
+    title: "Gourmet Burgers",
     image:
       "https://images.unsplash.com/photo-1571091718767-18b5b1457add?w=400&h=400&fit=crop",
   },
   {
     id: 2,
-    title: "Biryani",
+    title: "Royal Biryani",
     image:
       "https://images.unsplash.com/photo-1563379091339-03b21bc4a4f8?w=400&h=400&fit=crop",
   },
   {
     id: 3,
-    title: "Pizza",
+    title: "Hot Pizza",
     image:
       "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=400&fit=crop",
   },
   {
     id: 4,
-    title: "Desserts",
-    image:
-      "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400&h=400&fit=crop",
-  },
-  {
-    id: 5,
-    title: "Cakes",
+    title: "Decadent Cakes",
     image:
       "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop",
   },
   {
-    id: 6,
-    title: "Chines",
-    image:
-      "https://images.unsplash.com/photo-1512058560550-42749359aed7?w=400&h=400&fit=crop",
-  },
-  {
-    id: 7,
-    title: "Sushi",
+    id: 5,
+    title: "Fresh Sushi",
     image:
       "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400&h=400&fit=crop",
   },
@@ -57,131 +40,190 @@ const CATEGORIES = [
 const RESTAURANTS = [
   {
     id: 1,
-    name: "The Burger Club",
+    name: "The Burger Republic",
     image:
       "https://images.unsplash.com/photo-1550547660-d9450f859349?w=800&h=600&fit=crop",
-    cuisines: ["Burgers", "American"],
-    rating: 4.4,
-    time: "25 MINS",
-    offer: "60% OFF UPTO ₹120",
+    cuisines: ["Craft Burgers", "American"],
+    rating: 4.8,
+    time: "15-20 MINS",
+    offer: "60% OFF UPTO ₹150",
     sameAsMenuPrice: true,
   },
   {
     id: 2,
-    name: "Aroma Biryani",
+    name: "Biryani Excellence",
     image:
       "https://images.unsplash.com/photo-1589302168068-1c49911d4e45?w=800&h=600&fit=crop",
-    cuisines: ["Biryani", "Mughlai"],
-    rating: 4.2,
-    time: "35 MINS",
-    offer: "ITEMS AT ₹159",
+    cuisines: ["Hyderabadi", "Mughlai"],
+    rating: 4.6,
+    time: "30-35 MINS",
+    offer: "FREE DESSERT ON ₹499",
     sameAsMenuPrice: true,
   },
   {
     id: 3,
-    name: "Pizza Paradise",
+    name: "Pizza Artisan",
     image:
       "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&h=600&fit=crop",
-    cuisines: ["Pizzas", "Italian"],
-    rating: 4.5,
-    time: "30 MINS",
-    offer: "FREE DELIVERY",
-    sameAsMenuPrice: false,
+    cuisines: ["Italian", "Neapolitan"],
+    rating: 4.9,
+    time: "20-25 MINS",
+    offer: "BUY 1 GET 1 FREE",
+    sameAsMenuPrice: true,
   },
   {
     id: 4,
-    name: "Sweet Truth",
+    name: "Sushi Zen Garden",
     image:
-      "https://images.unsplash.com/photo-1535141192574-5d4897c12636?w=800&h=600&fit=crop",
-    cuisines: ["Desserts", "Bakery"],
-    rating: 4.3,
-    time: "20 MINS",
-    offer: "₹100 OFF",
+      "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=800&h=600&fit=crop",
+    cuisines: ["Japanese", "Sushi"],
+    rating: 4.7,
+    time: "25-30 MINS",
+    offer: "NO DELIVERY FEE",
     sameAsMenuPrice: true,
   },
 ];
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-white selection:bg-orange-100 selection:text-orange-900">
+    <div className="min-h-screen bg-[#fafafa]">
       <Navbar />
 
       <main className="pt-24 pb-20">
-        {/* Elite Hero Section */}
-        <section className="max-w-7xl mx-auto px-4 md:px-8 mb-16">
-          <div className="relative rounded-[3rem] overflow-hidden bg-gray-900 h-[400px] flex items-center shadow-2xl">
+        {/* APPETITE HERO SECTION */}
+        <section className="max-w-[1400px] mx-auto px-4 md:px-8 mb-20 pt-8">
+          <div className="relative rounded-[3rem] overflow-hidden h-[500px] flex items-center shadow-2xl">
             <img
               src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1600&h=800&fit=crop"
-              className="absolute inset-0 w-full h-full object-cover opacity-50 scale-105"
+              className="absolute inset-0 w-full h-full object-cover"
+              alt="Delicious Food"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-900/40 to-transparent" />
-            <div className="relative z-10 px-12 md:px-20 max-w-2xl">
-              <span className="text-brand-primary font-black text-sm uppercase tracking-[0.3em] mb-4 block">
-                Premium Delivery
-              </span>
-              <h1 className="text-5xl md:text-7xl font-black text-white leading-[1.05] tracking-tight mb-8">
-                CRAVING <br />
-                <span className="text-gradient">EXCELLENCE?</span>
+            <div className="absolute inset-0 marketing-hero-gradient" />
+
+            <div className="relative z-10 px-12 md:px-24 max-w-3xl">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="px-4 py-1.5 bg-brand-primary rounded-full text-white text-[10px] font-black uppercase tracking-widest shadow-xl">
+                  Best in Class
+                </div>
+                <div className="text-white/60 text-[10px] font-bold uppercase tracking-widest">
+                  Fastest Delivery in City
+                </div>
+              </div>
+              <h1 className="text-6xl md:text-8xl font-black text-white leading-[0.95] tracking-tight mb-10">
+                HUNGRY FOR <br />
+                <span className="text-brand-primary">PERFECTION?</span>
               </h1>
-              <button className="bg-brand-primary hover:bg-brand-secondary text-white font-black py-4 px-10 rounded-2xl flex items-center gap-3 transition-all duration-300 transform hover:scale-105 shadow-xl shadow-orange-500/20 active:scale-95">
-                Explore Now <ArrowRight size={20} strokeWidth={3} />
-              </button>
+              <p className="text-white/80 font-bold text-lg mb-12 max-w-xl">
+                Experience world-class flavors delivered to your doorstep at{" "}
+                <span className="text-white underline decoration-brand-primary decoration-[3px]">
+                  actual restaurant prices
+                </span>
+                .
+              </p>
+              <div className="flex flex-wrap items-center gap-6">
+                <button className="bg-brand-primary hover:bg-brand-secondary text-white font-black py-5 px-12 rounded-2xl flex items-center gap-4 transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-orange-500/40 active:scale-95 text-lg">
+                  Order Your Feast <ArrowRight size={22} strokeWidth={3} />
+                </button>
+                <div className="flex items-center gap-4 bg-white/10 backdrop-blur-md px-6 py-4 rounded-2xl border border-white/10">
+                  <div className="flex -space-x-3">
+                    {[1, 2, 3].map((i) => (
+                      <div
+                        key={i}
+                        className="w-10 h-10 rounded-full border-2 border-white overflow-hidden shadow-lg"
+                      >
+                        <img src={`https://i.pravatar.cc/100?u=${i + 10}`} />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-white/90 text-sm font-black italic tracking-tight">
+                    Joined by 12k+ Foodies
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Category Carousel Section */}
-        <section className="max-w-7xl mx-auto px-4 md:px-8 mb-20">
-          <div className="flex items-center justify-between mb-10">
-            <div>
-              <h2 className="text-3xl font-black text-gray-900 tracking-tighter">
-                WHAT'S ON YOUR MIND?
-              </h2>
-              <div className="h-1.5 w-12 bg-brand-primary mt-2 rounded-full" />
-            </div>
-            <div className="flex gap-3">
-              <button className="p-3 bg-gray-50 border border-gray-100 rounded-full hover:bg-gray-100 transition-all shadow-sm">
-                <ChevronRight
-                  size={20}
-                  strokeWidth={3}
-                  className="rotate-180"
-                />
-              </button>
-              <button className="p-3 bg-gray-50 border border-gray-100 rounded-full hover:bg-gray-100 transition-all shadow-sm">
-                <ChevronRight size={20} strokeWidth={3} />
-              </button>
-            </div>
-          </div>
-          <div className="flex gap-10 overflow-x-auto pb-6 scrollbar-hide snap-x">
-            {CATEGORIES.map((cat) => (
-              <div key={cat.id} className="snap-start">
-                <CategoryCard {...cat} />
+        {/* TRUST SIGNALS BAR */}
+        <section className="max-w-7xl mx-auto px-4 md:px-8 mb-24">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            {[
+              {
+                icon: <ShieldCheck className="text-green-500" />,
+                label: "Menu Price Policy",
+                sub: "No markup, ever.",
+              },
+              {
+                icon: <Timer className="text-blue-500" />,
+                label: "25 Mins Goal",
+                sub: "Fast or free.",
+              },
+              {
+                icon: <Target className="text-orange-500" />,
+                label: "Precise Tracking",
+                sub: "Real-time updates.",
+              },
+              {
+                icon: <Zap className="text-yellow-500" />,
+                label: "Instant Refunds",
+                sub: "No questions asked.",
+              },
+            ].map((t, idx) => (
+              <div
+                key={idx}
+                className="bg-white p-6 rounded-[2rem] border border-gray-100 flex items-center gap-5 shadow-sm hover:shadow-md transition-all"
+              >
+                <div className="p-3 bg-gray-50 rounded-2xl">{t.icon}</div>
+                <div>
+                  <div className="text-[13px] font-black text-gray-900 tracking-tight">
+                    {t.label}
+                  </div>
+                  <div className="text-[11px] font-bold text-gray-400">
+                    {t.sub}
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Restaurant List Section */}
-        <section className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        {/* CATEGORY EXPLORER */}
+        <section className="max-w-7xl mx-auto px-4 md:px-8 mb-28">
+          <div className="flex items-end justify-between mb-12">
             <div>
-              <h2 className="text-3xl font-black text-gray-900 tracking-tighter uppercase">
-                Elite Dining Near You
+              <h2 className="text-4xl font-black text-gray-900 tracking-tighter uppercase">
+                What's the Craving today?
               </h2>
-              <p className="text-gray-500 font-bold text-sm mt-1">
-                Discover the finest culinary experiences curated just for you.
+              <div className="h-1.5 w-16 bg-brand-primary mt-3 rounded-full" />
+            </div>
+            <button className="text-brand-primary font-black text-sm uppercase tracking-widest flex items-center gap-2 hover:gap-4 transition-all">
+              View All <ArrowRight size={16} />
+            </button>
+          </div>
+          <div className="flex gap-10 overflow-x-auto pb-8 scrollbar-hide">
+            {CATEGORIES.map((cat) => (
+              <CategoryCard key={cat.id} {...cat} />
+            ))}
+          </div>
+        </section>
+
+        {/* RESTAURANT MARKETPLACE */}
+        <section className="max-w-[1400px] mx-auto px-4 md:px-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
+            <div>
+              <h2 className="text-4xl font-black text-gray-900 tracking-tighter uppercase underline decoration-brand-primary/20 decoration-[6px] underline-offset-8">
+                Top rated for you
+              </h2>
+              <p className="text-gray-500 font-bold mt-4">
+                Handpicked elite restaurants with the best delivery performance.
               </p>
             </div>
 
-            {/* Filters */}
-            <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-hide">
-              <button className="flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-2xl text-[13px] font-black hover:bg-brand-primary transition-all shadow-lg active:scale-95">
-                Filter <SlidersHorizontal size={14} strokeWidth={3} />
-              </button>
-              {["Fast Delivery", "Ratings 4.0+", "Offers"].map((f) => (
+            <div className="flex items-center gap-4">
+              {["Offers", "Fastest", "Rating 4.5+", "Vegetarian"].map((f) => (
                 <button
                   key={f}
-                  className="px-6 py-3 border border-gray-100 rounded-2xl text-[13px] font-bold text-gray-600 hover:bg-gray-50 transition-all whitespace-nowrap active:scale-95"
+                  className="px-6 py-3 bg-white border border-gray-100 rounded-2xl text-[13px] font-black text-gray-600 hover:bg-brand-primary hover:text-white hover:border-brand-primary transition-all shadow-sm active:scale-95"
                 >
                   {f}
                 </button>
@@ -189,7 +231,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {RESTAURANTS.map((res) => (
               <RestaurantCard key={res.id} {...res} />
             ))}
@@ -197,15 +239,70 @@ const Home = () => {
         </section>
       </main>
 
-      {/* Footer minimal info */}
-      <footer className="bg-gray-100 py-12">
-        <div className="max-w-7xl mx-auto px-4 md:px-8 flex flex-col items-center">
-          <span className="text-xl font-black text-gray-400">
-            FOOD<span className="text-gray-400/50">FLIE</span>
-          </span>
-          <p className="text-gray-400 text-xs mt-2 font-bold uppercase tracking-widest">
-            © 2026 Crafted with Excellence
-          </p>
+      <footer className="bg-gray-900 pt-32 pb-20 rounded-t-[5rem]">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-24 mb-24">
+            <div>
+              <div className="text-3xl font-black text-white mb-8 tracking-tighter">
+                FOOD<span className="text-brand-primary">FLIE</span>
+              </div>
+              <p className="text-gray-500 font-bold leading-relaxed mb-8">
+                The world's first food delivery platform designed for
+                transparency and elite curated taste.
+              </p>
+              <div className="flex gap-4">
+                {[1, 2, 3, 4].map((i) => (
+                  <div
+                    key={i}
+                    className="w-10 h-10 bg-white/5 rounded-xl border border-white/5 hover:border-brand-primary transition-colors"
+                  ></div>
+                ))}
+              </div>
+            </div>
+            <div className="md:col-span-2 grid grid-cols-2 md:grid-cols-3 gap-12">
+              {[
+                { t: "Company", l: ["About Us", "Team", "Careers", "Impact"] },
+                {
+                  t: "Legal",
+                  l: ["Terms", "Privacy", "Menu Price Policy", "Trust Bar"],
+                },
+                { t: "Help", l: ["Support", "Partner with us", "Fleet Login"] },
+              ].map((g, idx) => (
+                <div key={idx}>
+                  <div className="text-white/40 text-[10px] uppercase font-black tracking-[0.3em] mb-8">
+                    {g.t}
+                  </div>
+                  <ul className="space-y-4">
+                    {g.l.map((link) => (
+                      <li
+                        key={link}
+                        className="text-gray-400 font-black text-[13px] hover:text-brand-primary cursor-pointer transition-colors"
+                      >
+                        {link}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+            <span className="text-gray-600 font-bold text-xs uppercase tracking-[0.3em]">
+              © 2026 FOODFLIE PRIVATE LIMITED
+            </span>
+            <div className="flex gap-12">
+              {["MADE IN INDIA", "ISO CERTIFIED", "FSSAI COMPLIANT"].map(
+                (b) => (
+                  <span
+                    key={b}
+                    className="text-white/10 font-bold text-[10px] tracking-widest"
+                  >
+                    {b}
+                  </span>
+                ),
+              )}
+            </div>
+          </div>
         </div>
       </footer>
     </div>

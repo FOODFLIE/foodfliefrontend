@@ -4,55 +4,80 @@
   --font-outfit: "Outfit", sans-serif;
   --font-inter: "Inter", sans-serif;
 
-  --color-brand-primary: #ff5200;
-  --color-brand-secondary: #fc8019;
-  --color-brand-dark: #1b1c1e;
+  --color-brand-primary: #ff4a00;
+  --color-brand-secondary: #ff7d29;
+  --color-brand-dark: #121417;
+  --color-brand-gold: #ffb800;
 
-  --shadow-elite: 0 10px 40px -10px rgba(0, 0, 0, 0.1);
-  --shadow-glow: 0 0 20px rgba(255, 82, 0, 0.15);
+  --shadow-marketing:
+    0 20px 40px -8px rgba(0, 0, 0, 0.1), 0 10px 20px -12px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 30px rgba(255, 74, 0, 0.25);
+
+  --radius-standard: 1.5rem;
+  --radius-large: 2.5rem;
 }
 
 @layer base {
-  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800;900&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Outfit:wght@500;700;800;900&display=swap");
 
   body {
-    background-color: #ffffff;
-    color: #1b1c1e;
+    background-color: #fcfcfc;
+    color: var(--color-brand-dark);
     font-family: var(--font-outfit);
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 }
 
-.glass {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+/* Scannable Data Utilities */
+.data-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.75rem;
+  font-weight: 900;
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
-.card-hover {
-  transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
+.rating-badge {
+  background-color: #16a34a;
+  color: white;
+  box-shadow: 0 10px 15px -3px rgba(22, 163, 74, 0.2);
 }
 
-.card-hover:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-elite);
+.time-badge {
+  background-color: #f9fafb;
+  color: #374151;
+  border: 1px solid #f3f4f6;
 }
 
-.text-gradient {
-  background: linear-gradient(135deg, #ff5200 0%, #ff8a00 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+.glass-marketing {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.badge-glow {
+.marketing-hero-gradient {
   background: linear-gradient(
     135deg,
-    rgba(255, 82, 0, 0.1) 0%,
-    rgba(255, 138, 0, 0.1) 100%
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.4) 100%
   );
-  border: 1px solid rgba(255, 82, 0, 0.2);
-  box-shadow: var(--shadow-glow);
+}
+
+.trust-badge-glow {
+  background: linear-gradient(135deg, #fff 0%, #fff7f2 100%);
+  border: 1.5px solid rgba(255, 74, 0, 0.1);
+  box-shadow: 0 10px 25px -5px rgba(255, 74, 0, 0.15);
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
