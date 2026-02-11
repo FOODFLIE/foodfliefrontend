@@ -104,53 +104,59 @@ const RESTAURANTS = [
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-prestige-dark text-white selection:bg-prestige-accent/30 selection:text-white">
       <Navbar />
 
-      <main className="pt-14 sm:pt-20 pb-6 sm:pb-12">
-        {/* MICRO INTRO */}
-        <section className="responsive-section mb-5 sm:mb-12">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4 py-3 sm:py-6 border-b border-gray-50">
-            <div>
-              <h1 className="text-lg sm:text-2xl md:text-3xl font-black text-black tracking-tight leading-none mb-0.5">
-                CRAVE <span className="text-brand-primary">DIFFERENT.</span>
+      <main className="pt-28 pb-12">
+        {/* ARTISTIC HERO - Abstract Mesh */}
+        <section className="responsive-section mb-12">
+          <div className="relative h-[240px] md:h-[320px] rounded-[2.5rem] overflow-hidden mesh-gradient prestige-glow border border-white/5 flex flex-col items-center justify-center text-center p-8 group">
+            {/* Ambient Background Elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div className="absolute top-10 left-10 w-32 h-32 bg-prestige-accent/10 blur-[100px] rounded-full animate-pulse" />
+              <div className="absolute bottom-10 right-10 w-32 h-32 bg-prestige-accent/5 blur-[80px] rounded-full animate-pulse decoration-1000" />
+            </div>
+
+            <div className="relative z-10 space-y-4">
+              <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-none">
+                UNCOMPROMISED <br />
+                <span className="text-prestige-accent italic">FLAVOR.</span>
               </h1>
-              <p className="text-[9px] sm:text-[11px] font-black text-gray-300 uppercase tracking-widest">
-                Premium Selection • Original Prices
+              <p className="text-[10px] md:text-[12px] font-black signature-tracking text-prestige-silver uppercase">
+                Artisanal Curation • Zero Markup • Absolute Precision
               </p>
             </div>
-            <div className="flex self-start sm:self-auto">
-              <div className="px-2 py-1 bg-brand-neutral rounded-lg border border-gray-100 flex items-center gap-1 sm:gap-2">
-                <BadgeCheck
-                  size={9}
-                  sm:size={12}
-                  className="text-brand-primary"
-                  strokeWidth={3}
-                />
-                <span className="text-[8px] sm:text-[10px] font-black text-black uppercase tracking-tight">
-                  Price Sync Active
-                </span>
-              </div>
+
+            {/* Interactive Floating Detail */}
+            <div className="absolute bottom-6 right-8 hidden md:flex items-center gap-3 glass-morphism px-4 py-2 rounded-2xl animate-bounce duration-3000">
+              <div className="w-2 h-2 rounded-full bg-prestige-accent prestige-glow" />
+              <span className="text-[10px] font-bold text-white/60">
+                Elite Access Active
+              </span>
             </div>
           </div>
         </section>
 
-        {/* MICRO SELECTION - CATEGORIES */}
-        <section className="responsive-section mb-8 sm:mb-12">
-          <div className="flex items-center justify-between mb-3.5 sm:mb-6">
-            <h2 className="text-[9px] sm:text-sm font-black tracking-widest uppercase text-gray-400">
-              Categories
-            </h2>
-            <button className="text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-brand-primary flex items-center gap-0.5 sm:gap-1 group">
-              All{" "}
+        {/* SIGNATURE SELECTION - CATEGORIES */}
+        <section className="responsive-section mb-16">
+          <div className="flex items-center justify-between mb-8 px-2">
+            <div className="flex flex-col">
+              <h2 className="text-sm font-black signature-tracking uppercase text-prestige-silver opacity-50 mb-1">
+                The Gallery
+              </h2>
+              <span className="text-xl font-black text-white tracking-tight">
+                Artisanal Selection
+              </span>
+            </div>
+            <button className="text-[10px] font-black uppercase tracking-widest text-prestige-accent flex items-center gap-2 group hover:gap-3 transition-all">
+              VIEW ALL{" "}
               <ArrowRight
-                size={8}
-                sm:size={10}
-                className="group-hover:translate-x-0.5 transition-transform"
+                size={12}
+                className="group-hover:translate-x-1 transition-transform"
               />
             </button>
           </div>
-          <div className="plate-grid-tight pb-2 scrollbar-hide">
+          <div className="plate-grid-tight pb-6 scrollbar-hide">
             {CATEGORIES.map((cat) => (
               <CategoryCard key={cat.id} {...cat} />
             ))}
@@ -159,15 +165,15 @@ const Home = () => {
 
         {/* HIGH DENSITY GRID - RESTAURANTS */}
         <section className="responsive-section">
-          <div className="mb-5 sm:mb-8">
-            <h2 className="text-base sm:text-xl font-black text-black tracking-tight uppercase mb-2.5 sm:mb-4">
-              Nearby Selection
+          <div className="mb-10 px-2 flex items-center justify-between">
+            <h2 className="text-xl font-black text-white tracking-tight uppercase">
+              Elite Selection
             </h2>
-            <div className="flex flex-wrap gap-1 sm:gap-2">
-              {["Ratings 4.5+", "Under 30m", "Hot Offers"].map((f) => (
+            <div className="flex gap-2">
+              {["Ratings 4.5+", "Under 30m"].map((f) => (
                 <button
                   key={f}
-                  className="px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-lg border border-gray-100 text-[8px] sm:text-[10px] font-black text-gray-400 uppercase tracking-tight hover:border-black hover:text-black transition-all"
+                  className="px-4 py-1.5 rounded-full border border-white/5 text-[9px] font-black text-prestige-silver/40 uppercase tracking-widest hover:border-prestige-accent hover:text-white transition-all glass-morphism"
                 >
                   {f}
                 </button>
@@ -175,8 +181,7 @@ const Home = () => {
             </div>
           </div>
 
-          {/* DENSE GRID: 2 COLS ON MOBILE, 3 ON TABLET, 4 ON DESKTOP */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
             {RESTAURANTS.map((res) => (
               <RestaurantCard key={res.id} {...res} />
             ))}
@@ -184,47 +189,68 @@ const Home = () => {
         </section>
 
         {/* COMPACT TRUST BAR */}
-        <section className="responsive-section mt-12 sm:mt-16">
-          <div className="bg-brand-black rounded-xl sm:rounded-2xl p-5 sm:p-10 relative overflow-hidden group">
-            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-5 sm:gap-6">
-              <div className="text-center md:text-left">
-                <h2 className="text-lg sm:text-xl md:text-2xl font-black text-white tracking-tight mb-1">
-                  NO MARKUPS.{" "}
-                  <span className="text-brand-primary italic">PERIOD.</span>
-                </h2>
-                <p className="text-[9px] sm:text-[10px] font-bold text-white/30 uppercase tracking-widest">
-                  We match every restaurant menu price.
-                </p>
-              </div>
-              <button className="compact-button w-full md:w-auto">
-                Learn About Price Sync
-              </button>
-            </div>
-          </div>
-        </section>
+    
       </main>
 
-      <footer className="bg-white pt-12 sm:pt-16 pb-6 sm:pb-8 border-t border-gray-50">
-        <div className="responsive-section">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6 sm:gap-8 mb-8 sm:mb-12">
-            <div className="text-xl sm:text-2xl font-black text-black tracking-tighter">
-              FOOD<span className="text-brand-primary">FLIE.</span>
+      <footer className="py-20 border-t border-white/5 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-prestige-dark to-black opacity-50" />
+        <div className="responsive-section relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+            <div className="col-span-1 md:col-span-2">
+              <div className="text-3xl font-black text-white tracking-tighter mb-6">
+                FOOD<span className="text-prestige-accent italic">FLIE.</span>
+              </div>
+              <p className="text-prestige-silver/30 text-xs font-bold leading-relaxed max-w-sm">
+                Redefining the digital dining experience through precision
+                curation and uncompromised quality. The elite choice for the
+                modern connoisseur.
+              </p>
             </div>
-            <div className="flex flex-wrap justify-center gap-6 sm:gap-8">
-              {["Vision", "Privacy", "Partners", "Support"].map((link) => (
+            {["Services", "Company"].map((title, i) => (
+              <div key={title} className="flex flex-col gap-4">
+                <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/20">
+                  {title}
+                </h4>
+                <div className="flex flex-col gap-2">
+                  {i === 0
+                    ? ["Selection", "Fast Track", "Protocol", "Support"].map(
+                        (l) => (
+                          <span
+                            key={l}
+                            className="text-xs font-bold text-prestige-silver/40 hover:text-prestige-accent cursor-pointer transition-colors"
+                          >
+                            {l}
+                          </span>
+                        ),
+                      )
+                    : ["Our Vision", "Partners", "Careers", "Legal"].map(
+                        (l) => (
+                          <span
+                            key={l}
+                            className="text-xs font-bold text-prestige-silver/40 hover:text-prestige-accent cursor-pointer transition-colors"
+                          >
+                            {l}
+                          </span>
+                        ),
+                      )}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col md:flex-row justify-between items-center pt-10 border-t border-white/5 gap-6">
+            <span className="text-[9px] font-black text-white/10 uppercase tracking-[0.8em]">
+              © 2026 FOODFLIE • PRECISION CURATION
+            </span>
+            <div className="flex gap-8">
+              {["TW", "IG", "FB"].map((s) => (
                 <span
-                  key={link}
-                  className="text-[9px] sm:text-[10px] font-black text-gray-300 hover:text-black cursor-pointer uppercase tracking-widest transition-colors"
+                  key={s}
+                  className="text-[10px] font-black text-white/20 hover:text-white cursor-pointer transition-colors tracking-widest"
                 >
-                  {link}
+                  {s}
                 </span>
               ))}
             </div>
-          </div>
-          <div className="text-center">
-            <span className="text-[8px] sm:text-[9px] font-black text-gray-200 uppercase tracking-[0.5em]">
-              © 2026 FOODFLIE • PRECISION QUALITY
-            </span>
           </div>
         </div>
       </footer>

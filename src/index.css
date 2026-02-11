@@ -4,43 +4,61 @@
   --font-outfit: "Outfit", sans-serif;
   --font-inter: "Inter", sans-serif;
 
-  --color-brand-primary: #ff4500;
-  --color-brand-black: #000000;
-  --color-brand-white: #ffffff;
-  --color-brand-neutral: #fafafa;
+  --color-prestige-dark: #08080a;
+  --color-prestige-surface: #121214;
+  --color-prestige-accent: #ff4d4d;
+  --color-prestige-silver: #a1a1aa;
 
-  --shadow-prestige: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
-  --shadow-compact: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-prestige: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(255, 77, 77, 0.15);
 
-  --radius-micro: 0.75rem;
-  --radius-standard: 1rem;
-  --radius-full: 9999px;
+  --radius-prestige: 1.25rem;
 }
 
 @layer base {
   @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@600;700;800;900&display=swap");
 
   body {
-    background-color: var(--color-brand-white);
-    color: var(--color-brand-black);
+    background-color: var(--color-prestige-dark);
+    color: white;
     font-family: var(--font-inter);
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
 
   h1,
   h2,
   h3 {
     font-family: var(--font-outfit);
-    font-weight: 900;
+    letter-spacing: -0.02em;
   }
 }
 
-/* Micro-Precision Utilities */
+/* Neo-Prestige Utilities */
+.glass-morphism {
+  @apply bg-white/[0.03] backdrop-blur-2xl border border-white/10;
+}
+
+.prestige-glow {
+  box-shadow: var(--shadow-glow);
+}
+
+.signature-tracking {
+  letter-spacing: 0.15em;
+}
+
+.mesh-gradient {
+  background:
+    radial-gradient(at 0% 0%, rgba(255, 77, 77, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(255, 77, 77, 0.05) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(255, 77, 77, 0.08) 0px, transparent 50%);
+}
+
 .plate-grid-tight {
   display: flex;
-  gap: 0.75rem;
+  gap: 1.5rem;
   overflow-x: auto;
-  padding: 0.25rem 0.15rem;
+  padding: 0.5rem 0.25rem;
   scrollbar-width: none;
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
@@ -55,19 +73,19 @@
 }
 
 .responsive-section {
-  @apply max-w-7xl mx-auto px-3 sm:px-6 lg:px-8;
+  @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
 }
 
 .compact-button {
-  @apply bg-brand-black text-white px-4 py-2 sm:px-6 sm:py-3 rounded-full font-black text-[10px] sm:text-[12px] uppercase tracking-wider transition-all duration-300 hover:bg-brand-primary active:scale-95 shadow-md;
+  @apply bg-prestige-accent text-white px-6 py-3 rounded-full font-black text-[11px] sm:text-[12px] uppercase tracking-widest transition-all duration-300 hover:scale-105 active:scale-95;
 }
 
 .precision-card {
-  @apply bg-white border border-gray-100 transition-all duration-300 hover:shadow-prestige sm:hover:-translate-y-1;
+  @apply bg-prestige-surface border border-white/5 transition-all duration-500 hover:border-prestige-accent/30;
 }
 
 .micro-nav {
-  @apply fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-b border-gray-50 py-2 sm:py-3;
+  @apply fixed top-0 left-0 right-0 z-50 bg-prestige-dark/80 backdrop-blur-xl border-b border-white/5 py-2 sm:py-3;
 }
 
 /* High-Density Motion */
