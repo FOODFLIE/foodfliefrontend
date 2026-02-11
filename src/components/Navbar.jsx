@@ -1,94 +1,70 @@
 import React, { useState, useEffect } from "react";
-import {
-  Search,
-  MapPin,
-  ShoppingCart,
-  User,
-  ChevronDown,
-  Bell,
-} from "lucide-react";
+import { Search, MapPin, ShoppingCart, ChevronDown } from "lucide-react";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? "glass-marketing py-3 shadow-lg" : "bg-white py-5"}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? "bg-white/95 backdrop-blur-xl py-1.5 sm:py-2 shadow-sm border-b border-gray-50" : "bg-white py-2 sm:py-3"}`}
     >
-      <div className="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-between gap-12">
-        {/* Logo & Location: The Core Context */}
-        <div className="flex items-center gap-12 shrink-0">
-          <div className="flex items-center gap-2 cursor-pointer group">
-            <div className="w-10 h-10 bg-brand-primary rounded-xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-all">
-              <span className="text-white font-black text-xl">F</span>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4 md:gap-8">
+        {/* Micro Branding */}
+        <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 cursor-pointer group">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 bg-brand-black rounded-lg flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+              <span className="text-white font-black text-base sm:text-lg">
+                F
+              </span>
             </div>
-            <span className="text-2xl font-black text-gray-900 tracking-tighter">
-              FOOD<span className="text-brand-primary">FLIE</span>
+            <span className="text-lg sm:text-xl font-black text-black tracking-tighter scale-y-110">
+              FOOD
+              <span className="text-brand-primary underline decoration-2 underline-offset-4">
+                FLIE
+              </span>
             </span>
           </div>
 
-          <div className="hidden lg:flex items-center gap-3 bg-gray-50 px-5 py-3 rounded-2xl border border-gray-100 cursor-pointer hover:border-brand-primary/30 transition-all group">
-            <MapPin size={18} className="text-brand-primary" strokeWidth={3} />
-            <div className="flex flex-col">
-              <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">
-                Deliver to
-              </span>
-              <div className="flex items-center gap-1">
-                <span className="text-[13px] font-black text-gray-900">
-                  Home • Jubilee Hills
-                </span>
-                <ChevronDown
-                  size={14}
-                  className="text-gray-400 group-hover:text-brand-primary transition-colors"
-                />
-              </div>
-            </div>
+          <div className="hidden md:flex items-center gap-2 border-l border-gray-100 pl-4 group cursor-pointer">
+            <MapPin size={12} className="text-brand-primary" strokeWidth={3} />
+            <span className="text-[10px] sm:text-[11px] font-black text-black group-hover:text-brand-primary transition-colors">
+              Jubilee Hills
+            </span>
+            <ChevronDown size={10} className="text-gray-300" />
           </div>
         </div>
 
-        {/* Global Search: The Conversion Engine */}
-        <div className="flex-1 max-w-2xl relative group hidden md:block">
-          <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-brand-primary transition-colors">
-            <Search size={20} strokeWidth={3} />
+        {/* Precision Search */}
+        <div className="flex-1 max-w-lg relative group">
+          <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-brand-primary">
+            <Search size={14} sm:size={16} strokeWidth={3} />
           </div>
           <input
             type="text"
-            placeholder="Search for restaurants, items, or cuisines..."
-            className="w-full bg-gray-50 border border-gray-100 py-4 pl-14 pr-6 rounded-[1.2rem] text-sm font-bold text-gray-900 placeholder:text-gray-400 focus:outline-none focus:bg-white focus:border-brand-primary focus:ring-4 focus:ring-orange-500/5 transition-all"
+            placeholder="Search..."
+            className="w-full bg-gray-50 border-none py-1.5 sm:py-2 px-9 sm:px-10 rounded-full text-[12px] sm:text-[13px] font-bold text-black placeholder:text-gray-300 focus:ring-2 focus:ring-brand-primary/20 transition-all"
           />
-          <div className="absolute right-4 top-1/2 -translate-y-1/2 bg-white px-3 py-1.5 rounded-lg border border-gray-100 shadow-sm text-[10px] font-black text-gray-400 uppercase tracking-widest pointer-events-none">
-            ⌘ K
-          </div>
         </div>
 
-        {/* Action Buttons: The Checkout Path */}
-        <div className="flex items-center gap-8 shrink-0">
-          <div className="hidden sm:flex items-center gap-2 cursor-pointer group">
-            <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-brand-primary group-hover:bg-brand-primary group-hover:text-white transition-all">
-              <Bell size={20} />
-            </div>
+        {/* Compact Checkout */}
+        <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 cursor-pointer group bg-brand-black text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg hover:bg-brand-primary transition-all active:scale-95">
+            <ShoppingCart size={14} sm:size={16} strokeWidth={3} />
+            <span className="text-[11px] sm:text-[12px] font-black hidden xs:block italic">
+              ₹499
+            </span>
           </div>
 
-          <div className="flex items-center gap-3 cursor-pointer group bg-gray-900 text-white px-6 py-3 rounded-2xl hover:bg-brand-primary transition-all shadow-xl shadow-black/10 active:scale-95">
-            <div className="relative">
-              <ShoppingCart size={20} strokeWidth={2.5} />
-              <span className="absolute -top-3 -right-3 w-5 h-5 bg-brand-primary text-white text-[10px] font-black rounded-full flex items-center justify-center border-2 border-gray-900">
-                2
-              </span>
-            </div>
-            <span className="text-sm font-black hidden lg:block">₹499.00</span>
-          </div>
-
-          <div className="w-12 h-12 rounded-2xl overflow-hidden border-2 border-gray-100 p-0.5 hover:border-brand-primary transition-all cursor-pointer shadow-sm">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg overflow-hidden border border-gray-100 p-0.5 hover:border-brand-primary transition-all cursor-pointer hidden sm:block">
             <img
               src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop"
-              className="w-full h-full object-cover rounded-[0.8rem]"
+              className="w-full h-full object-cover rounded-md"
             />
           </div>
         </div>

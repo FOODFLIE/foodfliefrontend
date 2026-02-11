@@ -1,5 +1,5 @@
 import React from "react";
-import { Star, Clock, BadgeCheck, Flame } from "lucide-react";
+import { Star, Clock, BadgeCheck } from "lucide-react";
 
 const RestaurantCard = ({
   image,
@@ -11,67 +11,65 @@ const RestaurantCard = ({
   sameAsMenuPrice,
 }) => {
   return (
-    <div className="group relative bg-white rounded-[2rem] overflow-hidden border border-gray-100 hover:border-brand-primary/20 transition-all duration-500 hover:shadow-marketing cursor-pointer">
-      {/* Visual Hook: Massive Appetising Image */}
-      <div className="relative aspect-[16/10] overflow-hidden">
+    <div className="group precision-card rounded-lg sm:rounded-2xl overflow-hidden cursor-pointer flex flex-col h-full">
+      {/* Visual Component - Compact */}
+      <div className="relative aspect-[16/9] overflow-hidden">
         <img
           src={image}
           alt={name}
-          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+          className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent opacity-60" />
 
-        {/* Urgent Marketing Tag: Offer */}
+        {/* Compact Offer */}
         {offer && (
-          <div className="absolute bottom-4 left-4 bg-brand-primary text-white text-[12px] font-black px-4 py-2 rounded-xl flex items-center gap-2 shadow-lg animate-pulse">
-            <Flame size={14} fill="currentColor" />
+          <div className="absolute bottom-1.5 left-1.5 bg-brand-primary text-white text-[6px] sm:text-[8px] font-black px-1 py-0.5 sm:px-2 sm:py-1 rounded shadow-lg backdrop-blur-sm bg-opacity-90">
             {offer}
           </div>
         )}
 
-        {/* TRUST SIGNAL: Same as Menu Price (Overlay) */}
+        {/* Price Transparency */}
         {sameAsMenuPrice && (
-          <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-sm border border-white/20">
+          <div className="absolute top-1.5 right-1.5 bg-white/95 px-1 py-0.5 sm:px-2 sm:py-1 rounded-full flex items-center gap-0.5 sm:gap-1 shadow-sm border border-gray-100">
             <BadgeCheck
-              size={16}
+              size={7}
               className="text-brand-primary"
               strokeWidth={3}
             />
-            <span className="text-[10px] font-black text-gray-900 tracking-tight uppercase">
-              Menu Price Guaranteed
+            <span className="text-[5px] sm:text-[7px] font-black text-black tracking-widest uppercase">
+              Direct
             </span>
           </div>
         )}
       </div>
 
-      {/* Conversion Data: Critical Info at a Glance */}
-      <div className="p-6">
-        <div className="flex justify-between items-start mb-3">
-          <h3 className="text-xl font-black text-gray-900 group-hover:text-brand-primary transition-colors line-clamp-1">
-            {name}
-          </h3>
-        </div>
-
-        <p className="text-[13px] font-bold text-gray-400 mb-6 line-clamp-1">
-          {cuisines.join(", ")}
+      {/* Info Cluster - Dense */}
+      <div className="p-1.5 sm:p-3 md:p-4 flex flex-col flex-1">
+        <h3 className="text-[11px] sm:text-[13px] md:text-[15px] font-black text-black group-hover:text-brand-primary transition-colors line-clamp-1 tracking-tight leading-tight mb-0.5">
+          {name}
+        </h3>
+        <p className="text-[7px] sm:text-[9px] md:text-[10px] font-bold text-gray-400 mb-1.5 sm:mb-3 truncate tracking-wide">
+          {cuisines.slice(0, 1).join(", ")}
         </p>
 
-        <div className="flex items-center justify-between border-t border-gray-50 pt-5 mt-auto">
-          <div className="flex items-center gap-4">
-            {/* SCANNABLE RATING */}
-            <div className="data-badge rating-badge">
-              <Star size={14} fill="currentColor" strokeWidth={0} />
-              {rating}
+        <div className="flex items-center justify-between mt-auto pt-1 sm:pt-2 border-t border-gray-50">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <div className="flex items-center gap-0.5 sm:gap-1">
+              <Star
+                size={8}
+                fill="#FF4500"
+                className="text-brand-primary"
+                strokeWidth={0}
+              />
+              <span className="text-[9px] sm:text-[11px] font-black">
+                {rating}
+              </span>
             </div>
-            {/* SCANNABLE TIME */}
-            <div className="data-badge time-badge">
-              <Clock size={14} className="text-brand-primary" strokeWidth={3} />
-              {time}
+            <div className="text-gray-300 text-[7px] sm:text-[9px] font-black">
+              •
             </div>
-          </div>
-
-          <div className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-gray-300 group-hover:bg-brand-primary group-hover:text-white group-hover:border-brand-primary transition-all duration-300">
-            <span className="font-black text-xs">→</span>
+            <div className="text-gray-400 font-black text-[7px] sm:text-[9px] uppercase tracking-tighter">
+              {time.replace(" MINS", "m")}
+            </div>
           </div>
         </div>
       </div>
