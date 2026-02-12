@@ -1,105 +1,65 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import RestaurantCard from "../../components/RestaurantCard";
+import ProductCard from "../../components/ProductCard";
 import { CATEGORIES, RESTAURANTS } from "../../data";
-import { ArrowLeft, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { ChevronRight, Filter } from "lucide-react";
 
 const CategoryProduct = () => {
   const { id } = useParams();
   const category = CATEGORIES.find((c) => c.id === parseInt(id));
-
-  // Mock filtering: just show all restaurants for now,
-  // in a real app would filter by category.
   const filteredRestaurants = RESTAURANTS;
 
   if (!category)
-    return <div className="text-white p-10">Category not found</div>;
+    return <div className="p-20 text-center">Category not found</div>;
 
   return (
-    <div className="min-h-screen bg-prestige-dark text-white selection:bg-prestige-accent/30 selection:text-white">
+    <div className="bg-white min-h-screen pb-20">
       <Navbar />
 
-      <main className="pt-28 pb-12">
-        {/* Dynamic Header */}
-        <section className="responsive-section mb-12">
-          <div className="relative h-[200px] md:h-[240px] rounded-[2.5rem] overflow-hidden mesh-gradient prestige-glow border border-white/5 flex flex-col items-center justify-center text-center p-8">
-            <Link
-              to="/"
-              className="absolute top-6 left-8 flex items-center gap-2 text-white/40 hover:text-white transition-colors group"
-            >
-              <ArrowLeft
-                size={16}
-                className="group-hover:-translate-x-1 transition-transform"
-              />
-              <span className="text-[10px] font-black uppercase tracking-widest">
-                Back to Gallery
-              </span>
-            </Link>
+      <main className="responsive-container py-6">
+        {/* Breadcrumbs */}
+        <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">
+          <Link to="/" className="hover:text-zepto-purple">
+            Home
+          </Link>
+          <ChevronRight size={10} />
+          <span className="text-slate-600">{category.title}</span>
+        </div>
 
-            <div className="relative z-10">
-              <h1 className="text-4xl md:text-5xl font-black tracking-tighter leading-none uppercase">
-                {category.title}
-              </h1>
-              <p className="text-[10px] md:text-[11px] font-black signature-tracking text-prestige-silver uppercase mt-3">
-                Signature Selection • Handpicked for You
-              </p>
-            </div>
-
-            <div className="absolute bottom-[-1px] left-1/2 -translate-x-1/2 w-32 h-[2px] bg-gradient-to-r from-transparent via-prestige-accent to-transparent" />
-          </div>
-        </section>
-
-        {/* Floating Glass Filter Bar */}
-        <section className="responsive-section mb-10">
-          <div className="glass-morphism rounded-full px-6 py-3 flex items-center justify-between shadow-2xl border-white/5 mx-2">
-            <div className="flex items-center gap-6 overflow-x-auto scrollbar-hide">
-              {["Sort By", "Cuisines", "Ratings", "Offers"].map((filter) => (
-                <button
-                  key={filter}
-                  className="flex items-center gap-2 group whitespace-nowrap"
-                >
-                  <span className="text-[10px] font-black uppercase tracking-widest text-prestige-silver/60 group-hover:text-white transition-colors">
-                    {filter}
-                  </span>
-                  <ChevronDown size={10} className="text-prestige-accent" />
-                </button>
-              ))}
-            </div>
-            <div className="w-px h-4 bg-white/10 mx-4 hidden md:block" />
-            <button className="flex items-center gap-2 group shrink-0">
-              <SlidersHorizontal size={14} className="text-prestige-accent" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-white">
-                More Filters
-              </span>
+        {/* Header */}
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-black text-slate-800 tracking-tighter font-poppins">
+            {category.title}
+          </h1>
+          <div className="flex items-center gap-4">
+            <button className="flex items-center gap-2 px-4 py-2 bg-zepto-grey rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-200 transition-colors">
+              <Filter size={14} /> Filter
             </button>
           </div>
-        </section>
-
-        {/* Results Grid */}
-        <section className="responsive-section">
-          <div className="mb-8 px-2">
-            <h2 className="text-sm font-black signature-tracking uppercase text-prestige-silver opacity-50">
-              {filteredRestaurants.length} Results in {category.title}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
-            {filteredRestaurants.map((res) => (
-              <RestaurantCard key={res.id} {...res} />
-            ))}
-          </div>
-        </section>
-      </main>
-
-      {/* Persistence Simple Footer */}
-      <footer className="py-12 border-t border-white/5 opacity-50">
-        <div className="responsive-section text-center">
-          <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.8em]">
-            Neo-Prestige Quality Assurance
-          </span>
         </div>
-      </footer>
+
+        {/* Filter Chips */}
+        <div className="flex gap-3 mb-10 overflow-x-auto scrollbar-hide">
+          {["Relevance", "Faster Delivery", "Ratings 4.0+", "Offers"].map(
+            (tag) => (
+              <button
+                key={tag}
+                className="px-5 py-2 rounded-full border border-slate-200 text-xs font-bold text-slate-500 whitespace-nowrap hover:border-zepto-purple hover:text-zepto-purple transition-all"
+              >
+                {tag}
+              </button>
+            ),
+          )}
+        </div>
+
+        {/* Product Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {filteredRestaurants.map((res) => (
+            <ProductCard key={res.id} {...res} />
+          ))}
+        </div>
+      </main>
     </div>
   );
 };

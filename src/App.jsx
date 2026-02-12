@@ -1,12 +1,11 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import Home from "./pages/home/home";
+import { Route, Routes } from "react-router-dom";
 import CategoryProduct from "./pages/category/CategoryProduct";
 import RestaurantDetail from "./pages/restaurant/RestaurantDetail";
+import Home from "./pages/home/home";
 
 const App = () => {
   return (
-    <div className="bg-prestige-dark min-h-screen">
+    <div className="min-h-screen">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/category/:id" element={<CategoryProduct />} />

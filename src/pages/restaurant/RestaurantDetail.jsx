@@ -1,54 +1,10 @@
 import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import MenuItem from "../../components/MenuItem";
+import CartFooter from "../../components/CartFooter";
 import { RESTAURANTS } from "../../data";
-import {
-  ArrowLeft,
-  Star,
-  Clock,
-  Heart,
-  Share2,
-  Info,
-  Plus,
-} from "lucide-react";
-
-// Mock Menu Data
-const MENU_CATEGORIES = [
-  {
-    title: "Signature Classics",
-    items: [
-      {
-        id: 101,
-        name: "Truffle Umami Burger",
-        price: 599,
-        desc: "Aged wagyu beef, black truffle aioli, melted brie.",
-        image:
-          "https://images.unsplash.com/photo-1550547660-d9450f859349?w=200&h=200&fit=crop",
-      },
-      {
-        id: 102,
-        name: "Gold Leaf Saffron Biryani",
-        price: 899,
-        desc: "Hand-picked strands of saffron, tender lamb, edible 24k gold.",
-        image:
-          "https://images.unsplash.com/photo-1589302168068-1c49911d4e45?w=200&h=200&fit=crop",
-      },
-    ],
-  },
-  {
-    title: "Artisanal Sides",
-    items: [
-      {
-        id: 201,
-        name: "Parmesan Dust Fries",
-        price: 299,
-        desc: "Triple cooked fries with 24-month aged parmesan.",
-        image:
-          "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=200&h=200&fit=crop",
-      },
-    ],
-  },
-];
+import { Star, Clock, Zap, Search } from "lucide-react";
 
 const RestaurantDetail = () => {
   const { id } = useParams();
@@ -56,202 +12,131 @@ const RestaurantDetail = () => {
   const [cartCount, setCartCount] = useState(0);
 
   if (!restaurant)
-    return <div className="text-white p-10">Restaurant not found</div>;
+    return <div className="p-20 text-center">Establishment not found</div>;
 
   return (
-    <div className="min-h-screen bg-prestige-dark text-white selection:bg-prestige-accent/30 selection:text-white pb-32">
+    <div className="bg-white min-h-screen pb-40">
       <Navbar />
 
-      {/* Immersive Header */}
-      <section className="relative h-[300px] md:h-[400px] overflow-hidden">
-        <div className="absolute inset-0">
-          <img
-            src={restaurant.image}
-            className="w-full h-full object-cover scale-110 blur-[2px] opacity-40"
-            alt={restaurant.name}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-prestige-dark via-prestige-dark/40 to-transparent" />
-        </div>
-
-        <div className="responsive-section relative h-full flex flex-col justify-end pb-12">
-          <Link
-            to="/"
-            className="absolute top-28 left-4 flex items-center gap-2 text-white/60 hover:text-white transition-colors group"
-          >
-            <ArrowLeft
-              size={16}
-              className="group-hover:-translate-x-1 transition-transform"
-            />
-            <span className="text-[10px] font-black uppercase tracking-widest">
-              Back to Gallery
-            </span>
-          </Link>
-
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="px-3 py-1 glass-morphism rounded-lg border-prestige-accent/30 flex items-center gap-2">
-                  <Star
-                    size={12}
-                    className="fill-prestige-accent text-prestige-accent"
-                  />
-                  <span className="text-xs font-black">
-                    {restaurant.rating}
-                  </span>
+      <main className="responsive-container py-6 md:py-8">
+        {/* Header Block */}
+        <section className="bg-zepto-grey/40 border border-slate-100 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-12 mb-8 md:mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 relative overflow-hidden">
+          <div className="relative z-10 flex-1">
+            <h1 className="text-3xl md:text-6xl font-black text-slate-800 tracking-tighter mb-4 uppercase italic font-poppins">
+              {restaurant.name}
+            </h1>
+            <div className="flex flex-wrap items-center gap-4 md:gap-6 text-slate-500 font-bold text-xs md:text-sm">
+              <div className="flex items-center gap-2">
+                <div className="bg-zepto-green text-white px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-md shadow-zepto-green/10">
+                  <Star size={12} fill="currentColor" /> {restaurant.rating}
                 </div>
-                <span className="text-[10px] font-black text-prestige-accent uppercase tracking-widest">
-                  Signature Certified
-                </span>
+                <span className="hidden text-red-500  sm:inline">Menu Price</span>
               </div>
-              <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-none uppercase">
-                {restaurant.name}
-              </h1>
-              <p className="text-[10px] md:text-[12px] font-bold text-prestige-silver/60 uppercase tracking-[0.2em]">
-                {restaurant.cuisines.join(" • ")} • Jubillee Hills
+              <div className="flex items-center gap-2">
+                <Clock size={16} className="text-zepto-purple" />
+                <span>{restaurant.time} Delivery</span>
+              </div>
+              <p className="text-zepto-purple hidden sm:block">
+                {restaurant.cuisines.join(" • ")}
               </p>
             </div>
-
-            <div className="flex gap-2">
-              {[Heart, Share2, Info].map((Icon, i) => (
-                <button
-                  key={i}
-                  className="w-12 h-12 rounded-2xl glass-morphism flex items-center justify-center hover:border-prestige-accent transition-all"
-                >
-                  <Icon
-                    size={18}
-                    className="text-white/40 hover:text-white transition-colors"
-                  />
-                </button>
-              ))}
-            </div>
           </div>
-        </div>
-      </section>
 
-      {/* Menu Sections */}
-      <main className="responsive-section mt-12 grid grid-cols-1 lg:grid-cols-12 gap-12">
-        <div className="lg:col-span-8 space-y-16">
-          {MENU_CATEGORIES.map((category) => (
-            <div key={category.title} className="space-y-8">
-              <div className="flex flex-col gap-1 border-l-4 border-prestige-accent pl-6">
-                <h2 className="text-xl font-black tracking-tight uppercase">
-                  {category.title}
-                </h2>
-                <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">
-                  {category.items.length} SIGNATURE CREATIONS
-                </span>
-              </div>
-
-              <div className="grid gap-6">
-                {category.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="glass-morphism rounded-[2rem] p-6 border-white/5 flex gap-6 group hover:border-white/10 transition-all"
-                  >
-                    <div className="flex-1 space-y-2">
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 border border-green-500 flex items-center justify-center p-0.5">
-                          <div className="w-1 h-1 rounded-full bg-green-500" />
-                        </div>
-                        <h3 className="text-[16px] font-black tracking-tight uppercase">
-                          {item.name}
-                        </h3>
-                      </div>
-                      <p className="text-xs text-prestige-silver/40 font-medium leading-relaxed italic">
-                        {item.desc}
-                      </p>
-                      <div className="pt-2 flex items-center gap-4">
-                        <span className="text-sm font-black text-prestige-accent font-outfit">
-                          ₹{item.price}
-                        </span>
-                        <button
-                          onClick={() => setCartCount((prev) => prev + 1)}
-                          className="flex items-center gap-2 px-6 py-2 rounded-xl bg-white/5 border border-white/5 hover:bg-prestige-accent hover:border-prestige-accent text-white transition-all group/btn"
-                        >
-                          <Plus
-                            size={14}
-                            className="group-hover/btn:rotate-90 transition-transform"
-                          />
-                          <span className="text-[10px] font-black uppercase tracking-widest">
-                            Add Item
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                    <div className="w-28 h-28 rounded-2xl overflow-hidden shrink-0 border border-white/5">
-                      <img
-                        src={item.image}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                        alt={item.name}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Sidebar Info */}
-        <div className="lg:col-span-4 hidden lg:block">
-          <div className="sticky top-32 glass-morphism rounded-[2.5rem] p-8 space-y-8 border-white/5">
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col">
-                <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">
-                  Delivery Time
-                </span>
-                <span className="text-lg font-black">{restaurant.time}</span>
-              </div>
-              <Clock
-                size={24}
-                className="text-prestige-accent"
-                strokeWidth={2.5}
+          <div className="relative z-10 bg-white p-5 md:p-6 rounded-2xl md:rounded-3xl border border-slate-50 shadow-lg max-w-full md:max-w-xs w-full">
+            <div className="flex items-center gap-3 mb-3 md:mb-4">
+              <Zap
+                size={20}
+                md:size={24}
+                className="text-zepto-purple animate-pulse"
+                fill="currentColor"
               />
+              <h3 className="font-black text-slate-800 uppercase tracking-tighter italic text-sm md:text-base">
+                Active Offer
+              </h3>
             </div>
-            <div className="w-full h-px bg-white/5" />
-            <div className="space-y-4">
-              <h4 className="text-[10px] font-black uppercase tracking-widest">
-                Offers Protocol
-              </h4>
-              <div className="p-4 rounded-2xl bg-prestige-accent/5 border border-prestige-accent/10 flex items-center gap-4">
-                <div className="w-8 h-8 rounded-full bg-prestige-accent flex items-center justify-center shadow-lg shadow-prestige-accent/20">
-                  <span className="text-[10px] font-black">%</span>
-                </div>
-                <span className="text-xs font-black text-white italic">
-                  {restaurant.offer}
-                </span>
+            <p className="text-zepto-purple font-black text-lg md:text-xl mb-1">
+              {restaurant.offer}
+            </p>
+            <p className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+              Valid on all items above ₹199
+            </p>
+          </div>
+        </section>
+
+        {/* Categories Horizontal Scroll (Mobile/Tablet Only) */}
+        <div className="lg:hidden flex gap-3 mb-8 overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 border-b border-slate-50">
+          {["Signature Dishes", "Artisanal Sides", "Beverages", "Desserts"].map(
+            (cat, i) => (
+              <button
+                key={cat}
+                className={`px-6 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all shadow-sm ${i === 0 ? "bg-zepto-purple text-white" : "bg-zepto-grey/50 text-slate-500"}`}
+              >
+                {cat}
+              </button>
+            ),
+          )}
+        </div>
+
+        {/* Menu Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
+          {/* Categories Sidebar (Desktop only) */}
+          <aside className="lg:col-span-3 hidden lg:block sticky top-28 h-fit">
+            <h3 className="text-sm font-black text-slate-800 uppercase tracking-[0.2em] mb-6 pl-2 border-l-4 border-zepto-purple">
+              Categories
+            </h3>
+            <ul className="space-y-2">
+              {[
+                "10-mins delivery",
+                "Artisanal Sides",
+                "Beverages",
+                "Desserts",
+              ].map((cat, i) => (
+                <li
+                  key={cat}
+                  className={`p-4 rounded-2xl font-bold text-sm cursor-pointer transition-all ${i === 0 ? "bg-zepto-light text-zepto-purple shadow-sm" : "text-slate-400 hover:text-slate-600"}`}
+                >
+                  {cat}
+                </li>
+              ))}
+            </ul>
+          </aside>
+
+          {/* Items List */}
+          <div className="lg:col-span-9 space-y-8 md:space-y-12">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-6 gap-4">
+              <h2 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight">
+                Signature Dishes
+              </h2>
+              <div className="relative w-full sm:w-auto">
+                <Search
+                  size={18}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"
+                />
+                <input
+                  type="text"
+                  placeholder="Search dish..."
+                  className="bg-slate-50 px-10 py-2.5 rounded-xl text-xs font-bold outline-none focus:bg-white border border-transparent focus:border-slate-100 transition-all w-full sm:w-64"
+                />
               </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {[1, 2, 3, 4].map((item) => (
+                <MenuItem
+                  key={item}
+                  name="Elite Truffle Dish"
+                  description="Premium selection with handpicked ingredients and artisanal seasoning."
+                  price={499}
+                  image="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop"
+                  onAdd={() => setCartCount((c) => c + 1)}
+                />
+              ))}
             </div>
           </div>
         </div>
       </main>
 
-      {/* PERSISTENT CART BRIDGE */}
-      {cartCount > 0 && (
-        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-bounce-in">
-          <div className="glass-morphism rounded-full px-8 py-4 flex items-center gap-12 shadow-2xl border-prestige-accent/20 prestige-glow">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-black text-sm">
-                {cartCount}
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[8px] font-black text-white/20 uppercase tracking-widest">
-                  Checkout Value
-                </span>
-                <span className="text-sm font-black italic text-prestige-accent">
-                  Signature Selection Active
-                </span>
-              </div>
-            </div>
-            <Link
-              to="/"
-              className="compact-button shadow-2xl shadow-prestige-accent/40"
-            >
-              PROCEED TO CHECKOUT
-            </Link>
-          </div>
-        </div>
-      )}
+      <CartFooter count={cartCount} />
     </div>
   );
 };
