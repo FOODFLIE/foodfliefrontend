@@ -1,7 +1,53 @@
-@import 'tailwindcss/preflight';
-@import 'tailwindcss/utilities';
-@import 'tailwindcss';
+@import "tailwindcss";
 
-body {
-  height: 100%;
+@theme {
+  --font-inter: "Inter", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
+
+  --color-zepto-purple: #5e17eb;
+  --color-zepto-dark: #480e60;
+  --color-zepto-light: #f3f0ff;
+  --color-zepto-green: #25c861;
+  --color-zepto-grey: #f0f0f5;
+}
+
+@layer base {
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
+  body {
+    @apply bg-white text-slate-900 font-inter;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-poppins tracking-tight;
+  }
+
+  h1 {
+    @apply tracking-tighter;
+  }
+}
+
+@layer components {
+  .responsive-container {
+    @apply max-w-[1280px] mx-auto px-4;
+  }
+
+  .nav-icon-btn {
+    @apply p-2 hover:bg-slate-100 rounded-full transition-colors flex flex-col items-center justify-center gap-1;
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
