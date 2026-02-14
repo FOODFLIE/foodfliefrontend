@@ -77,6 +77,12 @@ const Navbar = () => {
 
           {/* Right: Actions - Hidden on Mobile (in bottom nav instead) */}
           <div className="hidden sm:flex items-center gap-2">
+            <Link
+              to="/partner"
+              className="px-4 py-2 text-sm font-bold text-slate-600 hover:text-zepto-purple transition-colors mr-2"
+            >
+              Partner with us
+            </Link>
             <button
               onClick={() =>
                 isAuthenticated

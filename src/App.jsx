@@ -1,8 +1,11 @@
+import React from "react";
 import { Route, Routes } from "react-router-dom";
 import CategoryProduct from "./pages/category/CategoryProduct";
 import RestaurantDetail from "./pages/restaurant/RestaurantDetail";
 import Home from "./pages/home/home";
 import Profile from "./pages/profile/Profile";
+import SellerAuth from "./pages/partner/SellerAuth";
+
 import { AuthProvider } from "./context/AuthContext";
 
 const App = () => {
@@ -14,6 +17,8 @@ const App = () => {
           <Route path="/category/:id" element={<CategoryProduct />} />
           <Route path="/restaurant/:id" element={<RestaurantDetail />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/partner" element={<SellerAuth />} />
+    
         </Routes>
       </div>
     </AuthProvider>

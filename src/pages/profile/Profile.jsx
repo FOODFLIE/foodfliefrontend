@@ -10,6 +10,7 @@ import {
   MapPin,
   CreditCard,
   BadgeCheck,
+  Store,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AuthModal from "../../components/AuthModal";
@@ -19,10 +20,10 @@ const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  console.log("User data in Profile component:", user); 
+  console.log("User data in Profile component:", user);
 
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('user'));
+    const userData = JSON.parse(localStorage.getItem("user"));
     if (userData) {
       setUser(userData);
     } else {
@@ -35,8 +36,8 @@ const Profile = () => {
   }
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     navigate("/");
   };
 
@@ -148,6 +149,30 @@ const Profile = () => {
 
           {/* Right Column: Content Area */}
           <div className="lg:col-span-2 space-y-8">
+            {/* Partner Card */}
+            <div
+              className="bg-gradient-to-r from-zepto-purple to-zepto-dark rounded-3xl p-6 text-white flex items-center justify-between relative overflow-hidden group cursor-pointer"
+              onClick={() => navigate("/partner")}
+            >
+              <div className="absolute right-0 bottom-0 opacity-10 transform translate-x-1/4 translate-y-1/4">
+                <Store size={120} />
+              </div>
+              <div className="relative z-10">
+                <h3 className="text-xl font-black italic tracking-tight">
+                  Partner with FoodFlie
+                </h3>
+                <p className="text-sm font-medium opacity-90 mt-1 max-w-[200px]">
+                  Grow your business with 0% commission for the first month.
+                </p>
+                <button className="mt-4 bg-white text-zepto-purple px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:shadow-lg transition-all">
+                  Register Now
+                </button>
+              </div>
+              <div className="relative z-10 bg-white/10 p-4 rounded-2xl backdrop-blur-sm border border-white/10">
+                <Store size={32} />
+              </div>
+            </div>
+
             {/* Quick Actions */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
