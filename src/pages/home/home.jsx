@@ -55,8 +55,6 @@ const CHAIN_RESTAURANTS = [
 const Home = () => {
   return (
     <div className="bg-white pb-20">
-      <Navbar />
-
       <main className="responsive-container py-6">
         {/* Banner Section */}
         <Banner

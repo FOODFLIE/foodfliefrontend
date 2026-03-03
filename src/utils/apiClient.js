@@ -3,7 +3,7 @@ import axios from "axios";
 import { getFlieOptions } from "./flieUtils";
 const flies = getFlieOptions();
 const API_URL = flies.base_url;
-console.log("API_URL", API_URL);
+
 
 export const apiClient = axios.create({
   baseURL: API_URL,
@@ -29,7 +29,7 @@ apiClient.interceptors.request.use(
 // Response Interceptor (Optional)
 apiClient.interceptors.response.use(
   (response) => {
-    console.log("API Response:", response);
+   
     return response;
   },
   (error) => {

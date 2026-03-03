@@ -1,7 +1,7 @@
 import React from "react";
-import { Plus } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 
-const MenuItem = ({ name, description, price, image, onAdd }) => {
+const MenuItem = ({ name, description, price, image, onAdd, isAdding }) => {
   return (
     <div className="flex gap-6 p-6 rounded-3xl border border-slate-50 bg-white hover:border-zepto-purple/20 transition-all group shadow-sm hover:shadow-xl">
       <div className="flex-1 space-y-3">
@@ -17,9 +17,15 @@ const MenuItem = ({ name, description, price, image, onAdd }) => {
           </span>
           <button
             onClick={onAdd}
-            className="bg-white border-2 border-zepto-purple text-zepto-purple px-8 py-2 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-zepto-purple hover:text-white transition-all flex items-center gap-2 shadow-sm"
+            disabled={isAdding}
+            className="bg-white border-2 border-zepto-purple text-zepto-purple px-8 py-2 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-zepto-purple hover:text-white transition-all flex items-center gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <Plus size={14} strokeWidth={3} /> Add
+            {isAdding ? (
+              <Loader2 className="animate-spin" size={14} />
+            ) : (
+              <Plus size={14} strokeWidth={3} />
+            )}
+            {isAdding ? "Adding..." : "Add"}
           </button>
         </div>
       </div>

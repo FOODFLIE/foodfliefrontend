@@ -34,7 +34,8 @@ const MobileBottomNav = ({
       icon: ShoppingCart,
       label: "Cart",
       badge: cartCount,
-      action: () => {}, // TODO: Open cart
+      path: "/cart",
+      action: () => navigate("/cart"),
     },
     {
       id: "account",

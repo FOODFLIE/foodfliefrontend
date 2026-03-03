@@ -106,15 +106,19 @@ const Navbar = () => {
               </span>
             </button>
 
-            <button className="bg-zepto-purple text-white px-4 py-2.5 rounded-xl flex items-center gap-3 shadow-lg shadow-zepto-purple/20 hover:bg-zepto-dark transition-all">
+            <Link
+              to="/cart"
+              style={{ backgroundColor: '#8B5CF6' }}
+              className="text-white px-4 py-2.5 rounded-xl flex items-center gap-3 shadow-lg hover:opacity-90 transition-all"
+            >
               <div className="relative">
                 <ShoppingCart size={20} strokeWidth={2.5} />
-                <span className="absolute -top-1 -right-1 bg-zepto-green text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-zepto-purple">
+                <span className="absolute -top-1 -right-1 bg-green-500 text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
                   0
                 </span>
               </div>
               <span className="text-sm font-bold truncate italic">My Cart</span>
-            </button>
+            </Link>
           </div>
         </div>
 

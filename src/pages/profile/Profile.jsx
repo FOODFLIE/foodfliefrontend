@@ -20,7 +20,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  console.log("User data in Profile component:", user);
+
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user"));

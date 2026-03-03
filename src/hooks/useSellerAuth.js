@@ -132,8 +132,7 @@ export const useSellerAuth = () => {
     try {
       const { otp, menu_file, terms_accepted, ...payload } = formData;
 
-      console.log("Received registration data:", payload);
-      console.log("RegisterSeller data:", payload);
+ 
 
       const response = await registerSeller(payload);
       if (response.token && response.seller) {
