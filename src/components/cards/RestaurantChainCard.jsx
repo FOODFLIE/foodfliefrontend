@@ -46,7 +46,7 @@ const RestaurantChainCard = ({
       {/* Content */}
       <div className="mt-3 px-1">
         <div className="flex items-center justify-between mb-1">
-             <h3 className="text-lg font-black text-slate-900 tracking-tight truncate pr-2 group-hover:text-zepto-purple transition-colors">
+             <h3 className="text-lg font-black text-slate-900 tracking-tight truncate pr-2 group-hover:text-zepto-purple transition-colors capitalize">
                 {name}
              </h3>
         </div>

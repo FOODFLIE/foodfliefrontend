@@ -13,7 +13,7 @@ import {
   Power,
 } from "lucide-react";
 import { Outlet, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/authContext";
 
 const SellerDashboard = () => {
   const { user, logout } = useAuth();

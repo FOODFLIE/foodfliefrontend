@@ -1,11 +1,11 @@
 import React from "react";
 import { X, User, Mail, ShieldCheck, ArrowRight, Loader2 } from "lucide-react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/authContext";
 import { useOTPAuth } from "../hooks/useOTPAuth";
-import FormInput from "./common/FormInput";
-import PhoneInput from "./common/PhoneInput";
-import AuthModalHeader from "./auth/AuthModalHeader";
-import AuthModalFooter from "./auth/AuthModalFooter";
+import FormInput from "./common/formInput";
+import PhoneInput from "./common/phoneInput";
+import AuthModalHeader from "./auth/authModalHeader";
+import AuthModalFooter from "./auth/authModalFooter";
 
 const AuthModal = ({ isOpen, onClose }) => {
   const { login } = useAuth();

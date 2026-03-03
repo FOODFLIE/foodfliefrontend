@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import MenuItem from "../../components/MenuItem";
-import CartFooter from "../../components/CartFooter";
+import MenuItem from "../../components/menuItem";
+import CartFooter from "../../components/cartFooter";
 import { RESTAURANTS } from "../../data";
 import { Star, Clock, Zap, Search, Loader2 } from "lucide-react";
 import { getProductsByPartner } from "../../services/productService";

@@ -33,3 +33,12 @@ export const getProductBySku = async (sku) => {
     throw error;
   }
 };
+export const getAllStores = async () => {
+  try {
+    const response = await apiClient.get("/api/customer-product/stores");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching all stores:", error);
+    throw error;
+  }
+};

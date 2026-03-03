@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../context/authContext";
 import {
   Calendar,
   Phone,
@@ -13,7 +13,7 @@ import {
   Store,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import AuthModal from "../../components/AuthModal";
+import AuthModal from "../../components/authModal";
 
 const Profile = () => {
   const { logout } = useAuth();

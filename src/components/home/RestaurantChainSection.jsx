@@ -1,9 +1,47 @@
 import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import RestaurantChainCard from "../cards/RestaurantChainCard";
+import RestaurantChainCard from "../cards/restaurantChainCard";
+import { getAllStores } from "../../services/productService";
 
-const RestaurantChainSection = ({ title, restaurants }) => {
+const RestaurantChainSection = ({ title }) => {
+  const [restaurants, setRestaurants] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
   const scrollRef = React.useRef(null);
+
+  React.useEffect(() => {
+    const fetchStores = async () => {
+      try {
+        setLoading(true);
+        const data = await getAllStores();
+
+        // Handle various response structures
+        const storesList = Array.isArray(data) ? data : data?.data || [];
+
+        // Map API data to component structure
+        const mappedStores = storesList
+          .map((item) => ({
+            ...item,
+            name: item.store_name || item.name,
+            location: item.area || item.address || "Local",
+            rating: item.rating || 4.2 + Math.random() * 0.5, // Fallback rating for display
+            time: item.time || "25-30 mins",
+            cuisine: item.cuisine || "Indian, Fast Food",
+            image:
+              item.image ||
+              "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop",
+          }))
+          .slice(0, 10); // Limit to top 10 for "chain" view
+
+        setRestaurants(mappedStores);
+      } catch (error) {
+        console.error("Failed to fetch stores for chain section:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStores();
+  }, []);
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -13,8 +51,11 @@ const RestaurantChainSection = ({ title, restaurants }) => {
     }
   };
 
+  if (loading) return null; // Or a subtle skeleton
+  if (restaurants.length === 0) return null;
+
   return (
-    <div className="py-8">
+    <div className="py-8 border-b border-slate-100">
       <div className="flex items-center justify-between mb-6 px-4 sm:px-0">
         <h2 className="text-xl font-black text-slate-900 tracking-tight italic">
           {title}
