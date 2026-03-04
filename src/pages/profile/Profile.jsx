@@ -11,25 +11,42 @@ import {
   CreditCard,
   BadgeCheck,
   Store,
+  Clock,
+  CheckCircle2,
+  XCircle,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import AuthModal from "../../components/authModal";
+import { getCustomerOrders } from "../../services/orderService";
 
 const Profile = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
-
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
 
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user"));
     if (userData) {
       setUser(userData);
+      fetchRecentOrders();
     } else {
       setShowAuthModal(true);
     }
   }, []);
+
+  const fetchRecentOrders = async () => {
+    try {
+      const data = await getCustomerOrders();
+      setRecentOrders(data.slice(0, 3));
+    } catch (error) {
+      console.error("Error fetching recent orders:", error);
+    } finally {
+      setLoadingOrders(false);
+    }
+  };
 
   if (!user) {
     return <AuthModal isOpen={showAuthModal} onClose={() => navigate("/")} />;
@@ -183,6 +200,9 @@ const Profile = () => {
               ].map((item, i) => (
                 <div
                   key={i}
+                  onClick={() =>
+                    item.label === "Orders" && navigate("/profile/orders")
+                  }
                   className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer group"
                 >
                   <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-zepto-light transition-colors">
@@ -203,26 +223,113 @@ const Profile = () => {
               ))}
             </div>
 
-            {/* Recent Orders Placeholder */}
-            <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-              <div className="p-6 border-b border-slate-50 flex items-center justify-between">
+            {/* Recent Orders Section */}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between px-2">
                 <h2 className="text-xl font-black text-slate-900 tracking-tight italic">
                   Recent Orders
                 </h2>
-                <button className="text-xs font-bold text-zepto-purple hover:underline">
+                <button
+                  onClick={() => navigate("/profile/orders")}
+                  className="text-xs font-bold text-zepto-purple hover:underline"
+                >
                   View All
                 </button>
               </div>
-              <div className="p-12 text-center">
-                <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Package size={28} className="text-slate-200" />
-                </div>
-                <p className="text-slate-400 font-bold text-sm">
-                  No recent orders found
-                </p>
-                <p className="text-xs text-slate-300 mt-1 uppercase tracking-widest font-black">
-                  Ready to order something delicious?
-                </p>
+
+              <div className="space-y-4">
+                {loadingOrders ? (
+                  <div className="bg-white rounded-3xl p-12 text-center border border-slate-100 shadow-sm">
+                    <div className="w-12 h-12 bg-zepto-purple/10 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                      <Clock size={24} className="text-zepto-purple/40" />
+                    </div>
+                    <p className="text-slate-400 font-bold text-sm">
+                      Loading your orders...
+                    </p>
+                  </div>
+                ) : recentOrders.length === 0 ? (
+                  <div className="bg-white rounded-3xl p-12 text-center border border-slate-100 shadow-sm">
+                    <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Package size={28} className="text-slate-200" />
+                    </div>
+                    <p className="text-slate-400 font-bold text-sm">
+                      No recent orders found
+                    </p>
+                    <p className="text-xs text-slate-300 mt-1 uppercase tracking-widest font-black">
+                      Ready to order something delicious?
+                    </p>
+                  </div>
+                ) : (
+                  recentOrders.map((order) => (
+                    <div
+                      key={order.id}
+                      onClick={() => navigate(`order/${order.id}`)}
+                      className="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-300 overflow-hidden cursor-pointer group"
+                    >
+                      <div className="p-6">
+                        {/* Order Items Preview */}
+                        <div className="flex gap-4 mb-4 overflow-x-auto pb-2 scrollbar-hide">
+                          {order.items?.map((item, idx) => (
+                            <div key={idx} className="flex-shrink-0">
+                              <img
+                                src={
+                                  item.product?.image || "/placeholder-food.png"
+                                }
+                                alt=""
+                                className="w-16 h-16 object-cover rounded-2xl border border-slate-50 group-hover:scale-110 transition-transform duration-300"
+                              />
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="flex justify-between items-start">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-black text-slate-900 text-lg">
+                                {order.status?.toLowerCase() === "delivered"
+                                  ? "Order delivered"
+                                  : order.status?.toLowerCase() === "cancelled"
+                                    ? "Order cancelled"
+                                    : order.status || "Order placed"}
+                              </span>
+                              {order.status?.toLowerCase() === "delivered" ? (
+                                <CheckCircle2
+                                  size={18}
+                                  className="text-green-500"
+                                />
+                              ) : order.status?.toLowerCase() ===
+                                "cancelled" ? (
+                                <XCircle size={18} className="text-slate-400" />
+                              ) : (
+                                <Clock size={18} className="text-amber-500" />
+                              )}
+                            </div>
+                            <p className="text-slate-400 text-sm font-medium">
+                              Placed at {formatDate(order.created_at)}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg font-black text-slate-900">
+                              ₹{order.total_amount}
+                            </span>
+                            <ChevronRight
+                              size={18}
+                              className="text-slate-400"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {order.status?.toLowerCase() === "delivered" && (
+                        <div className="px-6 py-4 bg-slate-50/30 border-t border-slate-50 flex justify-center">
+                          <span className="text-slate-700 font-bold text-sm">
+                            Rate your order
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
               </div>
             </div>
           </div>

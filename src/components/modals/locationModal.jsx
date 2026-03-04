@@ -43,7 +43,7 @@ const LocationModal = ({ isOpen, onClose }) => {
 
   const handleFinalSave = (details) => {
     console.log("Saving full address details:", details);
-    updateLocation(details.coords.lat, details.coords.lng);
+    updateLocation(details.coords.lat, details.coords.lng, details);
     setShowAddressDetails(false);
     onClose();
   };

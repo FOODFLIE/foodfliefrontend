@@ -19,6 +19,7 @@ export const useUserLocation = () => {
 export const LocationProvider = ({ children }) => {
   const [coords, setCoords] = useState({ latitude: null, longitude: null });
   const [address, setAddress] = useState("Detecting location...");
+  const [addressDetails, setAddressDetails] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -55,11 +56,21 @@ export const LocationProvider = ({ children }) => {
     }
   };
 
-  const updateLocation = useCallback((lat, lng) => {
+  const updateLocation = useCallback((lat, lng, details = null) => {
     if (lat && lng) {
       setCoords({ latitude: lat, longitude: lng });
       setLoading(false);
-      fetchAddress(lat, lng);
+
+      if (details) {
+        setAddressDetails(details);
+        // Use details' shortAddress or buildingName for the main pill
+        setAddress(
+          details.shortAddress || details.buildingName || "Custom Location",
+        );
+      } else {
+        fetchAddress(lat, lng);
+        setAddressDetails(null);
+      }
       return;
     }
 
@@ -78,6 +89,7 @@ export const LocationProvider = ({ children }) => {
         setCoords({ latitude, longitude });
         setLoading(false);
         fetchAddress(latitude, longitude);
+        setAddressDetails(null);
         console.log("📍 Location coordinates obtained:", {
           latitude,
           longitude,
@@ -102,6 +114,7 @@ export const LocationProvider = ({ children }) => {
       value={{
         coords,
         address,
+        addressDetails,
         loading,
         error,
         updateLocation,

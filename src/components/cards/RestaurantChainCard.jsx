@@ -22,7 +22,7 @@ const RestaurantChainCard = ({
   return (
     <div 
         onClick={handleClick}
-        className="min-w-[280px] sm:min-w-[320px] cursor-pointer group snap-start"
+        className="min-w-[100px] sm:min-w-[180px] cursor-pointer group snap-start"
     >
       {/* Image Container */}
       <div className="relative h-48 sm:h-52 w-full rounded-2xl overflow-hidden shadow-sm">

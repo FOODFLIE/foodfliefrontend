@@ -1,19 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Store, AlertCircle, ChevronRight, Tag } from "lucide-react";
-import { getCart, updateCartItem, removeFromCart } from "../services/cartService";
+import {
+  Store,
+  AlertCircle,
+  ChevronRight,
+  Tag,
+  MapPin,
+  Navigation,
+} from "lucide-react";
+import {
+  getCart,
+  updateCartItem,
+  removeFromCart,
+} from "../services/cartService";
 import { placeOrder } from "../services/orderService";
+import { useUserLocation } from "../context/locationContext";
 import EmptyCart from "../components/emptyCart";
 import LoadingCart from "../components/loadingCart";
 import CartItem from "../components/cartItem";
 import BillSummary from "../components/billSummary";
+import LocationModal from "../components/modals/locationModal";
 
 const Cart = () => {
   const navigate = useNavigate();
+  const {
+    address,
+    addressDetails,
+    loading: locationLoading,
+    coords,
+  } = useUserLocation();
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
 
   useEffect(() => {
     fetchCart();
@@ -44,8 +63,19 @@ const Cart = () => {
   };
 
   const handleOrderComplete = async () => {
+    if (!address) {
+      setError("Please add a delivery address to place your order.");
+      setIsLocationModalOpen(true);
+      return;
+    }
+
+    // Construct full address string from details if available
+    const finalAddress = addressDetails
+      ? `${addressDetails.buildingName}${addressDetails.companyFloor ? `, ${addressDetails.companyFloor}` : ""}. ${addressDetails.fullAddress}${addressDetails.landmark ? ` (Landmark: ${addressDetails.landmark})` : ""}`
+      : address;
+
     try {
-      await placeOrder("Default Address", "COD");
+      await placeOrder(finalAddress, "COD");
       setTimeout(() => navigate("/orders"), 400);
     } catch (err) {
       setError("Failed to place order: " + err.message);
@@ -71,145 +101,218 @@ const Cart = () => {
   const totalAmount = subtotal + deliveryFee + handlingFee;
 
   return (
-    <div className="min-h-screen bg-[#fafafa] pb-32 pt-10 md:pt-14 relative z-0">
-      {/* Background Soft Gradients */}
-      <div className="absolute top-0 left-0 w-full h-[35vh] bg-gradient-to-b from-purple-50/70 via-white/40 to-transparent -z-10" />
+    <>
+      <div className="min-h-screen bg-[#fafafa] pb-32 pt-8 md:pt-14 relative z-0">
+        {/* Background Soft Gradients */}
+        <div className="absolute top-0 left-0 w-full h-[30vh] bg-gradient-to-b from-purple-50/70 via-white/40 to-transparent -z-10" />
 
-      <div className="responsive-container">
-        <div className="max-w-[1080px] mx-auto">
-          {/* Header Title Layer */}
-          <div className="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <h1 className="text-4xl md:text-[3.5rem] leading-none font-black text-slate-900 tracking-tighter mb-3">
-                Review Cart
-              </h1>
-              <div className="flex items-center gap-3 text-slate-500 font-medium text-lg">
-                <span className="bg-white px-3 py-1 rounded-full border border-slate-200/60 shadow-sm text-slate-700 font-bold">
-                  {cart.items.length} item{cart.items.length !== 1 ? "s" : ""}
-                </span>
-                <span className="w-1.5 h-1.5 rounded-full bg-slate-300"></span>
-                <span className="flex items-center gap-1.5">
-                  <Store size={18} className="text-slate-400" />
-                  {cart.partner_name}
-                </span>
+        <div className="responsive-container">
+          <div className="max-w-[1080px] mx-auto">
+            {/* Header Title Layer */}
+            <div className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <h1 className="text-3xl md:text-5xl leading-none font-black text-slate-900 tracking-tighter mb-2 md:mb-3">
+                  Review Cart
+                </h1>
+                <div className="flex items-center gap-3 text-slate-500 font-medium text-base md:text-lg">
+                  <span className="bg-white px-3 py-1 rounded-full border border-slate-200/60 shadow-sm text-slate-700 font-bold text-xs md:text-sm">
+                    {cart.items.length} item{cart.items.length !== 1 ? "s" : ""}
+                  </span>
+                  <span className="w-1 h-1 rounded-full bg-slate-300"></span>
+                  <span className="flex items-center gap-1.5 text-sm md:text-lg">
+                    <Store size={16} className="text-slate-400 md:w-[18px]" />
+                    {cart.partner_name}
+                  </span>
+                </div>
+              </div>
+
+              {/* Optional delivery timeline or similar badge */}
+              <div className="bg-green-50/80 border border-green-100 text-zepto-green px-3 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex items-center gap-2 font-bold shadow-sm backdrop-blur-md self-start md:self-auto text-xs md:text-sm">
+                <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+                Delivery in 25-30 mins
               </div>
             </div>
 
-            {/* Optional delivery timeline or similar badge */}
-            <div className="hidden md:flex bg-green-50/80 border border-green-100 text-zepto-green px-4 py-2 rounded-2xl items-center gap-2 font-bold shadow-sm backdrop-blur-md">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-              Delivery in 25-30 mins
-            </div>
-          </div>
+            {error && (
+              <div className="mb-8 bg-rose-50 border border-rose-100 rounded-2xl p-4 flex items-center gap-3 shadow-sm animate-fade-in">
+                <AlertCircle size={22} className="text-rose-500" />
+                <p className="text-sm font-semibold text-rose-700">{error}</p>
+              </div>
+            )}
 
-          {error && (
-            <div className="mb-8 bg-rose-50 border border-rose-100 rounded-2xl p-4 flex items-center gap-3 shadow-sm animate-fade-in">
-              <AlertCircle size={22} className="text-rose-500" />
-              <p className="text-sm font-semibold text-rose-700">{error}</p>
-            </div>
-          )}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10">
+              {/* Left Column - Delivery Address & Cart Items */}
+              <div className="lg:col-span-7 space-y-6">
+                {/* Delivery Address Section */}
+                <div className="bg-white rounded-[1.5rem] md:rounded-[2rem] border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.03)] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_40px_rgb(0,0,0,0.06)]">
+                  <div className="p-5 md:p-8">
+                    <div className="flex items-start justify-between gap-3 md:gap-4">
+                      <div className="flex items-start gap-3 md:gap-4 flex-1">
+                        <div className="w-10 h-10 md:w-14 md:h-14 bg-pink-50 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0">
+                          <MapPin className="text-[#FC105F] fill-[#FC105F]/10 w-6 h-6 md:w-7 md:h-7" />
+                        </div>
+                        <div className="overflow-hidden">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <h3 className="text-lg md:text-xl font-black text-slate-800 leading-tight">
+                              Delivery Address
+                            </h3>
+                            {addressDetails?.category && (
+                              <span className="px-1.5 py-0.5 bg-slate-100 text-[9px] md:text-[10px] font-black uppercase text-slate-500 rounded-md tracking-wider">
+                                {addressDetails.category}
+                              </span>
+                            )}
+                          </div>
+                          {address ? (
+                            <div className="mt-1">
+                              {addressDetails?.buildingName && (
+                                <p className="text-slate-800 font-bold text-xs md:text-sm">
+                                  {addressDetails.buildingName}{" "}
+                                  {addressDetails.companyFloor &&
+                                    `, ${addressDetails.companyFloor}`}
+                                </p>
+                              )}
+                              <p className="text-slate-500 font-medium line-clamp-2 text-[11px] md:text-sm leading-relaxed mt-0.5">
+                                {addressDetails?.fullAddress || address}
+                              </p>
+                            </div>
+                          ) : (
+                            <p className="text-rose-500 font-bold mt-1 text-xs md:text-sm">
+                              No delivery address selected
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => setIsLocationModalOpen(true)}
+                        className="px-4 py-2 md:px-6 md:py-2.5 bg-slate-900 text-white rounded-lg md:rounded-xl font-bold text-xs md:text-sm hover:bg-slate-800 transition-colors shadow-lg shadow-slate-200 shrink-0"
+                      >
+                        {address ? "Change" : "Add"}
+                      </button>
+                    </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10">
-            {/* Left Column - Cart Items */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="bg-white rounded-[2rem] border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.03)] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_40px_rgb(0,0,0,0.06)] relative">
-                {/* Decorative top accent */}
-                <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-zepto-purple to-purple-400"></div>
+                    {/* Quick Location Badge if available */}
+                    {!address && (
+                      <button
+                        onClick={() => setIsLocationModalOpen(true)}
+                        className="mt-4 md:mt-6 w-full py-3 md:py-4 border-2 border-dashed border-slate-200 rounded-xl md:rounded-2xl flex items-center justify-center gap-2 text-slate-400 font-bold hover:border-pink-200 hover:text-pink-500 hover:bg-pink-50/30 transition-all group text-xs md:text-base"
+                      >
+                        <Navigation
+                          size={16}
+                          className="group-hover:rotate-45 transition-transform md:w-[18px]"
+                        />
+                        Set address to place order
+                      </button>
+                    )}
+                  </div>
+                </div>
 
-                <div className="p-6 md:p-8 bg-gradient-to-b from-slate-50/50 to-white border-b border-slate-100 flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-5">
-                    <div className="w-16 h-16 bg-white rounded-[1.25rem] border border-slate-100 flex items-center justify-center shadow-sm relative overflow-hidden group-hover:border-purple-200 transition-colors">
-                      <Store
-                        size={26}
-                        className="text-slate-700 relative z-10"
-                        strokeWidth={1.5}
+                <div className="bg-white rounded-[1.5rem] md:rounded-[2rem] border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.03)] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_40px_rgb(0,0,0,0.06)] relative">
+                  {/* Decorative top accent */}
+                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-zepto-purple to-purple-400"></div>
+
+                  <div className="p-5 md:p-8 bg-gradient-to-b from-slate-50/50 to-white border-b border-slate-100 flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4 md:gap-5">
+                      <div className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-xl md:rounded-[1.25rem] border border-slate-100 flex items-center justify-center shadow-sm relative overflow-hidden group-hover:border-purple-200 transition-colors shrink-0">
+                        <Store
+                          size={22}
+                          className="text-slate-700 relative z-10 md:w-[26px]"
+                          strokeWidth={1.5}
+                        />
+                        <div className="absolute inset-0 bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      </div>
+                      <div>
+                        <h2 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight">
+                          {cart.partner_name}
+                        </h2>
+                        <p className="text-xs md:text-sm text-slate-500 font-medium mt-0.5 md:mt-1">
+                          Review your items before checkout
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="divide-y divide-slate-100">
+                    {cart.items.map((item) => (
+                      <CartItem
+                        key={item.id}
+                        item={item}
+                        onUpdateQuantity={handleUpdateQuantity}
+                        onRemove={handleRemoveItem}
                       />
-                      <div className="absolute inset-0 bg-slate-50 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Promo Offer Banner */}
+                <div className="bg-gradient-to-br from-white to-purple-50/30 rounded-2xl md:rounded-[2rem] p-4 md:p-6 border border-purple-100/60 shadow-[0_8px_20px_rgb(0,0,0,0.02)] flex items-center justify-between gap-3 md:gap-4 group cursor-pointer hover:border-purple-200 hover:shadow-[0_8px_30px_rgb(0,0,0,0.05)] transition-all">
+                  <div className="flex items-center gap-3 md:gap-4">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-purple-100/50 rounded-xl md:rounded-2xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform shrink-0">
+                      <Tag
+                        size={20}
+                        className="text-zepto-purple md:w-[22px]"
+                      />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-black text-slate-800 tracking-tight">
-                        {cart.partner_name}
-                      </h2>
-                      <p className="text-sm text-slate-500 font-medium mt-1">
-                        Delivering to your saved location
+                      <h4 className="font-bold text-slate-800 text-base md:text-lg">
+                        Apply Coupon
+                      </h4>
+                      <p className="text-xs md:text-sm text-slate-500 font-medium">
+                        Log in to view offers
                       </p>
                     </div>
                   </div>
+                  <ChevronRight
+                    size={18}
+                    className="text-slate-300 group-hover:text-zepto-purple transition-colors group-hover:translate-x-1 md:w-[20px]"
+                    strokeWidth={2.5}
+                  />
                 </div>
 
-                <div className="divide-y divide-slate-100">
-                  {cart.items.map((item) => (
-                    <CartItem
-                      key={item.id}
-                      item={item}
-                      onUpdateQuantity={handleUpdateQuantity}
-                      onRemove={handleRemoveItem}
-                    />
-                  ))}
+                {/* Cooking Notes Banner */}
+                <div className="bg-white rounded-2xl md:rounded-[2rem] p-4 md:p-6 border border-slate-200/60 shadow-[0_8px_20px_rgb(0,0,0,0.02)] cursor-text transition-all focus-within:border-slate-300 focus-within:shadow-md">
+                  <textarea
+                    placeholder="Any cooking instructions? (e.g. Less spicy, extra sauce)"
+                    className="w-full bg-transparent outline-none resize-none font-medium text-slate-700 placeholder:text-slate-400 text-xs md:text-sm"
+                    rows="2"
+                  ></textarea>
                 </div>
               </div>
 
-              {/* Promo Offer Banner */}
-              <div className="bg-gradient-to-br from-white to-purple-50/30 rounded-[2rem] p-6 border border-purple-100/60 shadow-[0_8px_20px_rgb(0,0,0,0.02)] flex items-center justify-between gap-4 group cursor-pointer hover:border-purple-200 hover:shadow-[0_8px_30px_rgb(0,0,0,0.05)] transition-all">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-purple-100/50 rounded-2xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
-                    <Tag size={22} className="text-zepto-purple" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-slate-800 text-lg">
-                      Apply Coupon
-                    </h4>
-                    <p className="text-sm text-slate-500 font-medium">
-                      Log in to view offers
-                    </p>
-                  </div>
-                </div>
-                <ChevronRight
-                  size={20}
-                  className="text-slate-300 group-hover:text-zepto-purple transition-colors group-hover:translate-x-1"
-                  strokeWidth={2.5}
+              {/* Right Column - Bill Details & Call to Action */}
+              <div className="lg:col-span-5 relative mt-4 lg:mt-0">
+                <BillSummary
+                  subtotal={subtotal}
+                  deliveryFee={deliveryFee}
+                  handlingFee={handlingFee}
+                  totalAmount={totalAmount}
+                  onOrderComplete={handleOrderComplete}
                 />
-              </div>
 
-              {/* Cooking Notes Banner */}
-              <div className="bg-white rounded-[2rem] p-6 border border-slate-200/60 shadow-[0_8px_20px_rgb(0,0,0,0.02)] cursor-text transition-all focus-within:border-slate-300 focus-within:shadow-md">
-                <textarea
-                  placeholder="Any cooking instructions? (e.g. Less spicy, extra sauce)"
-                  className="w-full bg-transparent outline-none resize-none font-medium text-slate-700 placeholder:text-slate-400"
-                  rows="2"
-                ></textarea>
-              </div>
-            </div>
-
-            {/* Right Column - Bill Details & Call to Action */}
-            <div className="lg:col-span-5 relative mt-4 lg:mt-0">
-              <BillSummary
-                subtotal={subtotal}
-                deliveryFee={deliveryFee}
-                handlingFee={handlingFee}
-                totalAmount={totalAmount}
-                onOrderComplete={handleOrderComplete}
-              />
-
-              {/* Optional Terms Disclaimer */}
-              <div className="mt-6 text-center px-4">
-                <p className="text-xs font-medium text-slate-400 leading-relaxed">
-                  By completing this order, you agree to our{" "}
-                  <span className="text-slate-600 underline cursor-pointer hover:text-zepto-purple">
-                    Terms of Service
-                  </span>{" "}
-                  and{" "}
-                  <span className="text-slate-600 underline cursor-pointer hover:text-zepto-purple">
-                    Privacy Policy
-                  </span>
-                  .
-                </p>
+                {/* Optional Terms Disclaimer */}
+                <div className="mt-6 text-center px-4">
+                  <p className="text-[10px] md:text-xs font-medium text-slate-400 leading-relaxed">
+                    By completing this order, you agree to our{" "}
+                    <span className="text-slate-600 underline cursor-pointer hover:text-zepto-purple">
+                      Terms of Service
+                    </span>{" "}
+                    and{" "}
+                    <span className="text-slate-600 underline cursor-pointer hover:text-zepto-purple">
+                      Privacy Policy
+                    </span>
+                    .
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <LocationModal
+        isOpen={isLocationModalOpen}
+        onClose={() => setIsLocationModalOpen(false)}
+      />
+    </>
   );
 };
 

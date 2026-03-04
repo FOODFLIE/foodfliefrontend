@@ -12,7 +12,9 @@ import Menu from "./pages/partner/components/menu";
 import { AuthProvider } from "./context/authContext";
 import { LocationProvider } from "./context/locationContext";
 import Navbar from "./components/navbar";
-
+import Footer from "./components/footer";
+import OrderHistory from "./pages/profile/orderHistory";
+import OrderDetail from "./pages/profile/orderDetail";
 
 const App = () => {
   return (
@@ -24,7 +26,11 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/category/:id" element={<CategoryProduct />} />
             <Route path="/restaurant/:id" element={<RestaurantDetail />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile">
+              <Route index element={<Profile />} />
+              <Route path="orders" element={<OrderHistory />} />
+              <Route path="order/:id" element={<OrderDetail />} />
+            </Route>
             <Route path="/cart" element={<Cart />} />
             <Route path="/partner" element={<SellerAuth />} />
             <Route path="/partner/dashboard" element={<SellerDashboard />}>
@@ -33,6 +39,7 @@ const App = () => {
               <Route path="menu" element={<Menu />} />
             </Route>
           </Routes>
+          <Footer />
         </div>
       </AuthProvider>
     </LocationProvider>

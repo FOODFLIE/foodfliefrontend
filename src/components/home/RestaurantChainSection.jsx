@@ -90,8 +90,8 @@ const RestaurantChainSection = ({ title }) => {
   }
 
   return (
-    <div className="py-8 border-b border-slate-100">
-      <div className="flex items-center justify-between mb-6 px-4 sm:px-0">
+    <div className="py-2 border-b border-slate-100">
+      <div className="flex items-center justify-between mb-3 px-4 sm:px-0">
         <h2 className="text-xl font-black text-slate-900 tracking-tight italic">
           {title}
         </h2>
@@ -113,7 +113,7 @@ const RestaurantChainSection = ({ title }) => {
 
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-6 pb-6 px-4 sm:px-0 scrollbar-hide snap-x"
+        className="flex overflow-x-auto gap-6 pb-3 px-4 sm:px-0 scrollbar-hide snap-x"
       >
         {restaurants.map((restaurant, index) => (
           <RestaurantChainCard key={index} {...restaurant} />

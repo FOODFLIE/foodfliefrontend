@@ -1,13 +1,13 @@
 import React from "react";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/navbar";
 import Banner from "../../components/Banner";
 import CategorySection from "../../components/home/categorySection";
 import RestaurantChainSection from "../../components/home/restaurantChainSection";
 
 const Home = () => {
   return (
-    <div className="bg-white pb-20">
-      <main className="responsive-container py-6">
+    <div className="bg-white pb-12">
+      <main className="responsive-container py-3">
         {/* Banner Section */}
         <Banner
           image="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=1200&h=400&fit=crop"

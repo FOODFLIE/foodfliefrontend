@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/navbar";
 import MenuItem from "../../components/menuItem";
 import CartFooter from "../../components/cartFooter";
 import { RESTAURANTS } from "../../data";

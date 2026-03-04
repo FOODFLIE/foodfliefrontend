@@ -31,8 +31,8 @@ const CategorySection = () => {
 
   if (loading) {
     return (
-      <div className="py-8">
-        <div className="flex overflow-x-auto pb-4 gap-4 sm:gap-8 px-4 sm:px-0">
+      <div className="py-2">
+        <div className="flex overflow-x-auto pb-3 gap-4 sm:gap-8 px-4 sm:px-0">
           {[...Array(6)].map((_, i) => (
             <div
               key={i}
@@ -48,14 +48,14 @@ const CategorySection = () => {
   }
 
   return (
-    <div className="py-8">
-      <div className="flex items-center justify-between mb-6 px-4 sm:px-0">
+    <div className="py-2">
+      <div className="flex items-center justify-between mb-3 px-4 sm:px-0">
         <h2 className="text-xl font-black text-slate-900 tracking-tight italic">
           Inspiration for your first order
         </h2>
       </div>
 
-      <div className="flex overflow-x-auto pb-4 gap-4 sm:gap-8 px-4 sm:px-0 scrollbar-hide snap-x">
+      <div className="flex overflow-x-auto pb-3 gap-4 sm:gap-8 px-4 sm:px-0 scrollbar-hide snap-x">
         {categories.map((category) => (
           <div
             key={category.id}
