@@ -55,7 +55,14 @@ export const LocationProvider = ({ children }) => {
     }
   };
 
-  const updateLocation = useCallback(() => {
+  const updateLocation = useCallback((lat, lng) => {
+    if (lat && lng) {
+      setCoords({ latitude: lat, longitude: lng });
+      setLoading(false);
+      fetchAddress(lat, lng);
+      return;
+    }
+
     if (!navigator.geolocation) {
       setError("Geolocation is not supported");
       return;
