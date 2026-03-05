@@ -40,6 +40,7 @@ export default function MapPicker({ initialCoords, onClose, onConfirm }) {
   const [isPinMoving, setIsPinMoving] = useState(false);
   const [isLocationSet, setIsLocationSet] = useState(false);
   const [autocomplete, setAutocomplete] = useState(null);
+  const lastFetchedMapCenter = useRef({ lat: null, lng: null });
 
   const fetchAddress = async (lat, lng) => {
     try {
@@ -84,6 +85,19 @@ export default function MapPicker({ initialCoords, onClose, onConfirm }) {
       const newCenter = map.getCenter();
       const lat = newCenter.lat();
       const lng = newCenter.lng();
+
+      const latStr = lat.toFixed(6);
+      const lngStr = lng.toFixed(6);
+
+      if (
+        lastFetchedMapCenter.current.lat === latStr &&
+        lastFetchedMapCenter.current.lng === lngStr
+      ) {
+        // Prevent panTo/getCenter coordinate drift infinite loop
+        return;
+      }
+      lastFetchedMapCenter.current = { lat: latStr, lng: lngStr };
+
       setCenter({ lat, lng });
       setIsPinMoving(false);
       setIsLocationSet(true);

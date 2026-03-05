@@ -4,7 +4,7 @@ import {
   verifySellerOTP,
   registerSeller,
 } from "../services/sellerAuthService";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/authContext";
 import { useNavigate } from "react-router-dom";
 
 /**

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   X,
   MapPin,
@@ -10,10 +10,12 @@ import {
   Plus,
   Home,
   ChevronRight,
+  Briefcase,
 } from "lucide-react";
 import { useUserLocation } from "../../context/locationContext";
 import MapPicker from "../maps/mapPicker";
-import AddressDetailsModal from "./AddressDetailsModal";
+import AddressDetailsModal from "./addressDetailsModal";
+import { fetchAddresses } from "../../services/addressService";
 
 const LocationModal = ({ isOpen, onClose }) => {
   const { coords, address, error, loading, updateLocation } = useUserLocation();
@@ -27,6 +29,31 @@ const LocationModal = ({ isOpen, onClose }) => {
     shortAddress: "",
   });
   const [searchQuery, setSearchQuery] = useState("");
+  const [savedAddresses, setSavedAddresses] = useState([]);
+  const [loadingAddresses, setLoadingAddresses] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      loadAddresses();
+    }
+  }, [isOpen]);
+
+  const loadAddresses = async () => {
+    setLoadingAddresses(true);
+    try {
+      const data = await fetchAddresses();
+      // Handle cases where the API returns an object wrapping the array (e.g. { data: [...] } or { addresses: [...] })
+      const addressArray = Array.isArray(data)
+        ? data
+        : data?.data || data?.addresses || [];
+      setSavedAddresses(addressArray);
+    } catch (err) {
+      console.error("Failed to load saved addresses", err);
+      setSavedAddresses([]);
+    } finally {
+      setLoadingAddresses(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -151,37 +178,48 @@ const LocationModal = ({ isOpen, onClose }) => {
                   Saved Addresses
                 </h3>
 
-                <div className="flex items-start gap-4 p-4 rounded-2xl hover:bg-slate-50 cursor-pointer">
-                  <div className="p-2 rounded-xl bg-slate-100 text-slate-500">
-                    <MapPin size={20} />
+                {loadingAddresses ? (
+                  <div className="flex justify-center p-4">
+                    <Loader2
+                      size={24}
+                      className="animate-spin text-slate-400"
+                    />
                   </div>
+                ) : savedAddresses.length > 0 ? (
+                  savedAddresses.map((addr) => {
+                    const isHome = addr.address_type?.toLowerCase() === "home";
+                    const isWork = addr.address_type?.toLowerCase() === "work";
+                    const Icon = isHome ? Home : isWork ? Briefcase : MapPin;
 
-                  <div className="flex flex-col">
-                    <span className="text-sm font-bold text-slate-800">
-                      Hostel
-                    </span>
+                    return (
+                      <div
+                        key={addr.id}
+                        className="flex items-start gap-4 p-4 rounded-2xl hover:bg-slate-50 cursor-pointer transition-colors border border-transparent hover:border-slate-100"
+                      >
+                        <div className="p-2 rounded-xl bg-slate-100 text-slate-500 shrink-0">
+                          <Icon size={20} />
+                        </div>
 
-                    <p className="text-xs text-slate-400">
-                      Kukatpally, KPHB Phase 1, Hyderabad
-                    </p>
+                        <div className="flex flex-col flex-1 min-w-0">
+                          <span className="text-sm font-bold text-slate-800 capitalize">
+                            {addr.address_type || "Other"}
+                          </span>
+
+                          <p className="text-xs text-slate-400 truncate mt-0.5">
+                            {addr.address_line1}
+                          </p>
+                          <p className="text-xs text-slate-400 truncate">
+                            {addr.city}, {addr.pincode}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="text-sm text-slate-400 text-center py-4 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                    No saved addresses found.
                   </div>
-                </div>
-
-                <div className="flex items-start gap-4 p-4 rounded-2xl hover:bg-slate-50 cursor-pointer">
-                  <div className="p-2 rounded-xl bg-slate-100 text-slate-500">
-                    <Home size={20} />
-                  </div>
-
-                  <div className="flex flex-col">
-                    <span className="text-sm font-bold text-slate-800">
-                      Home
-                    </span>
-
-                    <p className="text-xs text-slate-400">
-                      Kukatpally, KPHB Phase 1, Hyderabad
-                    </p>
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

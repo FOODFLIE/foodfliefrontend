@@ -95,13 +95,13 @@ const Footer = () => {
             <h4 className="font-bold text-lg mb-6">Support</h4>
             <ul className="space-y-4 text-slate-400 text-sm">
               <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Help Center
+                <a href="/about" className="hover:text-white transition-colors">
+                  About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">
-                  Terms of Service
+                <a href="/contact" className="hover:text-white transition-colors">
+                  Contact Us
                 </a>
               </li>
               <li>

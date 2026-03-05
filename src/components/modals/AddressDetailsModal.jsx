@@ -8,6 +8,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useAuth } from "../../context/authContext";
+import { saveAddress } from "../../services/addressService";
 
 const AddressDetailsModal = ({
   isOpen,
@@ -26,7 +27,10 @@ const AddressDetailsModal = ({
     landmark: "",
     receiverName: "",
     receiverNumber: "",
+    pincode: "",
   });
+  const [isSaving, setIsSaving] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   // Pre-fill user data if available
   useEffect(() => {
@@ -46,15 +50,41 @@ const AddressDetailsModal = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onSave({
-      ...formData,
-      category: addressCategory,
-      coords,
-      fullAddress: address,
-      shortAddress: shortAddress,
-    });
+    setIsSaving(true);
+    setErrorMsg("");
+
+    try {
+      // Map to the required API payload structure
+      const payload = {
+        address_line1: `${formData.buildingName}${
+          formData.companyFloor ? `, ${formData.companyFloor}` : ""
+        }${formData.landmark ? `, ${formData.landmark}` : ""}`,
+        city: shortAddress || "Unknown",
+        pincode: formData.pincode || "000000",
+        latitude: coords?.lat || 0,
+        longitude: coords?.lng || 0,
+        address_type: addressCategory.toLowerCase(),
+        is_default: false,
+      };
+
+      await saveAddress(payload);
+
+      // Continue to the original local state save behavior
+      onSave({
+        ...formData,
+        category: addressCategory,
+        coords,
+        fullAddress: address,
+        shortAddress: shortAddress,
+      });
+    } catch (error) {
+      console.error("Failed to save address:", error);
+      setErrorMsg("Failed to save address. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -164,7 +194,7 @@ const AddressDetailsModal = ({
                   name="buildingName"
                   value={formData.buildingName}
                   onChange={handleChange}
-                  placeholder="Building name *"
+                  placeholder="Building name / Flat no *"
                   required
                   className="w-full h-14 bg-white border border-slate-100 rounded-xl px-4 text-sm outline-none focus:border-slate-300 transition-colors"
                 />
@@ -177,6 +207,18 @@ const AddressDetailsModal = ({
                   value={formData.landmark}
                   onChange={handleChange}
                   placeholder="Landmark (Optional)"
+                  className="w-full h-14 bg-white border border-slate-100 rounded-xl px-4 text-sm outline-none focus:border-slate-300 transition-colors"
+                />
+              </div>
+
+              <div className="relative">
+                <input
+                  type="text"
+                  name="pincode"
+                  value={formData.pincode}
+                  onChange={handleChange}
+                  placeholder="Pincode *"
+                  required
                   className="w-full h-14 bg-white border border-slate-100 rounded-xl px-4 text-sm outline-none focus:border-slate-300 transition-colors"
                 />
               </div>
@@ -221,16 +263,22 @@ const AddressDetailsModal = ({
               </div>
             </div>
 
+            {errorMsg && (
+              <p className="text-red-500 text-xs font-medium text-center">
+                {errorMsg}
+              </p>
+            )}
+
             <button
               type="submit"
-              className={`w-full h-14 rounded-2xl font-bold text-base transition-all mt-4 ${
-                formData.buildingName
+              className={`w-full h-14 rounded-2xl font-bold text-base transition-all mt-4 flex items-center justify-center ${
+                formData.buildingName && formData.pincode && !isSaving
                   ? "bg-[#FC105F] text-white shadow-lg shadow-pink-100 active:scale-[0.98]"
                   : "bg-slate-100 text-slate-400 cursor-not-allowed"
               }`}
-              disabled={!formData.buildingName}
+              disabled={!formData.buildingName || !formData.pincode || isSaving}
             >
-              Save Address
+              {isSaving ? "Saving..." : "Save Address"}
             </button>
           </form>
         </div>

@@ -75,8 +75,8 @@ const Cart = () => {
       : address;
 
     try {
-      await placeOrder(finalAddress, "COD");
-      setTimeout(() => navigate("/orders"), 400);
+      const response = await placeOrder(finalAddress, "COD");
+      setTimeout(() => navigate("/order-confirmation", { state: { orderId: response?.order_id } }), 400);
     } catch (err) {
       setError("Failed to place order: " + err.message);
     }

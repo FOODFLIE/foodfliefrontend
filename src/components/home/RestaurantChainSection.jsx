@@ -40,7 +40,7 @@ const RestaurantChainSection = ({ title }) => {
             ...item,
             name: item.store_name || item.name,
             location: item.area || item.address || "Local",
-            rating: item.rating || 4.2 + Math.random() * 0.5,
+            rating: item.rating || 4.2 ,
             time: item.time || "25-30 mins",
             cuisine: item.cuisine || "Indian, Fast Food",
             image:
@@ -91,8 +91,8 @@ const RestaurantChainSection = ({ title }) => {
 
   return (
     <div className="py-2 border-b border-slate-100">
-      <div className="flex items-center justify-between mb-3 px-4 sm:px-0">
-        <h2 className="text-xl font-black text-slate-900 tracking-tight italic">
+      <div className="flex items-center justify-between mb-2 px-4 sm:px-0">
+        <h2 className="text-base sm:text-xl font-black text-slate-900 tracking-tight">
           {title}
         </h2>
         <div className="flex gap-2">
@@ -113,7 +113,7 @@ const RestaurantChainSection = ({ title }) => {
 
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-6 pb-3 px-4 sm:px-0 scrollbar-hide snap-x"
+        className="flex overflow-x-auto gap-4 sm:gap-6 pb-3 px-4 sm:px-0 scrollbar-hide snap-x"
       >
         {restaurants.map((restaurant, index) => (
           <RestaurantChainCard key={index} {...restaurant} />

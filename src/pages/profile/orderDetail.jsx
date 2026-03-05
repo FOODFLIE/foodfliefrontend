@@ -25,7 +25,7 @@ const OrderDetail = () => {
     const fetchOrder = async () => {
       try {
         const data = await getOrderById(id);
-        console.log("1",data);
+        console.log("1", data);
         setOrder(data);
       } catch (error) {
         console.error("Error fetching order details:", error);
@@ -159,29 +159,24 @@ const OrderDetail = () => {
               <div key={idx} className="p-6 flex gap-4 group">
                 <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-100 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
                   <img
-                    src={item.product?.image || "/placeholder-food.png"}
-                    alt={item.product?.name}
+                    src={item.item_image || "/placeholder-food.png"}
+                    alt={item.item_name}
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="flex-1 min-w-0 py-1">
                   <h4 className="text-sm font-bold text-slate-900 leading-tight">
-                    {item.product?.name}
+                    {item.item_name}
                   </h4>
                   <p className="text-xs text-slate-400 mt-1 capitalize">
-                    {item.quantity} unit{item.quantity > 1 ? "s" : ""} •{" "}
-                    {item.product?.weight || "1pc"}
+                    {item.quantity} unit{item.quantity > 1 ? "s" : ""}
+                    {item.variant && ` • ${item.variant}`}
                   </p>
                 </div>
                 <div className="text-right py-1">
                   <p className="text-sm font-black text-slate-900">
                     ₹{item.price}
                   </p>
-                  {item.product?.originalPrice && (
-                    <p className="text-[10px] text-slate-300 line-through font-medium">
-                      ₹{item.product.originalPrice}
-                    </p>
-                  )}
                 </div>
               </div>
             ))}
@@ -200,9 +195,6 @@ const OrderDetail = () => {
             <div className="flex justify-between items-center text-sm font-medium">
               <span className="text-slate-400">Item Total</span>
               <div className="flex items-center gap-2">
-                <span className="text-slate-300 line-through text-xs italic">
-                  ₹{order.total_amount + 71}
-                </span>
                 <span className="text-slate-600 font-bold">
                   ₹{order.total_amount}
                 </span>
@@ -211,35 +203,28 @@ const OrderDetail = () => {
             <div className="flex justify-between items-center text-sm font-medium">
               <span className="text-slate-400">Delivery Fee</span>
               <div className="flex items-center gap-2">
-                <span className="text-slate-300 line-through text-xs italic">
-                  ₹30
-                </span>
-                <span className="text-zepto-green font-black text-xs uppercase italic">
-                  Free
+                <span className="text-slate-600 font-bold">
+                  ₹{order.delivery_fee}
                 </span>
               </div>
             </div>
-            <div className="flex justify-between items-center text-sm font-medium">
-              <span className="text-slate-400">Handling Fee</span>
-              <div className="flex items-center gap-2">
-                <span className="text-slate-300 line-through text-xs italic">
-                  ₹10
-                </span>
-                <span className="text-zepto-green font-black text-xs uppercase italic">
-                  Free
-                </span>
+            {Number(order.discount_amount) > 0 && (
+              <div className="flex justify-between items-center text-sm font-medium">
+                <span className="text-slate-400">Discount</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-zepto-green font-bold">
+                    -₹{order.discount_amount}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
             <div className="pt-4 border-t border-slate-50 flex justify-between items-center">
               <span className="text-base font-black text-slate-900 italic">
                 Total Bill
               </span>
               <div className="text-right">
-                <span className="text-xs text-slate-300 line-through font-bold mr-2">
-                  ₹{order.total_amount + 111}
-                </span>
                 <span className="text-base font-black text-slate-900 tracking-tight">
-                  ₹{order.total_amount}
+                  ₹{order.final_amount}
                 </span>
               </div>
             </div>
@@ -290,6 +275,24 @@ const OrderDetail = () => {
 
             <div className="space-y-1">
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                Payment Details
+              </p>
+              <p className="text-sm font-bold text-slate-700 uppercase">
+                {order.payment_method || "N/A"}{" "}
+                <span
+                  className={`ml-2 text-[10px] px-2 py-0.5 rounded-full ${
+                    order.payment_status === "completed"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-amber-100 text-amber-700"
+                  }`}
+                >
+                  {order.payment_status || "Pending"}
+                </span>
+              </p>
+            </div>
+
+            <div className="space-y-1">
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                 Delivery Address
               </p>
               <p className="text-sm font-bold text-slate-700 flex items-start gap-2 leading-relaxed">
@@ -297,8 +300,9 @@ const OrderDetail = () => {
                   size={14}
                   className="text-slate-300 mt-0.5 flex-shrink-0"
                 />
-                {order.address ||
-                  "4th floor sri balaji mens pg near vantashala"}
+                {order.address && order.address !== "undefined, undefined"
+                  ? order.address
+                  : "Address not provided"}
               </p>
             </div>
 
@@ -308,15 +312,19 @@ const OrderDetail = () => {
                   Order Placed at
                 </p>
                 <p className="text-sm font-bold text-slate-700">
-                  {formatDate(order.created_at)}
+                  {order.created_at ? formatDate(order.created_at) : "N/A"}
                 </p>
               </div>
               <div className="space-y-1">
                 <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                  Order Arrived at
+                  Order Status Updated
                 </p>
                 <p className="text-sm font-bold text-slate-700">
-                  {formatDate(order.arrived_at || order.created_at)}
+                  {order.delivered_at
+                    ? formatDate(order.delivered_at)
+                    : order.accepted_at
+                      ? formatDate(order.accepted_at)
+                      : "In Progress"}
                 </p>
               </div>
             </div>

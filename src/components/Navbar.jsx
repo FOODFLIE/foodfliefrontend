@@ -21,8 +21,8 @@ const Navbar = () => {
   return (
     <>
       <nav className="sticky top-0 z-50 bg-white border-b border-slate-100 shadow-sm">
-        <div className="responsive-container py-3 flex items-center justify-between gap-4 sm:gap-8">
-          <div className="flex items-center gap-3 sm:gap-6 shrink-0">
+        <div className="responsive-container py-2 sm:py-3 flex items-center justify-between gap-2 sm:gap-4 md:gap-8">
+          <div className="flex items-center gap-2 sm:gap-3 md:gap-6 shrink-0">
             <Logo />
             <LocationPill
               address={address}
