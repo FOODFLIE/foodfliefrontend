@@ -36,6 +36,8 @@ const Cart = () => {
   const [error, setError] = useState("");
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
 
+  console.log("2", addressDetails); 
+
   useEffect(() => {
     fetchCart();
   }, []);

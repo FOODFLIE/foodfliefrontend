@@ -6,8 +6,10 @@ import {
   Briefcase,
   Navigation,
   Trash2,
+  AlertCircle,
+  CheckCircle,
 } from "lucide-react";
-import { fetchAddresses, saveAddress } from "../../services/addressService";
+import { fetchAddresses, saveAddress, deleteAddress } from "../../services/addressService";
 import LocationModal from "../../components/modals/locationModal";
 import SEO from "../../components/common/seo";
 
@@ -15,6 +17,10 @@ const Addresses = () => {
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleting, setDeleting] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
+  const [toast, setToast] = useState(null);
+  const [deletedAddress, setDeletedAddress] = useState(null);
 
   useEffect(() => {
     loadAddresses();
@@ -39,6 +45,40 @@ const Addresses = () => {
         return <Briefcase className="w-5 h-5" />;
       default:
         return <MapPin className="w-5 h-5" />;
+    }
+  };
+
+  const showToast = (message, type = "success") => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  };
+
+  const handleDelete = async (addressId) => {
+    const addressToDelete = addresses.find(addr => addr.id === addressId);
+    setDeleting(addressId);
+    try {
+      await deleteAddress(addressId);
+      setAddresses(addresses.filter(addr => addr.id !== addressId));
+      setDeletedAddress(addressToDelete);
+      showToast("Address deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete address:", error);
+      showToast("Failed to delete address", "error");
+    } finally {
+      setDeleting(null);
+      setDeleteConfirm(null);
+    }
+  };
+
+  const handleUndo = async () => {
+    if (!deletedAddress) return;
+    try {
+      await saveAddress(deletedAddress);
+      loadAddresses();
+      setDeletedAddress(null);
+      setToast(null);
+    } catch (error) {
+      console.error("Failed to restore address:", error);
     }
   };
 
@@ -101,37 +141,38 @@ const Addresses = () => {
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-zepto-purple">
-                        {getCategoryIcon(address.category)}
+                        {getCategoryIcon(address.address_type)}
                       </div>
                       <div>
                         <h3 className="font-black text-slate-900 capitalize">
-                          {address.category || "Other"}
+                          {address.address_type || "Other"}
                         </h3>
-                        {address.building_name && (
+                        {address.address_line1 && (
                           <p className="text-xs text-slate-600 font-bold">
-                            {address.building_name}
+                            {address.address_line1.split(',')[0]}
                           </p>
                         )}
                       </div>
                     </div>
-                    <button className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-rose-500">
+                    <button 
+                      onClick={() => setDeleteConfirm(address.id)}
+                      disabled={deleting === address.id}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-rose-500 disabled:opacity-50"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
 
                   <div className="space-y-2">
-                    {address.company_floor && (
-                      <p className="text-sm text-slate-700 font-medium">
-                        {address.company_floor}
-                      </p>
-                    )}
                     <p className="text-sm text-slate-600 leading-relaxed">
-                      {address.full_address || address.address}
+                      {address.address_line1}
                     </p>
-                    {address.landmark && (
+                    <p className="text-xs text-slate-500">
+                      {address.city}, {address.pincode}
+                    </p>
+                    {address.contact_name && (
                       <p className="text-xs text-slate-500">
-                        <span className="font-bold">Landmark:</span>{" "}
-                        {address.landmark}
+                        <span className="font-bold">Contact:</span> {address.contact_name} - {address.phone}
                       </p>
                     )}
                   </div>
@@ -166,6 +207,62 @@ const Addresses = () => {
           loadAddresses();
         }}
       />
+
+      {deleteConfirm && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+            <div className="w-12 h-12 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <AlertCircle className="w-6 h-6 text-rose-500" />
+            </div>
+            <h3 className="text-lg font-black text-slate-900 text-center mb-2">
+              Delete Address?
+            </h3>
+            <p className="text-sm text-slate-600 text-center mb-6">
+              You can undo this action.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setDeleteConfirm(null)}
+                className="flex-1 px-4 py-2.5 bg-slate-100 text-slate-700 rounded-xl font-bold hover:bg-slate-200 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDelete(deleteConfirm)}
+                disabled={deleting}
+                className="flex-1 px-4 py-2.5 bg-rose-500 text-white rounded-xl font-bold hover:bg-rose-600 transition-colors disabled:opacity-50"
+              >
+                {deleting ? "Deleting..." : "Delete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {toast && (
+        <div className="fixed bottom-4 right-4 z-50 animate-in slide-in-from-bottom">
+          <div className={`flex items-center gap-3 px-4 py-3 rounded-xl shadow-lg ${
+            toast.type === "error" 
+              ? "bg-rose-500 text-white" 
+              : "bg-green-500 text-white"
+          }`}>
+            {toast.type === "error" ? (
+              <AlertCircle className="w-5 h-5" />
+            ) : (
+              <CheckCircle className="w-5 h-5" />
+            )}
+            <span className="font-bold text-sm">{toast.message}</span>
+            {toast.type !== "error" && deletedAddress && (
+              <button
+                onClick={handleUndo}
+                className="ml-2 px-3 py-1 bg-white/20 hover:bg-white/30 rounded-lg text-xs font-bold transition-colors"
+              >
+                Undo
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
 };

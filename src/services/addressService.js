@@ -19,3 +19,12 @@ export const fetchAddresses = async () => {
     throw error.response?.data || error.message;
   }
 };
+
+export const deleteAddress = async (addressId) => {
+  try {
+    const response = await apiClient.delete(`/api/address/${addressId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
