@@ -75,6 +75,23 @@ const LocationModal = ({ isOpen, onClose }) => {
     onClose();
   };
 
+  const handleSelectSavedAddress = (addr) => {
+    const addressDetails = {
+      buildingName: addr.building_name || addr.address_line1,
+      companyFloor: addr.company_floor || "",
+      landmark: addr.landmark || "",
+      receiverName: addr.receiver_name || "",
+      receiverNumber: addr.receiver_number || "",
+      pincode: addr.pincode,
+      category: addr.address_type,
+      coords: { lat: addr.latitude, lng: addr.longitude },
+      fullAddress: addr.address_line1,
+      shortAddress: addr.city,
+    };
+    updateLocation(addr.latitude, addr.longitude, addressDetails);
+    onClose();
+  };
+
   return (
     <>
       <div className="fixed inset-0 z-[1000] flex items-end sm:items-center justify-center sm:p-4 bg-black/60 backdrop-blur-sm">
@@ -194,6 +211,7 @@ const LocationModal = ({ isOpen, onClose }) => {
                     return (
                       <div
                         key={addr.id}
+                        onClick={() => handleSelectSavedAddress(addr)}
                         className="flex items-start gap-4 p-4 rounded-2xl hover:bg-slate-50 cursor-pointer transition-colors border border-transparent hover:border-slate-100"
                       >
                         <div className="p-2 rounded-xl bg-slate-100 text-slate-500 shrink-0">

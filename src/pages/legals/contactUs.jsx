@@ -11,10 +11,12 @@ import {
   Handshake,
   Smile,
 } from "lucide-react";
+import SEO from "../../components/common/seo";
 
 const ContactUs = () => {
   return (
     <div className="min-h-screen bg-[#FCFBFA] text-slate-800 font-sans selection:bg-purple-100 selection:text-purple-900 pb-24 overflow-hidden relative">
+      <SEO title="Contact Us" />
       {/* Soft Ambient Backgrounds */}
       <div className="absolute top-0 left-0 w-full h-[600px] overflow-hidden -z-10 pointer-events-none">
         <div className="absolute -top-[10%] -left-[5%] w-[40%] h-[80%] rounded-full bg-blue-50/60 blur-[100px] mix-blend-multiply"></div>

@@ -15,27 +15,39 @@ import { LocationProvider } from "./context/locationContext";
 import Navbar from "./components/navbar";
 import OrderHistory from "./pages/profile/orderHistory";
 import OrderDetail from "./pages/profile/orderDetail";
+import Addresses from "./pages/profile/addresses";
 import AboutUs from "./pages/legals/aboutUs";
 import ContactUs from "./pages/legals/contactUs";
+import Search from "./pages/search";
+import { Toaster } from "react-hot-toast";
+
 const App = () => {
   return (
     <LocationProvider>
       <AuthProvider>
+        <Toaster position="top-center" reverseOrder={false} />
         <div className="min-h-screen">
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/search" element={<Search />} />
             <Route path="/category/:id" element={<CategoryProduct />} />
             <Route path="/restaurant/:id" element={<RestaurantDetail />} />
             <Route path="/profile">
               <Route index element={<Profile />} />
               <Route path="orders" element={<OrderHistory />} />
               <Route path="order/:id" element={<OrderDetail />} />
+              <Route path="addresses" element={<Addresses />} />
             </Route>
             <Route path="/cart" element={<Cart />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/contact" element={<ContactUs />} />
+            <Route
+              path="/orderConfirmation/:id"
+              element={<OrderConfirmation />}
+            />
             <Route path="/order-confirmation" element={<OrderConfirmation />} />
+            <Route path="/orders/:id" element={<OrderConfirmation />} />
             <Route path="/partner" element={<SellerAuth />} />
             <Route path="/partner/dashboard" element={<SellerDashboard />}>
               <Route index element={<Orders />} />
@@ -43,7 +55,6 @@ const App = () => {
               <Route path="menu" element={<Menu />} />
             </Route>
           </Routes>
-       
         </div>
       </AuthProvider>
     </LocationProvider>

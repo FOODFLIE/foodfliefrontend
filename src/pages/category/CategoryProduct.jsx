@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
 import Navbar from "../../components/navbar";
-import ProductCard from "../../components/ProductCard";
+import ProductCard from "../../components/productCard";
 import { CATEGORIES, RESTAURANTS } from "../../data";
 import { ChevronRight, Filter, Loader2 } from "lucide-react";
 import { getProductsByCategory } from "../../services/productService";
+import SEO from "../../components/common/seo";
 
 const CategoryProduct = () => {
   const { id } = useParams();
@@ -51,6 +52,7 @@ const CategoryProduct = () => {
 
   return (
     <div className="bg-white min-h-screen pb-20">
+      <SEO title={categoryName || category?.title || "Category"} />
       <main className="responsive-container py-6">
         {/* Breadcrumbs */}
         <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">

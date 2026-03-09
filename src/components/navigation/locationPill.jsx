@@ -25,7 +25,7 @@ const LocationPill = ({ address, loading, onClick }) => {
 
       <div className="flex flex-col min-w-0 flex-1">
         <div className="flex items-center gap-1">
-          <span className="text-[8px] sm:text-[9px] font-black uppercase tracking-[0.1em] sm:tracking-[0.15em] text-slate-400 group-hover:text-zepto-purple/60 transition-colors">
+          <span className="text-[8px] sm:text-[9px] font-semibold uppercase tracking-[0.1em] sm:tracking-[0.15em] text-slate-400 group-hover:text-zepto-purple/60 transition-colors">
             Deliver to
           </span>
           <ChevronDown
@@ -34,14 +34,14 @@ const LocationPill = ({ address, loading, onClick }) => {
           />
         </div>
         <div className="flex items-center gap-1">
-          <span className="text-[10px] sm:text-xs font-black text-slate-800 truncate tracking-tight group-hover:text-zepto-purple transition-colors capitalize">
+          <span className="text-[10px] sm:text-xs font-semibold text-slate-800 truncate tracking-tight group-hover:text-zepto-purple transition-colors capitalize">
             {address}
           </span>
         </div>
       </div>
 
       <div className="hidden lg:flex items-center justify-center bg-zepto-purple text-white px-2 py-0.5 rounded-lg shadow-sm shadow-zepto-purple/10">
-        <span className="text-[9px] font-black italic tracking-tighter">
+        <span className="text-[9px] font-semibold italic tracking-tighter">
           10 MIN
         </span>
       </div>

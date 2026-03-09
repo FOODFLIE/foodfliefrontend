@@ -2,12 +2,18 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, User } from "lucide-react";
 
-const NavActions = ({ isAuthenticated, user, onLoginClick, onProfileClick }) => {
+const NavActions = ({
+  isAuthenticated,
+  user,
+  onLoginClick,
+  onProfileClick,
+  cartCount = 0,
+}) => {
   return (
     <div className="hidden sm:flex items-center gap-2">
       <Link
         to="/partner"
-        className="px-4 py-2 text-[11px] font-black uppercase tracking-widest text-slate-400 hover:text-zepto-purple transition-all duration-300 mr-2"
+        className="px-4 py-2 text-[11px] font-semibold uppercase tracking-widest text-slate-400 hover:text-zepto-purple transition-all duration-300 mr-2"
       >
         Partner with us
       </Link>
@@ -22,7 +28,7 @@ const NavActions = ({ isAuthenticated, user, onLoginClick, onProfileClick }) => 
           />
         </div>
         <span
-          className={`text-[10px] font-bold ${isAuthenticated ? "text-zepto-purple" : "text-slate-500"}`}
+          className={`text-[10px] font-semibold ${isAuthenticated ? "text-zepto-purple" : "text-slate-500"}`}
         >
           {isAuthenticated ? user?.name?.split(" ")[0] || "User" : "Login"}
         </span>
@@ -38,13 +44,11 @@ const NavActions = ({ isAuthenticated, user, onLoginClick, onProfileClick }) => 
             strokeWidth={2.5}
             className="group-hover:scale-110 transition-transform"
           />
-          <span className="absolute -top-1.5 -right-1.5 bg-[#25c861] text-[9px] font-black w-4.5 h-4.5 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
-            0
+          <span className="absolute -top-1.5 -right-1.5 bg-[#25c861] text-[9px] font-semibold w-4.5 h-4.5 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+            {cartCount}
           </span>
         </div>
-        <span className="text-sm font-black tracking-tight italic">
-          My Cart
-        </span>
+        <span className="text-sm font-bold tracking-tight italic">My Cart</span>
       </Link>
     </div>
   );

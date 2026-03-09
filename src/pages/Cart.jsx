@@ -20,6 +20,7 @@ import LoadingCart from "../components/loadingCart";
 import CartItem from "../components/cartItem";
 import BillSummary from "../components/billSummary";
 import LocationModal from "../components/modals/locationModal";
+import SEO from "../components/common/seo";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const Cart = () => {
     loading: locationLoading,
     coords,
   } = useUserLocation();
+  console.log("1", addressDetails);
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -69,14 +71,32 @@ const Cart = () => {
       return;
     }
 
-    // Construct full address string from details if available
-    const finalAddress = addressDetails
-      ? `${addressDetails.buildingName}${addressDetails.companyFloor ? `, ${addressDetails.companyFloor}` : ""}. ${addressDetails.fullAddress}${addressDetails.landmark ? ` (Landmark: ${addressDetails.landmark})` : ""}`
-      : address;
+    if (!addressDetails) {
+      setError("Invalid address. Please select a valid delivery address.");
+      return;
+    }
 
     try {
-      const response = await placeOrder(finalAddress, "COD");
-      setTimeout(() => navigate("/order-confirmation", { state: { orderId: response?.order_id } }), 400);
+      const response = await placeOrder(addressDetails, "COD");
+      const redirectUrl = response?.redirect_url;
+      const orderId = response?.order_id;
+
+      setTimeout(() => {
+        if (redirectUrl) {
+          try {
+            const url = new URL(redirectUrl, window.location.origin);
+            if (url.origin === window.location.origin) {
+              navigate(url.pathname, { state: { orderId } });
+            } else {
+              navigate(`/orders/${orderId}`, { state: { orderId } });
+            }
+          } catch {
+            navigate(redirectUrl, { state: { orderId } });
+          }
+        } else {
+          navigate(`/order-confirmation`, { state: { orderId } });
+        }
+      }, 400);
     } catch (err) {
       setError("Failed to place order: " + err.message);
     }
@@ -102,6 +122,7 @@ const Cart = () => {
 
   return (
     <>
+      <SEO title="Review Cart" />
       <div className="min-h-screen bg-[#fafafa] pb-32 pt-8 md:pt-14 relative z-0">
         {/* Background Soft Gradients */}
         <div className="absolute top-0 left-0 w-full h-[30vh] bg-gradient-to-b from-purple-50/70 via-white/40 to-transparent -z-10" />
@@ -111,15 +132,15 @@ const Cart = () => {
             {/* Header Title Layer */}
             <div className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <h1 className="text-3xl md:text-5xl leading-none font-black text-slate-900 tracking-tighter mb-2 md:mb-3">
+                <h1 className="text-3xl md:text-5xl leading-none font-bold text-slate-900 tracking-tighter mb-2 md:mb-3">
                   Review Cart
                 </h1>
                 <div className="flex items-center gap-3 text-slate-500 font-medium text-base md:text-lg">
-                  <span className="bg-white px-3 py-1 rounded-full border border-slate-200/60 shadow-sm text-slate-700 font-bold text-xs md:text-sm">
+                  <span className="bg-white px-3 py-1 rounded-full border border-slate-200/60 shadow-sm text-slate-700 font-semibold text-xs md:text-sm">
                     {cart.items.length} item{cart.items.length !== 1 ? "s" : ""}
                   </span>
                   <span className="w-1 h-1 rounded-full bg-slate-300"></span>
-                  <span className="flex items-center gap-1.5 text-sm md:text-lg">
+                  <span className="flex items-center gap-1.5 text-sm md:text-lg font-medium">
                     <Store size={16} className="text-slate-400 md:w-[18px]" />
                     {cart.partner_name}
                   </span>
@@ -127,9 +148,9 @@ const Cart = () => {
               </div>
 
               {/* Optional delivery timeline or similar badge */}
-              <div className="bg-green-50/80 border border-green-100 text-zepto-green px-3 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex items-center gap-2 font-bold shadow-sm backdrop-blur-md self-start md:self-auto text-xs md:text-sm">
+              <div className="bg-green-50/80 border border-green-100 text-zepto-green px-3 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex items-center gap-2 font-semibold shadow-sm backdrop-blur-md self-start md:self-auto text-xs md:text-sm">
                 <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                Delivery in 25-30 mins
+                Delivery in 13 mins
               </div>
             </div>
 

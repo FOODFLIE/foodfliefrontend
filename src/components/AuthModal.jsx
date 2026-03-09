@@ -1,5 +1,7 @@
 import React from "react";
 import { X, User, Mail, ShieldCheck, ArrowRight, Loader2 } from "lucide-react";
+import { toast } from "react-hot-toast";
+
 import { useAuth } from "../context/authContext";
 import { useOTPAuth } from "../hooks/useOTPAuth";
 import FormInput from "./common/formInput";
@@ -24,7 +26,17 @@ const AuthModal = ({ isOpen, onClose }) => {
     resetToSend,
   } = useOTPAuth((userData, userToken, isLoginMode) => {
     login(userData, userToken);
-    alert(isLoginMode ? "Welcome back!" : "Account created successfully!");
+    toast.success(
+      isLoginMode ? "Welcome back!" : "Account created successfully!",
+      {
+        style: {
+          borderRadius: "12px",
+          background: "#333",
+          color: "#fff",
+          fontWeight: "bold",
+        },
+      },
+    );
     onClose();
   });
 

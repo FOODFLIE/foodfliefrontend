@@ -21,7 +21,7 @@ const ProductCard = ({
     >
       {offer && (
         <div
-          className={`absolute top-0 left-0 bg-zepto-purple text-white ${compact ? "px-2 py-1 text-[8px]" : "px-2.5 py-1.5 text-[9px]"} font-black z-10 flex items-center gap-1 shadow-md uppercase tracking-tighter rounded-br-xl`}
+          className={`absolute top-0 left-0 bg-zepto-purple text-white ${compact ? "px-2 py-1 text-[8px]" : "px-2.5 py-1.5 text-[9px]"} font-semibold z-10 flex items-center gap-1 shadow-md uppercase tracking-tighter rounded-br-xl`}
         >
           <Zap size={compact ? 8 : 10} fill="currentColor" /> {offer}
         </div>
@@ -29,7 +29,7 @@ const ProductCard = ({
 
       {sameAsMenuPrice && (
         <div
-          className={`absolute top-2 right-2 bg-zepto-green text-white ${compact ? "px-1.5 py-0.5 text-[7px]" : "px-2 py-0.5 text-[8px]"} font-black z-20 flex items-center gap-1 shadow-sm uppercase tracking-tighter border border-white/20 rounded-full`}
+          className={`absolute top-2 right-2 bg-zepto-green text-white ${compact ? "px-1.5 py-0.5 text-[7px]" : "px-2 py-0.5 text-[8px]"} font-semibold z-20 flex items-center gap-1 shadow-sm uppercase tracking-tighter border border-white/20 rounded-full`}
         >
           <BadgeCheck size={compact ? 8 : 10} /> Menu Price
         </div>
@@ -53,7 +53,7 @@ const ProductCard = ({
             fill="currentColor"
           />
           <span
-            className={`${compact ? "text-[8px]" : "text-[10px]"} font-black text-slate-800 group-hover:text-zepto-purple transition-colors italic`}
+            className={`${compact ? "text-[8px]" : "text-[10px]"} font-semibold text-slate-800 group-hover:text-zepto-purple transition-colors italic`}
           >
             {time || "10 MINS"}
           </span>
@@ -62,7 +62,7 @@ const ProductCard = ({
 
       <div className={`${compact ? "space-y-0.5" : "space-y-1"}`}>
         <h4
-          className={`font-bold text-slate-800 ${compact ? "text-xs" : "text-sm"} truncate font-poppins tracking-tight capitalize`}
+          className={`font-semibold text-slate-800 ${compact ? "text-xs" : "text-sm"} truncate font-poppins tracking-tight capitalize`}
         >
           {store_name}
         </h4>
@@ -81,7 +81,7 @@ const ProductCard = ({
           className={`${compact ? "pt-2 mt-2" : "pt-3 mt-3"} border-t border-slate-50 flex items-center justify-between`}
         >
           <button
-            className={`bg-white border-2 border-zepto-purple text-zepto-purple ${compact ? "px-3 py-1 text-[8px]" : "px-4 py-1.5 text-[10px]"} rounded-xl font-bold uppercase tracking-widest hover:bg-zepto-purple hover:text-white transition-all shadow-sm`}
+            className={`bg-white border-2 border-zepto-purple text-zepto-purple ${compact ? "px-3 py-1 text-[8px]" : "px-4 py-1.5 text-[10px]"} rounded-xl font-semibold uppercase tracking-widest hover:bg-zepto-purple hover:text-white transition-all shadow-sm`}
           >
             {price ? "Add" : "View"}
           </button>

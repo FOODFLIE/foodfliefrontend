@@ -7,12 +7,12 @@ import { RESTAURANTS } from "../../data";
 import { Star, Clock, Zap, Search, Loader2 } from "lucide-react";
 import { getProductsByPartner } from "../../services/productService";
 import { addToCart } from "../../services/cartService";
+import SEO from "../../components/common/seo";
 
 const RestaurantDetail = () => {
   const { id } = useParams();
   const localRestaurant = RESTAURANTS.find((r) => r.id === parseInt(id));
   const [restaurantData, setRestaurantData] = useState(localRestaurant || null);
-  console.log("Restaurant data:", restaurantData);
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [addingToCart, setAddingToCart] = useState({});
@@ -38,7 +38,7 @@ const RestaurantDetail = () => {
               ...responseData,
               name: responseData.store_name || responseData.name,
               rating: responseData.rating || 4.0,
-              time: responseData.time || "30 MINS",
+              time: responseData.time || "13 MINS",
               cuisines: responseData.cuisines || ["Restaurant"],
               offer: responseData.offer || "Special Offer",
             };
@@ -65,7 +65,7 @@ const RestaurantDetail = () => {
             ...p,
             name: p.store_name || p.name,
             rating: p.rating || 4.0,
-            time: p.time || "30 MINS",
+            time: p.time || "13 MINS",
             cuisines: p.cuisines || ["Restaurant"],
             offer: p.offer || "Special Offer",
           });
@@ -118,6 +118,7 @@ const RestaurantDetail = () => {
 
   return (
     <div className="bg-white min-h-screen pb-40">
+      <SEO title={restaurantData?.name || "Restaurant"} />
       <main className="responsive-container py-6 md:py-8">
         {/* Header Block */}
         <section className="bg-zepto-grey/40 border border-slate-100 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-12 mb-8 md:mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 relative overflow-hidden">

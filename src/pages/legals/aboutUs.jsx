@@ -1,9 +1,11 @@
 import React from "react";
 import { Heart, Clock, ShieldCheck, Leaf, Users } from "lucide-react";
+import SEO from "../../components/common/seo";
 
 const AboutUs = () => {
   return (
     <div className="min-h-screen bg-[#FCFBFA] text-slate-800 font-sans selection:bg-purple-100 selection:text-purple-900 pb-24 overflow-hidden relative">
+      <SEO title="About Us" />
       {/* Soft Ambient Backgrounds to create a "soft corner" feeling */}
       <div className="absolute top-0 left-0 w-full h-[500px] overflow-hidden -z-10 pointer-events-none">
         <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[100%] rounded-full bg-purple-100/50 blur-[120px] mix-blend-multiply"></div>

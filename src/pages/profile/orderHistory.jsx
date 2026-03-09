@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { getCustomerOrders } from "../../services/orderService";
 import { useAuth } from "../../context/authContext";
+import SEO from "../../components/common/seo";
 
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -88,6 +89,7 @@ const OrderHistory = () => {
 
   return (
     <div className="min-h-screen bg-slate-50/50">
+      <SEO title="My Orders" />
       {/* Header */}
       <div className="glass-morphism sticky top-0 z-30">
         <div className="responsive-container py-4 flex items-center gap-4">

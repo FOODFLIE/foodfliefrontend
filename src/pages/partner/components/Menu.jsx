@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Search, Plus, MoreVertical, Edit2, X } from "lucide-react";
+import SEO from "../../../components/common/seo";
 
 const Menu = () => {
   // --- State for Modals & Forms ---
@@ -156,6 +157,7 @@ const Menu = () => {
 
   return (
     <div className="flex-1 flex flex-col h-[calc(100vh-64px)] bg-slate-100 overflow-hidden">
+      <SEO title="Manage Menu" />
       {/* Toolbar */}
       <div className="bg-white p-4 border-b border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4 shrink-0">
         <div className="relative w-full md:w-96">

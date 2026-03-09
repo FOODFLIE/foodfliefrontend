@@ -20,6 +20,7 @@ import {
   Check,
 } from "lucide-react";
 import { useSellerAuth } from "../../hooks/useSellerAuth";
+import SEO from "../../components/common/seo";
 
 const SellerAuth = () => {
   const {
@@ -599,6 +600,7 @@ const SellerAuth = () => {
   // Main Render
   return (
     <div className="min-h-screen bg-slate-50 font-inter text-slate-900">
+      <SEO title="Partner Login/Signup" />
       {/* Header */}
       <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-50">
         <div className="font-display font-extrabold text-2xl tracking-tighter">

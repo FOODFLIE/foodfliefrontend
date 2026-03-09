@@ -14,6 +14,7 @@ import {
   User,
 } from "lucide-react";
 import { getOrderById } from "../../services/orderService";
+import SEO from "../../components/common/seo";
 
 const OrderDetail = () => {
   const { id } = useParams();
@@ -94,6 +95,7 @@ const OrderDetail = () => {
 
   return (
     <div className="min-h-screen bg-slate-50/50 pb-24">
+      <SEO title="Order Details" />
       {/* Header */}
       <div className="glass-morphism sticky top-0 z-30 bg-white">
         <div className="responsive-container py-3 flex items-center justify-between">

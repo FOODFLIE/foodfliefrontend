@@ -4,16 +4,18 @@ import Banner from "../../components/Banner";
 import CategorySection from "../../components/home/categorySection";
 import RestaurantChainSection from "../../components/home/restaurantChainSection";
 import Footer from "../../components/footer";
+import SEO from "../../components/common/seo";
 
 const Home = () => {
   return (
     <div>
+      <SEO title="FoodFlie - 13 Minutes. Menu Prices Guaranteed." />
       <div className="bg-white pb-12">
         <main className="responsive-container py-3">
           {/* Banner Section */}
           <Banner
             // image="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=1200&h=400&fit=crop"
-            badgeText="10 Minutes.  Menu Prices Guaranteed."
+            badgeText="13 Minutes.  Menu Prices Guaranteed."
             title="HOT BIRYANI"
             titleHighlight="NO OVERPAYING"
             subtitle="We’re testing in your neighborhood. Get biryani in minutes at Menu prices."

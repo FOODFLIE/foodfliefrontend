@@ -40,10 +40,22 @@ export const getAllStores = async (userLat, userLng) => {
       userLat,
       userLng,
     });
-    console.log("1111",response.data);
+    console.log("1111", response.data);
     return response.data;
   } catch (error) {
     console.error("Error fetching all stores:", error);
+    throw error;
+  }
+};
+
+export const searchProductsAndPartners = async (query) => {
+  try {
+    const response = await apiClient.get(
+      `/api/customer-product/search?q=${query}`,
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error searching products and partners:", error);
     throw error;
   }
 };

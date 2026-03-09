@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Outlet, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
+import SEO from "../../components/common/seo";
 
 const SellerDashboard = () => {
   const { user, logout } = useAuth();
@@ -40,6 +41,7 @@ const SellerDashboard = () => {
 
   return (
     <div className="flex h-screen bg-slate-100 font-sans text-slate-900">
+      <SEO title="Seller Dashboard" />
       {/* Sidebar - Dark Theme */}
       <aside className="w-20 lg:w-24 bg-[#171a29] text-white flex flex-col items-center py-6 fixed h-full z-30">
         {/* Brand/Logo */}

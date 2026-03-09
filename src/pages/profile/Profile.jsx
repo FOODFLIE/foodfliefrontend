@@ -18,6 +18,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import AuthModal from "../../components/authModal";
 import { getCustomerOrders } from "../../services/orderService";
+import SEO from "../../components/common/seo";
 
 const Profile = () => {
   const { logout } = useAuth();
@@ -53,8 +54,7 @@ const Profile = () => {
   }
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("token");
+    logout();
     navigate("/");
   };
 
@@ -68,6 +68,7 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-slate-50/50">
+      <SEO title="My Profile" />
       {/* Header/Banner Area */}
       <div className="bg-zepto-purple h-48 w-full relative">
         <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent"></div>
@@ -193,16 +194,24 @@ const Profile = () => {
             {/* Quick Actions */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { icon: Package, label: "Orders", count: "12" },
-                { icon: MapPin, label: "Addresses", count: "3" },
-                { icon: CreditCard, label: "Payments", count: "2" },
-                { icon: User, label: "Help", count: null },
+                {
+                  icon: Package,
+                  label: "Orders",
+                  count: "12",
+                  path: "/profile/orders",
+                },
+                {
+                  icon: MapPin,
+                  label: "Addresses",
+                  count: "3",
+                  path: "/profile/addresses",
+                },
+                { icon: CreditCard, label: "Payments", count: "2", path: null },
+                { icon: User, label: "Help", count: null, path: null },
               ].map((item, i) => (
                 <div
                   key={i}
-                  onClick={() =>
-                    item.label === "Orders" && navigate("/profile/orders")
-                  }
+                  onClick={() => item.path && navigate(item.path)}
                   className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer group"
                 >
                   <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-zepto-light transition-colors">

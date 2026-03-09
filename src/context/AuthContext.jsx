@@ -31,6 +31,9 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    localStorage.removeItem("foodflie_selected_address");
+    localStorage.removeItem("recent_searches");
+    localStorage.removeItem("accessToken");
   };
 
   return (

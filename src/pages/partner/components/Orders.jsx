@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Search, Plus, MoreVertical, Edit2, X } from "lucide-react";
+import SEO from "../../../components/common/seo";
 
 const Orders = () => {
   const [activeTab, setActiveTab] = useState("New");
@@ -7,6 +9,7 @@ const Orders = () => {
 
   return (
     <div className="flex flex-col h-full bg-white">
+      <SEO title="Manage Orders" />
       {/* Tabs */}
       <div className="border-b border-slate-200 flex px-6">
         {tabs.map((tab) => (
