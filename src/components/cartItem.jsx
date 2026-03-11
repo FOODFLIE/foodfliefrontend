@@ -11,7 +11,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
               <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
             </div>
             <div>
-              <h3 className="text-base md:text-[1.25rem] leading-tight font-black text-slate-800 group-hover:text-zepto-purple transition-colors">
+              <h3 className="text-base md:text-[1.25rem] leading-tight font-black text-slate-800 group-hover:text-brand transition-colors">
                 {item.product_name}
               </h3>
               <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">
@@ -58,7 +58,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
             </span>
             <button
               onClick={() => onUpdateQuantity(item.id, item.quantity + 1)}
-              className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-slate-50/80 rounded-lg md:rounded-[0.85rem] hover:bg-slate-100 hover:text-zepto-green transition-all active:scale-95"
+              className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center bg-slate-50/80 rounded-lg md:rounded-[0.85rem] hover:bg-slate-100 hover:text-brand transition-all active:scale-95"
             >
               <Plus
                 size={16}

@@ -24,6 +24,7 @@ const AuthModal = ({ isOpen, onClose }) => {
     handleVerifyOTP,
     toggleAuthMode,
     resetToSend,
+    resetAuth,
   } = useOTPAuth((userData, userToken, isLoginMode) => {
     login(userData, userToken);
     toast.success(
@@ -40,6 +41,11 @@ const AuthModal = ({ isOpen, onClose }) => {
     onClose();
   });
 
+  const handleClose = () => {
+    resetAuth();
+    onClose();
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -47,7 +53,7 @@ const AuthModal = ({ isOpen, onClose }) => {
       <div className="bg-white w-full sm:max-w-md max-h-[95vh] sm:max-h-[90vh] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 flex flex-col">
         {/* Close Button */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute right-4 top-4 p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-all z-10 min-h-[44px] min-w-[44px] flex items-center justify-center"
         >
           <X size={20} />
@@ -120,7 +126,7 @@ const AuthModal = ({ isOpen, onClose }) => {
                   <button
                     type="button"
                     onClick={resetToSend}
-                    className="mt-2 text-xs font-bold text-zepto-purple hover:underline min-h-[44px] sm:min-h-0 flex items-center"
+                    className="mt-2 text-xs font-bold text-brand hover:underline min-h-[44px] sm:min-h-0 flex items-center"
                   >
                     Edit Phone Number?
                   </button>
@@ -139,7 +145,7 @@ const AuthModal = ({ isOpen, onClose }) => {
             <button
               disabled={loading}
               type="submit"
-              className="w-full bg-zepto-purple text-white h-14 sm:h-12 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-zepto-purple/20 hover:bg-zepto-dark active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100 transition-all font-bold text-sm mt-6 group"
+              className="w-full bg-brand text-white h-14 sm:h-12 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-brand/20 hover:bg-brand-dark active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100 transition-all font-bold text-sm mt-6 group"
             >
               {loading ? (
                 <Loader2 className="animate-spin" size={20} />

@@ -85,14 +85,14 @@ const Addresses = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="w-12 h-12 border-4 border-zepto-purple border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-12 h-12 border-4 border-brand border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   return (
     <>
-      <SEO title="My Addresses" />
+      <SEO title="My Addresses | FoodFlie" />
       <div className="min-h-screen bg-slate-50 pb-20 pt-6">
         <div className="responsive-container max-w-4xl mx-auto px-4">
           <div className="flex items-center justify-between mb-6">
@@ -106,7 +106,7 @@ const Addresses = () => {
             </div>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-zepto-purple text-white px-4 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-zepto-dark transition-colors shadow-lg"
+              className="bg-brand text-white px-4 py-2.5 rounded-xl font-bold text-sm flex items-center gap-2 hover:bg-brand-dark transition-colors shadow-lg"
             >
               <Plus className="w-4 h-4" />
               Add New
@@ -126,7 +126,7 @@ const Addresses = () => {
               </p>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="bg-zepto-purple text-white px-6 py-3 rounded-xl font-bold hover:bg-zepto-dark transition-colors"
+                className="bg-brand text-white px-6 py-3 rounded-xl font-bold hover:bg-brand-dark transition-colors"
               >
                 Add Address
               </button>
@@ -136,11 +136,11 @@ const Addresses = () => {
               {addresses.map((address) => (
                 <div
                   key={address.id}
-                  className="bg-white rounded-2xl p-5 border border-slate-200 hover:border-zepto-purple hover:shadow-lg transition-all group"
+                  className="bg-white rounded-2xl p-5 border border-slate-200 hover:border-brand hover:shadow-lg transition-all group"
                 >
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center text-zepto-purple">
+                      <div className="w-10 h-10 bg-brand-light rounded-xl flex items-center justify-center text-brand">
                         {getCategoryIcon(address.address_type)}
                       </div>
                       <div>

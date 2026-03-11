@@ -15,7 +15,7 @@ const PhoneInput = ({ value, onChange, disabled = false }) => {
           +91
         </div>
         <div className="flex-1 relative">
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-zepto-purple transition-colors">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand transition-colors">
             <Phone size={18} />
           </div>
           <input
@@ -26,7 +26,7 @@ const PhoneInput = ({ value, onChange, disabled = false }) => {
             value={value}
             onChange={onChange}
             placeholder="9876543210"
-            className="w-full bg-slate-50 border border-slate-100 focus:bg-white focus:border-zepto-purple/20 h-12 pl-12 pr-4 rounded-r-xl text-sm font-semibold transition-all outline-none disabled:opacity-75"
+            className="w-full bg-slate-50 border border-slate-100 focus:bg-white focus:border-brand/20 h-12 pl-12 pr-4 rounded-r-xl text-sm font-semibold transition-all outline-none disabled:opacity-75"
           />
         </div>
       </div>

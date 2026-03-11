@@ -47,7 +47,7 @@ const SellerAuth = () => {
       return (
         <div className="flex flex-col items-center justify-center h-full min-h-[400px] animate-in fade-in zoom-in duration-300">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
-            <CheckCircle2 size={40} className="text-zepto-green" />
+            <CheckCircle2 size={40} className="text-brand" />
           </div>
           <h2 className="text-3xl font-bold text-slate-900 mb-2 text-center">
             Application Submitted!
@@ -56,7 +56,7 @@ const SellerAuth = () => {
             Thank you for registering with FoodFlie. We are redirecting you to
             your dashboard...
           </p>
-          <div className="flex items-center gap-2 text-zepto-purple font-bold">
+          <div className="flex items-center gap-2 text-brand font-bold">
             <Loader2 className="animate-spin" size={20} />
             Redirecting...
           </div>
@@ -91,7 +91,7 @@ const SellerAuth = () => {
                     type="text"
                     name="name"
                     required
-                    className="block w-full border-slate-200 rounded-xl focus:ring-zepto-purple focus:border-transparent py-3 px-4 bg-slate-50 focus:bg-white transition-all"
+                    className="block w-full border-slate-200 rounded-xl focus:ring-brand focus:border-transparent py-3 px-4 bg-slate-50 focus:bg-white transition-all"
                     placeholder="Full Name"
                     value={formData.name}
                     onChange={handleInputChange}
@@ -105,7 +105,7 @@ const SellerAuth = () => {
                     type="text"
                     name="store_name"
                     required
-                    className="block w-full border-slate-200 rounded-xl focus:ring-zepto-purple focus:border-transparent py-3 px-4 bg-slate-50 focus:bg-white transition-all"
+                    className="block w-full border-slate-200 rounded-xl focus:ring-brand focus:border-transparent py-3 px-4 bg-slate-50 focus:bg-white transition-all"
                     placeholder="Restaurant Name"
                     value={formData.store_name}
                     onChange={handleInputChange}
@@ -120,14 +120,14 @@ const SellerAuth = () => {
                       type="text"
                       name="address"
                       required
-                      className="block w-full border-slate-200 rounded-xl focus:ring-zepto-purple focus:border-transparent py-3 px-4 pr-12 bg-slate-50 focus:bg-white transition-all"
+                      className="block w-full border-slate-200 rounded-xl focus:ring-brand focus:border-transparent py-3 px-4 pr-12 bg-slate-50 focus:bg-white transition-all"
                       placeholder="Complete Address"
                       value={formData.address}
                       onChange={handleInputChange}
                     />
                     <button
                       type="button"
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-zepto-purple font-bold text-sm"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-brand font-bold text-sm"
                     >
                       Edit
                     </button>
@@ -142,7 +142,7 @@ const SellerAuth = () => {
                       type="text"
                       name="area"
                       required
-                      className="block w-full border-slate-200 rounded-xl focus:ring-zepto-purple focus:border-transparent py-3 px-4 bg-slate-50 focus:bg-white transition-all"
+                      className="block w-full border-slate-200 rounded-xl focus:ring-brand focus:border-transparent py-3 px-4 bg-slate-50 focus:bg-white transition-all"
                       placeholder="e.g. Indiranagar"
                       value={formData.area}
                       onChange={handleInputChange}
@@ -156,7 +156,7 @@ const SellerAuth = () => {
                       type="email"
                       name="email"
                       required
-                      className="block w-full border-slate-200 rounded-xl focus:ring-zepto-purple focus:border-transparent py-3 px-4 bg-slate-50 focus:bg-white transition-all"
+                      className="block w-full border-slate-200 rounded-xl focus:ring-brand focus:border-transparent py-3 px-4 bg-slate-50 focus:bg-white transition-all"
                       placeholder="owner@example.com"
                       value={formData.email}
                       onChange={handleInputChange}
@@ -195,7 +195,7 @@ const SellerAuth = () => {
               <button
                 type="button"
                 onClick={nextRegistrationStep}
-                className="bg-zepto-purple text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-zepto-purple/20 hover:bg-zepto-dark transition-all flex items-center gap-2"
+                className="bg-brand text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-brand/20 hover:bg-brand-dark transition-all flex items-center gap-2"
               >
                 Proceed <ArrowRight size={18} />
               </button>
@@ -223,7 +223,7 @@ const SellerAuth = () => {
                   name="outlet_type"
                   value={formData.outlet_type}
                   onChange={handleInputChange}
-                  className="w-full border-slate-200 rounded-xl py-3 px-4 bg-slate-50 focus:bg-white focus:ring-zepto-purple"
+                  className="w-full border-slate-200 rounded-xl py-3 px-4 bg-slate-50 focus:bg-white focus:ring-brand"
                 >
                   <option value="">Choose your outlet type</option>
                   <option value="restaurant">Restaurant</option>
@@ -248,7 +248,7 @@ const SellerAuth = () => {
                     type="text"
                     name="pan_number"
                     required
-                    className="block w-full border-slate-200 rounded-xl focus:ring-zepto-purple focus:border-transparent py-3 px-4 uppercase bg-slate-50 focus:bg-white transition-all"
+                    className="block w-full border-slate-200 rounded-xl focus:ring-brand focus:border-transparent py-3 px-4 uppercase bg-slate-50 focus:bg-white transition-all"
                     placeholder="ABCDE1234F"
                     value={formData.pan_number}
                     onChange={handleInputChange}
@@ -272,7 +272,7 @@ const SellerAuth = () => {
                     type="text"
                     name="gst_number"
                     required
-                    className="block w-full border-slate-200 rounded-xl focus:ring-zepto-purple focus:border-transparent py-3 px-4 uppercase bg-slate-50 focus:bg-white transition-all"
+                    className="block w-full border-slate-200 rounded-xl focus:ring-brand focus:border-transparent py-3 px-4 uppercase bg-slate-50 focus:bg-white transition-all"
                     placeholder="22AAAAA0000A1Z5"
                     value={formData.gst_number}
                     onChange={handleInputChange}
@@ -294,7 +294,7 @@ const SellerAuth = () => {
                   type="text"
                   name="fssai_number"
                   required
-                  className="block w-full border-slate-200 rounded-xl focus:ring-zepto-purple focus:border-transparent py-3 px-4 uppercase bg-slate-50 focus:bg-white transition-all"
+                  className="block w-full border-slate-200 rounded-xl focus:ring-brand focus:border-transparent py-3 px-4 uppercase bg-slate-50 focus:bg-white transition-all"
                   placeholder="14-digit number"
                   value={formData.fssai_number}
                   onChange={handleInputChange}
@@ -320,7 +320,7 @@ const SellerAuth = () => {
                     type="text"
                     name="bank_account_number"
                     required
-                    className="block w-full border-slate-200 rounded-xl focus:ring-zepto-purple focus:border-transparent py-3 px-4 bg-slate-50 focus:bg-white transition-all"
+                    className="block w-full border-slate-200 rounded-xl focus:ring-brand focus:border-transparent py-3 px-4 bg-slate-50 focus:bg-white transition-all"
                     value={formData.bank_account_number}
                     onChange={handleInputChange}
                   />
@@ -333,7 +333,7 @@ const SellerAuth = () => {
                     type="text"
                     name="bank_ifsc"
                     required
-                    className="block w-full border-slate-200 rounded-xl focus:ring-zepto-purple focus:border-transparent py-3 px-4 uppercase bg-slate-50 focus:bg-white transition-all"
+                    className="block w-full border-slate-200 rounded-xl focus:ring-brand focus:border-transparent py-3 px-4 uppercase bg-slate-50 focus:bg-white transition-all"
                     value={formData.bank_ifsc}
                     onChange={handleInputChange}
                   />
@@ -352,7 +352,7 @@ const SellerAuth = () => {
               <button
                 type="button"
                 onClick={nextRegistrationStep}
-                className="bg-zepto-purple text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-zepto-purple/20 hover:bg-zepto-dark transition-all flex items-center gap-2"
+                className="bg-brand text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-brand/20 hover:bg-brand-dark transition-all flex items-center gap-2"
               >
                 Proceed <ArrowRight size={18} />
               </button>
@@ -379,7 +379,7 @@ const SellerAuth = () => {
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   {formData.menu_file ? (
                     <div className="text-center">
-                      <CheckCircle2 className="w-8 h-8 text-zepto-green mb-2 mx-auto" />
+                      <CheckCircle2 className="w-8 h-8 text-brand mb-2 mx-auto" />
                       <p className="text-sm text-slate-900 font-semibold">
                         {formData.menu_file.name}
                       </p>
@@ -388,7 +388,7 @@ const SellerAuth = () => {
                     <>
                       <UploadCloud className="w-8 h-8 text-slate-400 mb-2" />
                       <p className="text-sm text-slate-500">
-                        <span className="font-semibold text-zepto-purple">
+                        <span className="font-semibold text-brand">
                           Click to upload
                         </span>{" "}
                         menu
@@ -517,7 +517,7 @@ const SellerAuth = () => {
               <button
                 type="button"
                 onClick={nextRegistrationStep}
-                className="bg-zepto-purple text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-zepto-purple/20 hover:bg-zepto-dark transition-all flex items-center gap-2"
+                className="bg-brand text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-brand/20 hover:bg-brand-dark transition-all flex items-center gap-2"
               >
                 Proceed <ArrowRight size={18} />
               </button>
@@ -560,7 +560,7 @@ const SellerAuth = () => {
                   name="terms_accepted"
                   checked={formData.terms_accepted}
                   onChange={handleInputChange}
-                  className="mt-1 w-5 h-5 text-zepto-purple rounded border-slate-300 focus:ring-zepto-purple"
+                  className="mt-1 w-5 h-5 text-brand rounded border-slate-300 focus:ring-brand"
                 />
                 <span className="text-sm font-medium text-slate-800">
                   I accept the Terms of Service and Privacy Policy. I confirm
@@ -581,7 +581,7 @@ const SellerAuth = () => {
                 type="button"
                 onClick={handleRegister}
                 disabled={loading}
-                className="bg-zepto-green text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-zepto-green/20 hover:bg-emerald-600 transition-all flex items-center gap-2 disabled:opacity-70"
+                className="bg-brand text-white px-8 py-3 rounded-xl font-bold shadow-lg shadow-brand/20 hover:bg-brand-dark transition-all flex items-center gap-2 disabled:opacity-70"
               >
                 {loading ? (
                   <Loader2 className="animate-spin" />
@@ -605,13 +605,13 @@ const SellerAuth = () => {
       <div className="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-50">
         <div className="font-display font-extrabold text-2xl tracking-tighter">
           FoodFlie{" "}
-          <span className="text-zepto-purple text-base font-bold bg-purple-50 px-2 py-0.5 rounded-md ml-1 tracking-normal">
+          <span className="text-brand text-base font-bold bg-brand-muted px-2 py-0.5 rounded-md ml-1 tracking-normal">
             for partners
           </span>
         </div>
         <div className="text-sm font-medium text-slate-500">
           Need help?{" "}
-          <a href="#" className="text-zepto-purple font-bold">
+          <a href="#" className="text-brand font-bold">
             Contact Support
           </a>
         </div>
@@ -623,8 +623,8 @@ const SellerAuth = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
             {/* Left: Hero/Branding (Hidden on mobile) */}
             <div className="hidden lg:flex flex-col justify-center bg-slate-900 rounded-3xl p-12 relative overflow-hidden text-white min-h-[600px]">
-              <div className="absolute top-0 right-0 w-96 h-96 bg-zepto-purple rounded-full filter blur-[100px] opacity-50 -translate-y-1/2 translate-x-1/3"></div>
-              <div className="absolute bottom-0 left-0 w-80 h-80 bg-zepto-green rounded-full filter blur-[80px] opacity-30 translate-y-1/3 -translate-x-1/4"></div>
+              <div className="absolute top-0 right-0 w-96 h-96 bg-brand rounded-full filter blur-[100px] opacity-50 -translate-y-1/2 translate-x-1/3"></div>
+              <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-dark rounded-full filter blur-[80px] opacity-30 translate-y-1/3 -translate-x-1/4"></div>
 
               <div className="relative z-10 space-y-8">
                 <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center border border-white/10">
@@ -650,7 +650,7 @@ const SellerAuth = () => {
                     </p>
                   </div>
                   <div>
-                    <h3 className="text-3xl font-bold text-zepto-green mb-1">
+                    <h3 className="text-3xl font-bold text-brand mb-1">
                       1.5X
                     </h3>
                     <p className="text-sm text-slate-400">Revenue Growth</p>
@@ -678,14 +678,14 @@ const SellerAuth = () => {
                   <div className="space-y-6">
                     <div className="relative group">
                       <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none z-10">
-                        <span className="text-slate-500 font-bold group-focus-within:text-zepto-purple transition-colors">
+                        <span className="text-slate-500 font-bold group-focus-within:text-brand transition-colors">
                           +91
                         </span>
                       </div>
                       <input
                         type="tel"
                         name="phone"
-                        className="block w-full pl-14 text-xl font-bold border-2 border-slate-100 rounded-2xl py-4 focus:ring-4 focus:ring-zepto-purple/10 focus:border-zepto-purple transition-all outline-none bg-slate-50 focus:bg-white"
+                        className="block w-full pl-14 text-xl font-bold border-2 border-slate-100 rounded-2xl py-4 focus:ring-4 focus:ring-brand/10 focus:border-brand transition-all outline-none bg-slate-50 focus:bg-white"
                         placeholder="98765 43210"
                         value={formData.phone}
                         onChange={handleInputChange}
@@ -698,7 +698,7 @@ const SellerAuth = () => {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full bg-zepto-purple text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-zepto-purple/20 hover:bg-zepto-dark hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-70 disabled:hover:scale-100 flex items-center justify-center gap-2 group"
+                      className="w-full bg-brand text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-brand/20 hover:bg-brand-dark hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-70 disabled:hover:scale-100 flex items-center justify-center gap-2 group"
                     >
                       {loading ? (
                         <Loader2 className="animate-spin" />
@@ -717,11 +717,11 @@ const SellerAuth = () => {
                   <div className="text-center">
                     <p className="text-xs text-slate-400 font-medium">
                       By continuing, you agree to our{" "}
-                      <a href="#" className="underline hover:text-zepto-purple">
+                      <a href="#" className="underline hover:text-brand">
                         Terms of Service
                       </a>{" "}
                       &{" "}
-                      <a href="#" className="underline hover:text-zepto-purple">
+                      <a href="#" className="underline hover:text-brand">
                         Privacy Policy
                       </a>
                     </p>
@@ -757,7 +757,7 @@ const SellerAuth = () => {
                     <input
                       type="text"
                       name="otp"
-                      className="block w-full text-center text-4xl tracking-[0.6em] font-black border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-zepto-purple/10 focus:border-zepto-purple transition-all outline-none bg-slate-50 focus:bg-white py-5"
+                      className="block w-full text-center text-4xl tracking-[0.6em] font-black border-2 border-slate-100 rounded-2xl focus:ring-4 focus:ring-brand/10 focus:border-brand transition-all outline-none bg-slate-50 focus:bg-white py-5"
                       placeholder="••••••"
                       value={formData.otp}
                       onChange={handleInputChange}
@@ -768,7 +768,7 @@ const SellerAuth = () => {
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full bg-zepto-purple text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-zepto-purple/20 hover:bg-zepto-dark hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-70 disabled:hover:scale-100 flex items-center justify-center gap-2"
+                      className="w-full bg-brand text-white py-4 rounded-2xl font-bold text-lg shadow-xl shadow-brand/20 hover:bg-brand-dark hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-70 disabled:hover:scale-100 flex items-center justify-center gap-2"
                     >
                       {loading ? (
                         <Loader2 className="animate-spin" />
@@ -811,21 +811,21 @@ const SellerAuth = () => {
                   ].map((item) => (
                     <div key={item.id} className="flex gap-4">
                       <div
-                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center bg-slate-50 flex-shrink-0 transition-all duration-300 ${
+                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center bg-slate-50 shrink-0 transition-all duration-300 ${
                           registrationStep >= item.id
-                            ? "border-zepto-green bg-green-50"
+                            ? "border-brand bg-brand-muted"
                             : "border-slate-300"
                         }`}
                       >
                         {registrationStep > item.id ? (
-                          <div className="w-2.5 h-2.5 bg-zepto-green rounded-full" />
+                          <div className="w-2.5 h-2.5 bg-brand rounded-full" />
                         ) : registrationStep === item.id ? (
-                          <div className="w-2.5 h-2.5 bg-zepto-purple rounded-full animate-pulse" />
+                          <div className="w-2.5 h-2.5 bg-brand rounded-full animate-pulse" />
                         ) : null}
                       </div>
                       <div>
                         <p
-                          className={`text-sm font-bold transition-colors ${registrationStep === item.id ? "text-zepto-purple" : "text-slate-900"}`}
+                          className={`text-sm font-bold transition-colors ${registrationStep === item.id ? "text-brand" : "text-slate-900"}`}
                         >
                           {item.title}
                         </p>
@@ -847,7 +847,7 @@ const SellerAuth = () => {
                   {[1, 2, 3, 4].map((s) => (
                     <div
                       key={s}
-                      className={`h-1 w-8 rounded-full ${registrationStep >= s ? "bg-zepto-purple" : "bg-slate-200"}`}
+                      className={`h-1 w-8 rounded-full ${registrationStep >= s ? "bg-brand" : "bg-slate-200"}`}
                     />
                   ))}
                 </div>

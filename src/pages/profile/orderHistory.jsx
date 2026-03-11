@@ -80,7 +80,7 @@ const OrderHistory = () => {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="w-12 h-12 bg-zepto-purple/20 rounded-full mb-4"></div>
+          <div className="w-12 h-12 bg-brand/20 rounded-full mb-4"></div>
           <div className="h-4 w-32 bg-slate-200 rounded"></div>
         </div>
       </div>
@@ -119,7 +119,7 @@ const OrderHistory = () => {
             </p>
             <button
               onClick={() => navigate("/")}
-              className="bg-zepto-purple text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:shadow-xl transition-all"
+              className="bg-brand text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:shadow-xl transition-all"
             >
               Start Shopping
             </button>
@@ -136,7 +136,7 @@ const OrderHistory = () => {
                   {/* Order Items Preview */}
                   <div className="flex gap-4 mb-4 overflow-x-auto pb-2 scrollbar-hide">
                     {order.items?.map((item, idx) => (
-                      <div key={idx} className="flex-shrink-0">
+                      <div key={idx} className="shrink-0">
                         <img
                           src={item.product?.image || "/placeholder-food.png"}
                           alt={item.product?.name}
@@ -169,9 +169,19 @@ const OrderHistory = () => {
 
                 {order.status?.toLowerCase() === "delivered" && (
                   <div className="px-6 py-4 bg-slate-50/30 border-t border-slate-50 flex justify-center">
-                    <span className="text-slate-700 font-bold text-sm">
-                      Rate your order
-                    </span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(
+                          "https://www.instagram.com/foodflie?igsh=MWNraGIxdHdqbmYycg==",
+                          "_blank",
+                          "noopener,noreferrer",
+                        );
+                      }}
+                      className="text-slate-700 font-medium text-[11px] sm:text-xs underline underline-offset-4 decoration-brand/70 hover:text-brand transition-colors"
+                    >
+                      Thanks for ordering – follow us on Instagram
+                    </button>
                   </div>
                 )}
               </div>

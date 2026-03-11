@@ -68,10 +68,10 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-slate-50/50">
-      <SEO title="My Profile" />
+      <SEO title="My Profile | FoodFlie" />
       {/* Header/Banner Area */}
-      <div className="bg-zepto-purple h-48 w-full relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent"></div>
+      <div className="bg-brand h-48 w-full relative">
+        <div className="absolute inset-0 bg-linear-to-b from-black/20 to-transparent"></div>
       </div>
 
       <div className="responsive-container -mt-24 pb-20 relative z-10">
@@ -80,8 +80,8 @@ const Profile = () => {
           <div className="lg:col-span-1 space-y-6">
             <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/60 p-8 border border-white">
               <div className="flex flex-col items-center text-center">
-                <div className="w-24 h-24 bg-zepto-light rounded-3xl flex items-center justify-center mb-6 shadow-inner rotate-3 hover:rotate-0 transition-transform duration-500">
-                  <span className="text-4xl font-black text-zepto-purple uppercase">
+                <div className="w-24 h-24 bg-brand-muted rounded-3xl flex items-center justify-center mb-6 shadow-inner rotate-3 hover:rotate-0 transition-transform duration-500">
+                  <span className="text-4xl font-black text-brand uppercase">
                     {user?.name?.charAt(0) || user?.phone?.charAt(0) || "U"}
                   </span>
                 </div>
@@ -93,8 +93,8 @@ const Profile = () => {
                 </p>
 
                 <div className="w-full my-8 space-y-4">
-                  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100/50 group hover:border-zepto-purple/20 transition-colors">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-zepto-light text-slate-400 group-hover:text-zepto-purple transition-all">
+                  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100/50 group hover:border-brand/20 transition-colors">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-brand-muted text-slate-400 group-hover:text-brand transition-all">
                       <BadgeCheck size={18} />
                     </div>
                     <div className="text-left">
@@ -108,8 +108,8 @@ const Profile = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100/50 group hover:border-zepto-purple/20 transition-colors">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-zepto-light text-slate-400 group-hover:text-zepto-purple transition-all">
+                  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100/50 group hover:border-brand/20 transition-colors">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-brand-muted text-slate-400 group-hover:text-brand transition-all">
                       <Phone size={18} />
                     </div>
                     <div className="text-left">
@@ -121,8 +121,8 @@ const Profile = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100/50 group hover:border-zepto-purple/20 transition-colors">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-zepto-light text-slate-400 group-hover:text-zepto-purple transition-all">
+                  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100/50 group hover:border-brand/20 transition-colors">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-brand-muted text-slate-400 group-hover:text-brand transition-all">
                       <Calendar size={18} />
                     </div>
                     <div className="text-left">
@@ -149,7 +149,7 @@ const Profile = () => {
             </div>
 
             {/* Loyalty Card */}
-            <div className="bg-zepto-dark rounded-3xl p-8 text-white relative overflow-hidden group">
+            <div className="bg-brand-dark rounded-3xl p-8 text-white relative overflow-hidden group">
               <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-700"></div>
               <p className="text-sm font-bold opacity-60 italic">
                 Food Flie Gold
@@ -159,7 +159,7 @@ const Profile = () => {
                 Enjoy free deliveries on orders above ₹149 and extra 10% off on
                 all restaurants.
               </p>
-              <button className="mt-6 text-xs font-black uppercase tracking-widest bg-white text-zepto-purple px-6 py-3 rounded-xl hover:shadow-xl transition-all">
+              <button className="mt-6 text-xs font-black uppercase tracking-widest bg-white text-brand px-6 py-3 rounded-xl hover:shadow-xl transition-all">
                 Know More
               </button>
             </div>
@@ -169,7 +169,7 @@ const Profile = () => {
           <div className="lg:col-span-2 space-y-8">
             {/* Partner Card */}
             <div
-              className="bg-gradient-to-r from-zepto-purple to-zepto-dark rounded-3xl p-6 text-white flex items-center justify-between relative overflow-hidden group cursor-pointer"
+              className="bg-linear-to-r from-brand to-brand-dark rounded-3xl p-6 text-white flex items-center justify-between relative overflow-hidden group cursor-pointer"
               onClick={() => navigate("/partner")}
             >
               <div className="absolute right-0 bottom-0 opacity-10 transform translate-x-1/4 translate-y-1/4">
@@ -182,7 +182,7 @@ const Profile = () => {
                 <p className="text-sm font-medium opacity-90 mt-1 max-w-[200px]">
                   Grow your business with 0% commission for the first month.
                 </p>
-                <button className="mt-4 bg-white text-zepto-purple px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:shadow-lg transition-all">
+                <button className="mt-4 bg-white text-brand px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:shadow-lg transition-all">
                   Register Now
                 </button>
               </div>
@@ -214,17 +214,17 @@ const Profile = () => {
                   onClick={() => item.path && navigate(item.path)}
                   className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer group"
                 >
-                  <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-zepto-light transition-colors">
+                  <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-brand-muted transition-colors">
                     <item.icon
                       size={22}
-                      className="text-slate-400 group-hover:text-zepto-purple transition-colors"
+                      className="text-slate-400 group-hover:text-brand transition-colors"
                     />
                   </div>
                   <p className="text-sm font-black text-slate-800 tracking-tight">
                     {item.label}
                   </p>
                   {item.count && (
-                    <p className="text-xs font-bold text-zepto-purple mt-1">
+                    <p className="text-xs font-bold text-brand mt-1">
                       {item.count} Active
                     </p>
                   )}
@@ -240,7 +240,7 @@ const Profile = () => {
                 </h2>
                 <button
                   onClick={() => navigate("/profile/orders")}
-                  className="text-xs font-bold text-zepto-purple hover:underline"
+                  className="text-xs font-bold text-brand hover:underline"
                 >
                   View All
                 </button>
@@ -249,8 +249,8 @@ const Profile = () => {
               <div className="space-y-4">
                 {loadingOrders ? (
                   <div className="bg-white rounded-3xl p-12 text-center border border-slate-100 shadow-sm">
-                    <div className="w-12 h-12 bg-zepto-purple/10 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-                      <Clock size={24} className="text-zepto-purple/40" />
+                    <div className="w-12 h-12 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                      <Clock size={24} className="text-brand/40" />
                     </div>
                     <p className="text-slate-400 font-bold text-sm">
                       Loading your orders...
@@ -279,7 +279,7 @@ const Profile = () => {
                         {/* Order Items Preview */}
                         <div className="flex gap-4 mb-4 overflow-x-auto pb-2 scrollbar-hide">
                           {order.items?.map((item, idx) => (
-                            <div key={idx} className="flex-shrink-0">
+                            <div key={idx} className="shrink-0">
                               <img
                                 src={
                                   item.product?.image || "/placeholder-food.png"
@@ -331,9 +331,19 @@ const Profile = () => {
 
                       {order.status?.toLowerCase() === "delivered" && (
                         <div className="px-6 py-4 bg-slate-50/30 border-t border-slate-50 flex justify-center">
-                          <span className="text-slate-700 font-bold text-sm">
-                            Rate your order
-                          </span>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.open(
+                                "https://www.instagram.com/foodflie?igsh=MWNraGIxdHdqbmYycg==",
+                                "_blank",
+                                "noopener,noreferrer",
+                              );
+                            }}
+                            className="text-slate-700 font-medium text-[11px] sm:text-xs underline underline-offset-4 decoration-brand/70 hover:text-brand transition-colors"
+                          >
+                            Thanks for ordering – follow us on Instagram
+                          </button>
                         </div>
                       )}
                     </div>

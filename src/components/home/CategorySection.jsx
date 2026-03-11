@@ -62,7 +62,7 @@ const CategorySection = () => {
             onClick={() => handleCategoryClick(category.id, category.name)}
             className="flex flex-col items-center gap-1.5 min-w-[65px] sm:min-w-[100px] snap-start group cursor-pointer"
           >
-            <div className="w-[65px] h-[65px] sm:w-[120px] sm:h-[120px] rounded-full overflow-hidden shadow-sm group-hover:shadow-xl transition-all duration-500 relative ring-2 ring-transparent group-hover:ring-zepto-purple/10">
+            <div className="w-[65px] h-[65px] sm:w-[120px] sm:h-[120px] rounded-full overflow-hidden shadow-sm group-hover:shadow-xl transition-all duration-500 relative ring-2 ring-transparent group-hover:ring-brand/10">
               <img
                 src={category.image}
                 alt={category.name}

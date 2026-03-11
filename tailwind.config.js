@@ -3,11 +3,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        'zepto-purple': '#8B5CF6',
-        'zepto-dark': '#7C3AED',
-        'zepto-light': '#EDE9FE',
-        'zepto-green': '#10B981',
-        'zepto-grey': '#F1F5F9',
+        brand: "#DC2626",
+        "brand-dark": "#B91C1C",
+        "brand-light": "#FEE2E2",
+        "brand-muted": "#FEF2F2",
+        "brand-grey": "#F1F5F9",
       },
     },
   },

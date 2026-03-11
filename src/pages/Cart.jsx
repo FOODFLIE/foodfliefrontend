@@ -124,10 +124,13 @@ const Cart = () => {
 
   return (
     <>
-      <SEO title="Review Cart" />
+      <SEO 
+        title="Review Your Cart" 
+        description="Review your order and proceed to checkout. Fast 13-minute delivery with menu prices only."
+      />
       <div className="min-h-screen bg-[#fafafa] pb-32 pt-8 md:pt-14 relative z-0">
         {/* Background Soft Gradients */}
-        <div className="absolute top-0 left-0 w-full h-[30vh] bg-gradient-to-b from-purple-50/70 via-white/40 to-transparent -z-10" />
+        <div className="absolute top-0 left-0 w-full h-[30vh] bg-gradient-to-b from-brand-muted/70 via-white/40 to-transparent -z-10" />
 
         <div className="responsive-container">
           <div className="max-w-[1080px] mx-auto">
@@ -150,8 +153,8 @@ const Cart = () => {
               </div>
 
               {/* Optional delivery timeline or similar badge */}
-              <div className="bg-green-50/80 border border-green-100 text-zepto-green px-3 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex items-center gap-2 font-semibold shadow-sm backdrop-blur-md self-start md:self-auto text-xs md:text-sm">
-                <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
+              <div className="bg-brand-muted/80 border border-brand-light text-brand px-3 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex items-center gap-2 font-semibold shadow-sm backdrop-blur-md self-start md:self-auto text-xs md:text-sm">
+                <div className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse"></div>
                 Delivery in 13 mins
               </div>
             </div>
@@ -171,8 +174,8 @@ const Cart = () => {
                   <div className="p-5 md:p-8">
                     <div className="flex items-start justify-between gap-3 md:gap-4">
                       <div className="flex items-start gap-3 md:gap-4 flex-1">
-                        <div className="w-10 h-10 md:w-14 md:h-14 bg-pink-50 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0">
-                          <MapPin className="text-[#FC105F] fill-[#FC105F]/10 w-6 h-6 md:w-7 md:h-7" />
+                        <div className="w-10 h-10 md:w-14 md:h-14 bg-brand-muted rounded-xl md:rounded-2xl flex items-center justify-center shrink-0">
+                          <MapPin className="text-brand fill-brand/10 w-6 h-6 md:w-7 md:h-7" />
                         </div>
                         <div className="overflow-hidden">
                           <div className="flex items-center gap-2 flex-wrap">
@@ -231,11 +234,11 @@ const Cart = () => {
 
                 <div className="bg-white rounded-[1.5rem] md:rounded-[2rem] border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.03)] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_40px_rgb(0,0,0,0.06)] relative">
                   {/* Decorative top accent */}
-                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-zepto-purple to-purple-400"></div>
+                  <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-brand to-brand-dark"></div>
 
                   <div className="p-5 md:p-8 bg-gradient-to-b from-slate-50/50 to-white border-b border-slate-100 flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4 md:gap-5">
-                      <div className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-xl md:rounded-[1.25rem] border border-slate-100 flex items-center justify-center shadow-sm relative overflow-hidden group-hover:border-purple-200 transition-colors shrink-0">
+                      <div className="w-12 h-12 md:w-16 md:h-16 bg-white rounded-xl md:rounded-[1.25rem] border border-slate-100 flex items-center justify-center shadow-sm relative overflow-hidden group-hover:border-brand-light transition-colors shrink-0">
                         <Store
                           size={22}
                           className="text-slate-700 relative z-10 md:w-[26px]"
@@ -267,12 +270,12 @@ const Cart = () => {
                 </div>
 
                 {/* Promo Offer Banner */}
-                <div className="bg-gradient-to-br from-white to-purple-50/30 rounded-2xl md:rounded-[2rem] p-4 md:p-6 border border-purple-100/60 shadow-[0_8px_20px_rgb(0,0,0,0.02)] flex items-center justify-between gap-3 md:gap-4 group cursor-pointer hover:border-purple-200 hover:shadow-[0_8px_30px_rgb(0,0,0,0.05)] transition-all">
+                <div className="bg-gradient-to-br from-white to-brand-muted/30 rounded-2xl md:rounded-[2rem] p-4 md:p-6 border border-brand-light/60 shadow-[0_8px_20px_rgb(0,0,0,0.02)] flex items-center justify-between gap-3 md:gap-4 group cursor-pointer hover:border-brand-light hover:shadow-[0_8px_30px_rgb(0,0,0,0.05)] transition-all">
                   <div className="flex items-center gap-3 md:gap-4">
-                    <div className="w-10 h-10 md:w-12 md:h-12 bg-purple-100/50 rounded-xl md:rounded-2xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform shrink-0">
+                    <div className="w-10 h-10 md:w-12 md:h-12 bg-brand-light/50 rounded-xl md:rounded-2xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform shrink-0">
                       <Tag
                         size={20}
-                        className="text-zepto-purple md:w-[22px]"
+                        className="text-brand md:w-[22px]"
                       />
                     </div>
                     <div>
@@ -286,7 +289,7 @@ const Cart = () => {
                   </div>
                   <ChevronRight
                     size={18}
-                    className="text-slate-300 group-hover:text-zepto-purple transition-colors group-hover:translate-x-1 md:w-[20px]"
+                    className="text-slate-300 group-hover:text-brand transition-colors group-hover:translate-x-1 md:w-[20px]"
                     strokeWidth={2.5}
                   />
                 </div>
@@ -310,21 +313,6 @@ const Cart = () => {
                   totalAmount={totalAmount}
                   onOrderComplete={handleOrderComplete}
                 />
-
-                {/* Optional Terms Disclaimer */}
-                <div className="mt-6 text-center px-4">
-                  <p className="text-[10px] md:text-xs font-medium text-slate-400 leading-relaxed">
-                    By completing this order, you agree to our{" "}
-                    <span className="text-slate-600 underline cursor-pointer hover:text-zepto-purple">
-                      Terms of Service
-                    </span>{" "}
-                    and{" "}
-                    <span className="text-slate-600 underline cursor-pointer hover:text-zepto-purple">
-                      Privacy Policy
-                    </span>
-                    .
-                  </p>
-                </div>
               </div>
             </div>
           </div>

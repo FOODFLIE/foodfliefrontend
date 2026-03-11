@@ -15,30 +15,30 @@ import SEO from "../../components/common/seo";
 
 const ContactUs = () => {
   return (
-    <div className="min-h-screen bg-[#FCFBFA] text-slate-800 font-sans selection:bg-purple-100 selection:text-purple-900 pb-24 overflow-hidden relative">
-      <SEO title="Contact Us" />
+    <div className="min-h-screen bg-[#FCFBFA] text-slate-800 font-sans selection:bg-brand-light selection:text-slate-900 pb-24 overflow-hidden relative">
+      <SEO title="Contact Us | FoodFlie" />
       {/* Soft Ambient Backgrounds */}
       <div className="absolute top-0 left-0 w-full h-[600px] overflow-hidden -z-10 pointer-events-none">
         <div className="absolute -top-[10%] -left-[5%] w-[40%] h-[80%] rounded-full bg-blue-50/60 blur-[100px] mix-blend-multiply"></div>
-        <div className="absolute top-[20%] right-[0%] w-[50%] h-[70%] rounded-full bg-purple-50/70 blur-[120px] mix-blend-multiply"></div>
+        <div className="absolute top-[20%] right-[0%] w-[50%] h-[70%] rounded-full bg-brand-muted/70 blur-[120px] mix-blend-multiply"></div>
       </div>
 
       <div className="max-w-5xl mx-auto px-6 pt-12 lg:pt-16">
         {/* Empathetic Header */}
         <div className="text-center mb-12 max-w-3xl mx-auto space-y-8 tracking-tight">
-          <div className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-white/80 backdrop-blur-md shadow-[0_4px_24px_-4px_rgba(94,23,235,0.06)] border border-purple-50/80 mx-auto transition-all hover:shadow-[0_8px_30px_-4px_rgba(94,23,235,0.12)]">
-            <Phone className="w-4 h-4 text-[#5E17EB]" />
-            <span className="text-sm font-bold text-[#5E17EB] tracking-wide uppercase">
+          <div className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-white/80 backdrop-blur-md shadow-[0_4px_24px_-4px_rgba(220,38,38,0.06)] border border-brand-muted/80 mx-auto transition-all hover:shadow-[0_8px_30px_-4px_rgba(220,38,38,0.12)]">
+            <Phone className="w-4 h-4 text-brand" />
+            <span className="text-sm font-bold text-brand tracking-wide uppercase">
               We're here for you
             </span>
           </div>
 
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 leading-[1.1]">
             Always{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5E17EB] to-purple-400 relative">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-brand to-brand-dark relative">
               connected.
               <svg
-                className="absolute w-full h-3 -bottom-2 left-0 text-purple-200"
+                className="absolute w-full h-3 -bottom-2 left-0 text-brand-light"
                 viewBox="0 0 100 10"
                 preserveAspectRatio="none"
               >
@@ -60,7 +60,7 @@ const ContactUs = () => {
               I’d love to hear from you.
             </strong>
           </p>
-          <p className="text-lg text-purple-600/80 font-semibold italic">
+          <p className="text-lg text-brand/80 font-semibold italic">
             Reach out anytime. Your voice matters.
           </p>
         </div>
@@ -70,7 +70,7 @@ const ContactUs = () => {
           <div className="lg:col-span-5 space-y-6">
             <a
               href="mailto:support@foodflie.com"
-              className="block bg-white rounded-[2rem] p-8 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.04)] border border-slate-50 hover:shadow-[0_12px_44px_-12px_rgba(94,23,235,0.15)] hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden"
+              className="block bg-white rounded-4xl p-8 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.04)] border border-slate-50 hover:shadow-[0_12px_44px_-12px_rgba(94,23,235,0.15)] hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden"
             >
               <div className="absolute right-0 top-0 w-32 h-32 bg-blue-50 rounded-bl-[100px] -z-10 group-hover:scale-110 transition-transform duration-500"></div>
               <div className="w-14 h-14 bg-blue-100/50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-blue-100 transition-colors duration-500">
@@ -87,7 +87,7 @@ const ContactUs = () => {
               </p>
             </a>
 
-            <div className="bg-white rounded-[2rem] p-8 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.04)] border border-slate-50 hover:shadow-[0_12px_44px_-12px_rgba(94,23,235,0.15)] hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden">
+            <div className="bg-white rounded-4xl p-8 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.04)] border border-slate-50 hover:shadow-[0_12px_44px_-12px_rgba(94,23,235,0.15)] hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden">
               <div className="absolute right-0 top-0 w-32 h-32 bg-emerald-50 rounded-bl-[100px] -z-10 group-hover:scale-110 transition-transform duration-500"></div>
               <div className="w-14 h-14 bg-emerald-100/50 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-emerald-100 transition-colors duration-500">
                 <Phone className="w-6 h-6 text-emerald-600 stroke-[1.5]" />
@@ -108,7 +108,7 @@ const ContactUs = () => {
                 </p>
               </div>
               <div className="bg-white rounded-3xl p-6 shadow-[0_4px_20px_-8px_rgba(0,0,0,0.03)] border border-slate-50">
-                <Clock className="w-6 h-6 text-purple-500 mb-4" />
+                <Clock className="w-6 h-6 text-brand mb-4" />
                 <h4 className="font-bold text-slate-900 mb-1">Hours</h4>
                 <p className="text-sm text-slate-500 leading-relaxed pt-1 border-t border-slate-100">
                   Every day
@@ -121,11 +121,11 @@ const ContactUs = () => {
           {/* Right Column: Why Contact Us (Emotional Connection) */}
           <div className="lg:col-span-7 relative">
             {/* Soft Connection Glow */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white/60 to-purple-50/30 rounded-[2.5rem] blur-xl -z-10"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-white/60 to-brand-muted/30 rounded-[2.5rem] blur-xl -z-10"></div>
 
-            <div className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] p-10 md:p-12 shadow-[0_8px_40px_-12px_rgba(94,23,235,0.08)] border border-white relative overflow-hidden">
+            <div className="bg-white/80 backdrop-blur-xl rounded-[2.5rem] p-10 md:p-12 shadow-[0_8px_40px_-12px_rgba(220,38,38,0.08)] border border-white relative overflow-hidden">
               <div className="flex items-center gap-4 mb-10">
-                <div className="w-12 h-12 bg-[#5E17EB] rounded-2xl flex items-center justify-center shadow-[0_4px_20px_-4px_rgba(94,23,235,0.4)]">
+                <div className="w-12 h-12 bg-brand rounded-2xl flex items-center justify-center shadow-[0_4px_20px_-4px_rgba(220,38,38,0.4)]">
                   <Heart className="w-6 h-6 text-white" />
                 </div>
                 <h2 className="text-3xl font-bold text-slate-900 tracking-tight">
@@ -177,8 +177,8 @@ const ContactUs = () => {
                 </div>
 
                 <div className="flex items-start gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-colors">
-                  <div className="mt-1 w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center shrink-0">
-                    <Handshake className="w-5 h-5 text-[#5E17EB]" />
+                  <div className="mt-1 w-10 h-10 rounded-full bg-brand-muted flex items-center justify-center shrink-0">
+                    <Handshake className="w-5 h-5 text-brand" />
                   </div>
                   <div>
                     <h4 className="text-lg font-bold text-slate-900">

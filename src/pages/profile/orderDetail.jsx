@@ -63,7 +63,7 @@ const OrderDetail = () => {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="animate-pulse flex flex-col items-center">
-          <div className="w-12 h-12 bg-zepto-purple/20 rounded-full mb-4"></div>
+          <div className="w-12 h-12 bg-brand/20 rounded-full mb-4"></div>
           <div className="h-4 w-32 bg-slate-200 rounded"></div>
         </div>
       </div>
@@ -85,7 +85,7 @@ const OrderDetail = () => {
         </p>
         <button
           onClick={() => navigate("/profile/orders")}
-          className="bg-zepto-purple text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:shadow-xl transition-all"
+          className="bg-brand text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest hover:shadow-xl transition-all"
         >
           Back to Orders
         </button>
@@ -141,7 +141,7 @@ const OrderDetail = () => {
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">
                 Arrived in
               </span>
-              <div className="bg-zepto-light text-zepto-purple px-3 py-1 rounded-lg text-xs font-black italic mt-1">
+              <div className="bg-brand-muted text-brand px-3 py-1 rounded-lg text-xs font-black italic mt-1">
                 ⚡ +14 MINS
               </div>
             </div>
@@ -159,7 +159,7 @@ const OrderDetail = () => {
           <div className="divide-y divide-slate-50">
             {order.items?.map((item, idx) => (
               <div key={idx} className="p-6 flex gap-4 group">
-                <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-100 flex-shrink-0 group-hover:scale-105 transition-transform duration-300">
+                <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-100 shrink-0 group-hover:scale-105 transition-transform duration-300">
                   <img
                     src={item.item_image || "/placeholder-food.png"}
                     alt={item.item_name}
@@ -214,7 +214,7 @@ const OrderDetail = () => {
               <div className="flex justify-between items-center text-sm font-medium">
                 <span className="text-slate-400">Discount</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-zepto-green font-bold">
+                  <span className="text-brand font-bold">
                     -₹{order.discount_amount}
                   </span>
                 </div>
@@ -231,8 +231,8 @@ const OrderDetail = () => {
               </div>
             </div>
           </div>
-          <div className="p-4 bg-zepto-light/30 border-t border-slate-50">
-            <button className="w-full flex items-center justify-center gap-2 py-3 text-zepto-purple font-black text-[10px] uppercase tracking-widest hover:bg-zepto-light transition-colors rounded-2xl border border-zepto-purple/10">
+          <div className="p-4 bg-brand-muted/30 border-t border-slate-50">
+            <button className="w-full flex items-center justify-center gap-2 py-3 text-brand font-black text-[10px] uppercase tracking-widest hover:bg-brand-muted transition-colors rounded-2xl border border-brand/10">
               Download Invoice / Credit Note
             </button>
           </div>
@@ -300,7 +300,7 @@ const OrderDetail = () => {
               <p className="text-sm font-bold text-slate-700 flex items-start gap-2 leading-relaxed">
                 <MapPin
                   size={14}
-                  className="text-slate-300 mt-0.5 flex-shrink-0"
+                  className="text-slate-300 mt-0.5 shrink-0"
                 />
                 {order.address && order.address !== "undefined, undefined"
                   ? order.address
@@ -336,9 +336,18 @@ const OrderDetail = () => {
 
       {/* Sticky Bottom Actions */}
       <div className="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-md border-t border-slate-100 p-4 z-40">
-        <div className="responsive-container flex gap-4">
-          <button className="flex-1 py-4 border-2 border-rose-500 text-rose-500 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-rose-50 transition-all hover:shadow-md">
-            Rate Order
+        <div className="responsive-container flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center">
+          <button
+            onClick={() =>
+              window.open(
+                "https://www.instagram.com/foodflie?igsh=MWNraGIxdHdqbmYycg==",
+                "_blank",
+                "noopener,noreferrer",
+              )
+            }
+            className="flex-1 py-3 sm:py-4 border border-slate-300 text-slate-700 rounded-2xl text-[11px] sm:text-xs font-medium hover:bg-slate-50 hover:border-slate-400 transition-all hover:shadow-sm"
+          >
+            Thanks for ordering – Follow us on Instagram
           </button>
           <button className="flex-[1.5] py-4 bg-rose-500 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-rose-600 transition-all shadow-lg shadow-rose-200 hover:shadow-xl">
             Order Again

@@ -32,12 +32,12 @@ const SearchBar = () => {
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleSearch}
           onFocus={handleFocus}
-          className="w-full bg-slate-50 border border-slate-100 focus:bg-white focus:border-zepto-purple focus:ring-4 focus:ring-zepto-purple/5 h-11 pl-12 pr-4 rounded-xl text-sm font-medium transition-all outline-none shadow-sm"
+          className="w-full bg-slate-50 border border-slate-100 focus:bg-white focus:border-brand focus:ring-4 focus:ring-brand/5 h-11 pl-12 pr-4 rounded-xl text-sm font-medium transition-all outline-none shadow-sm"
         />
       </div>
-      <div className="hidden lg:flex items-center gap-1.5 whitespace-nowrap px-3 py-2 bg-zepto-light rounded-xl border border-zepto-purple/5">
-        <BadgeCheck size={16} className="text-zepto-green" />
-        <span className="text-[10px] font-semibold uppercase tracking-widest text-zepto-purple/60">
+      <div className="hidden lg:flex items-center gap-1.5 whitespace-nowrap px-3 py-2 bg-brand-muted rounded-xl border border-brand/5">
+        <BadgeCheck size={16} className="text-brand" />
+        <span className="text-[10px] font-semibold uppercase tracking-widest text-brand/60">
           Menu Prices Guaranteed
         </span>
       </div>

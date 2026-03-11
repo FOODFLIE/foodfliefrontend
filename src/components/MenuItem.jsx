@@ -3,9 +3,9 @@ import { Plus, Loader2 } from "lucide-react";
 
 const MenuItem = ({ name, description, price, image, onAdd, isAdding }) => {
   return (
-    <div className="flex gap-6 p-6 rounded-3xl border border-slate-50 bg-white hover:border-zepto-purple/20 transition-all group shadow-sm hover:shadow-xl">
+    <div className="flex gap-6 p-6 rounded-3xl border border-slate-50 bg-white hover:border-brand/20 transition-all group shadow-sm hover:shadow-xl">
       <div className="flex-1 space-y-3">
-        <h4 className="font-black text-slate-800 text-lg tracking-tight group-hover:text-zepto-purple transition-colors font-poppins">
+        <h4 className="font-black text-slate-800 text-lg tracking-tight group-hover:text-brand transition-colors font-poppins">
           {name}
         </h4>
         <p className="text-xs text-slate-400 font-medium leading-relaxed italic">
@@ -18,7 +18,7 @@ const MenuItem = ({ name, description, price, image, onAdd, isAdding }) => {
           <button
             onClick={onAdd}
             disabled={isAdding}
-            className="bg-white border-2 border-zepto-purple text-zepto-purple px-8 py-2 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-zepto-purple hover:text-white transition-all flex items-center gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-white border-2 border-brand text-brand px-8 py-2 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-brand hover:text-white transition-all flex items-center gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isAdding ? (
               <Loader2 className="animate-spin" size={14} />

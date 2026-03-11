@@ -132,7 +132,7 @@ const LocationModal = ({ isOpen, onClose }) => {
               <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-xl bg-purple-50 text-purple-600">
+                    <div className="p-2 rounded-xl bg-brand-muted text-brand">
                       {loading ? (
                         <Target size={20} className="animate-spin" />
                       ) : (
@@ -141,7 +141,7 @@ const LocationModal = ({ isOpen, onClose }) => {
                     </div>
 
                     <div className="flex flex-col">
-                      <span className="text-sm font-bold text-purple-600">
+                      <span className="text-sm font-bold text-brand">
                         Use My Current Location
                       </span>
 
@@ -154,7 +154,7 @@ const LocationModal = ({ isOpen, onClose }) => {
                   <button
                     onClick={updateLocation}
                     disabled={loading}
-                    className="px-4 py-1.5 border text-purple-600 text-xs font-bold rounded-lg"
+                    className="px-4 py-1.5 border text-brand text-xs font-bold rounded-lg"
                   >
                     {loading ? (
                       <Loader2 size={12} className="animate-spin" />

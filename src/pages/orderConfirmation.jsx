@@ -45,7 +45,7 @@ const OrderConfirmation = () => {
           </h1>
           <button
             onClick={() => navigate("/")}
-            className="mt-4 bg-zepto-purple text-white px-6 py-3 rounded-xl font-bold"
+            className="mt-4 bg-brand text-white px-6 py-3 rounded-xl font-bold"
           >
             Go Home
           </button>
@@ -56,7 +56,7 @@ const OrderConfirmation = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white pb-20 pt-6">
-      <SEO title="Order Confirmed" />
+      <SEO title="Order Confirmed | FoodFlie" />
       <div className="responsive-container max-w-2xl mx-auto px-4">
         <div className="text-center mb-6">
           <div className="w-20 h-20 sm:w-24 sm:h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -76,8 +76,8 @@ const OrderConfirmation = () => {
 
         <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200 mb-4">
           <div className="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100">
-            <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-              <Store className="w-6 h-6 text-zepto-purple" />
+            <div className="w-12 h-12 bg-brand-light rounded-xl flex items-center justify-center">
+              <Store className="w-6 h-6 text-brand" />
             </div>
             <div>
               <p className="text-xs text-slate-500 font-bold">Restaurant</p>
@@ -140,7 +140,7 @@ const OrderConfirmation = () => {
 
         <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200 mb-4">
           <h2 className="text-base sm:text-lg font-black text-slate-900 mb-4 flex items-center gap-2">
-            <Clock className="w-5 h-5 text-zepto-purple" />
+            <Clock className="w-5 h-5 text-brand" />
             Delivery Timeline
           </h2>
           <div className="space-y-4">
@@ -179,7 +179,7 @@ const OrderConfirmation = () => {
         <div className="grid grid-cols-2 gap-3 mb-4">
           <button
             onClick={() => navigate("/profile/orders")}
-            className="bg-zepto-purple text-white py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base hover:bg-zepto-dark transition-colors shadow-lg"
+            className="bg-brand text-white py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base hover:bg-brand-dark transition-colors shadow-lg"
           >
             Track Order
           </button>
@@ -191,17 +191,17 @@ const OrderConfirmation = () => {
           </button>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-50 to-white rounded-2xl p-4 sm:p-6 border border-purple-100">
+        <div className="bg-gradient-to-br from-brand-muted to-white rounded-2xl p-4 sm:p-6 border border-brand-light">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-              <Phone className="w-5 h-5 text-zepto-purple" />
+            <div className="w-10 h-10 bg-brand-light rounded-full flex items-center justify-center">
+              <Phone className="w-5 h-5 text-brand" />
             </div>
             <div>
               <p className="text-sm font-black text-slate-900">Need Help?</p>
               <p className="text-xs text-slate-600">We're here for you</p>
             </div>
           </div>
-          <button className="w-full bg-white text-zepto-purple py-2.5 rounded-lg font-bold text-sm border border-purple-200 hover:bg-purple-50 transition-colors">
+          <button className="w-full bg-white text-brand py-2.5 rounded-lg font-bold text-sm border border-brand-light hover:bg-brand-muted transition-colors">
             Contact Support
           </button>
         </div>

@@ -8,6 +8,12 @@ import { Star, Clock, Zap, Search, Loader2 } from "lucide-react";
 import { getProductsByPartner } from "../../services/productService";
 import { addToCart } from "../../services/cartService";
 import SEO from "../../components/common/seo";
+import { 
+  generateRestaurantSchema, 
+  generateMenuSchema, 
+  generateBreadcrumbSchema,
+  generateFoodEstablishmentSchema
+} from "../../utils/seoSchemas";
 
 const RestaurantDetail = () => {
   const { id } = useParams();
@@ -108,7 +114,7 @@ const RestaurantDetail = () => {
   if (!restaurantData && loading) {
     return (
       <div className="flex flex-col items-center justify-center py-40 gap-4">
-        <Loader2 className="w-10 h-10 text-zepto-purple animate-spin" />
+        <Loader2 className="w-10 h-10 text-brand animate-spin" />
         <p className="text-slate-400 font-bold text-sm uppercase tracking-widest">
           Loading restaurant...
         </p>
@@ -116,19 +122,39 @@ const RestaurantDetail = () => {
     );
   }
 
+  const breadcrumbs = [
+    { name: "Home", url: "https://foodflie.com" },
+    { name: "Restaurants", url: "https://foodflie.com/restaurants" },
+    { name: restaurantData?.name || "Restaurant", url: `https://foodflie.com/restaurant/${id}` }
+  ];
+
+  const schemas = restaurantData ? [
+    generateRestaurantSchema(restaurantData),
+    generateFoodEstablishmentSchema(restaurantData),
+    generateBreadcrumbSchema(breadcrumbs),
+    ...(menuItems.length > 0 ? [generateMenuSchema(restaurantData, menuItems)] : [])
+  ] : [];
+
   return (
     <div className="bg-white min-h-screen pb-40">
-      <SEO title={restaurantData?.name || "Restaurant"} />
+      <SEO 
+        title={`${restaurantData?.name || "Restaurant"} - Order Online in 13 Minutes`}
+        description={`Order from ${restaurantData?.name || "restaurant"} and get delivery in 13 minutes. ${restaurantData?.cuisines?.join ? restaurantData.cuisines.join(", ") : "Delicious food"} at menu prices. ${restaurantData?.rating ? `Rated ${restaurantData.rating} stars.` : ""} Free delivery on orders above ₹199.`}
+        keywords={`${restaurantData?.name}, ${restaurantData?.name} menu, ${restaurantData?.name} delivery, food delivery, online order, ${restaurantData?.cuisines?.join ? restaurantData.cuisines.join(", ") : "restaurant"}, ${restaurantData?.city || "Hyderabad"} restaurants`}
+        schema={schemas}
+        canonical={`https://foodflie.com/restaurant/${id}`}
+        type="restaurant"
+      />
       <main className="responsive-container py-6 md:py-8">
         {/* Header Block */}
-        <section className="bg-zepto-grey/40 border border-slate-100 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-12 mb-8 md:mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 relative overflow-hidden">
+        <section className="bg-brand-grey/40 border border-slate-100 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-12 mb-8 md:mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 relative overflow-hidden">
           <div className="relative z-10 flex-1">
             <h1 className="text-3xl md:text-6xl font-black text-slate-800 tracking-tighter mb-4 uppercase italic font-poppins">
               {restaurantData.name}
             </h1>
             <div className="flex flex-wrap items-center gap-4 md:gap-6 text-slate-500 font-bold text-xs md:text-sm">
               <div className="flex items-center gap-2">
-                <div className="bg-zepto-green text-white px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-md shadow-zepto-green/10">
+                <div className="bg-brand text-white px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-md shadow-brand/10">
                   <Star size={12} fill="currentColor" /> {restaurantData.rating}
                 </div>
                 <span className="hidden text-red-500  sm:inline">
@@ -136,10 +162,10 @@ const RestaurantDetail = () => {
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock size={16} className="text-zepto-purple" />
+                <Clock size={16} className="text-brand" />
                 <span>{restaurantData.time} Delivery</span>
               </div>
-              <p className="text-zepto-purple hidden sm:block">
+              <p className="text-brand hidden sm:block">
                 {restaurantData.cuisines?.join
                   ? restaurantData.cuisines.join(" • ")
                   : typeof restaurantData.cuisines === "string"
@@ -154,14 +180,14 @@ const RestaurantDetail = () => {
               <Zap
                 size={20}
                 md:size={24}
-                className="text-zepto-purple animate-pulse"
+                className="text-brand animate-pulse"
                 fill="currentColor"
               />
               <h3 className="font-black text-slate-800 uppercase tracking-tighter italic text-sm md:text-base">
                 Active Offer
               </h3>
             </div>
-            <p className="text-zepto-purple font-black text-lg md:text-xl mb-1">
+            <p className="text-brand font-black text-lg md:text-xl mb-1">
               {restaurantData.offer}
             </p>
             <p className="text-[9px] md:text-[10px] font-bold text-slate-400 uppercase tracking-widest">
@@ -176,7 +202,7 @@ const RestaurantDetail = () => {
             (cat, i) => (
               <button
                 key={cat}
-                className={`px-6 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all shadow-sm ${i === 0 ? "bg-zepto-purple text-white" : "bg-zepto-grey/50 text-slate-500"}`}
+                className={`px-6 py-2.5 rounded-xl font-bold text-xs whitespace-nowrap transition-all shadow-sm ${i === 0 ? "bg-brand text-white" : "bg-brand-grey/50 text-slate-500"}`}
               >
                 {cat}
               </button>
@@ -188,7 +214,7 @@ const RestaurantDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
           {/* Categories Sidebar (Desktop only) */}
           <aside className="lg:col-span-3 hidden lg:block sticky top-28 h-fit">
-            <h3 className="text-sm font-black text-slate-800 uppercase tracking-[0.2em] mb-6 pl-2 border-l-4 border-zepto-purple">
+            <h3 className="text-sm font-black text-slate-800 uppercase tracking-[0.2em] mb-6 pl-2 border-l-4 border-brand">
               Categories
             </h3>
             <ul className="space-y-2">
@@ -200,7 +226,7 @@ const RestaurantDetail = () => {
               ].map((cat, i) => (
                 <li
                   key={cat}
-                  className={`p-4 rounded-2xl font-bold text-sm cursor-pointer transition-all ${i === 0 ? "bg-zepto-light text-zepto-purple shadow-sm" : "text-slate-400 hover:text-slate-600"}`}
+                  className={`p-4 rounded-2xl font-bold text-sm cursor-pointer transition-all ${i === 0 ? "bg-brand-muted text-brand shadow-sm" : "text-slate-400 hover:text-slate-600"}`}
                 >
                   {cat}
                 </li>
@@ -229,7 +255,7 @@ const RestaurantDetail = () => {
 
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <Loader2 className="w-10 h-10 text-zepto-purple animate-spin" />
+                <Loader2 className="w-10 h-10 text-brand animate-spin" />
                 <p className="text-slate-400 font-bold text-sm uppercase tracking-widest">
                   Fetching menu...
                 </p>
@@ -239,7 +265,7 @@ const RestaurantDetail = () => {
                 <p className="text-red-500 font-bold mb-4">{error}</p>
                 <button
                   onClick={() => window.location.reload()}
-                  className="px-6 py-2 bg-zepto-purple text-white rounded-xl font-bold text-sm"
+                  className="px-6 py-2 bg-brand text-white rounded-xl font-bold text-sm"
                 >
                   Retry
                 </button>

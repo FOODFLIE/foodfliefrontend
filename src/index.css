@@ -6,11 +6,11 @@
   --font-inter: "Inter", sans-serif;
   --font-poppins: "Poppins", sans-serif;
 
-  --color-zepto-purple: #5e17eb;
-  --color-zepto-dark: #480e60;
-  --color-zepto-light: #f3f0ff;
-  --color-zepto-green: #25c861;
-  --color-zepto-grey: #f0f0f5;
+  --color-brand: #dc2626;
+  --color-brand-dark: #b91c1c;
+  --color-brand-light: #fee2e2;
+  --color-brand-muted: #fef2f2;
+  --color-brand-grey: #f0f0f5;
 }
 
 @layer base {

@@ -13,7 +13,7 @@ const AuthModalFooter = ({ isLogin, onToggle }) => (
         {isLogin ? "New to Food Flie?" : "Already have an account?"}{" "}
         <button
           onClick={onToggle}
-          className="text-zepto-purple font-bold hover:underline active:scale-95 transition-transform inline-block min-h-[44px] sm:min-h-0 flex items-center justify-center"
+          className="text-brand font-bold hover:underline active:scale-95 transition-transform inline-block min-h-[44px] sm:min-h-0 flex items-center justify-center"
         >
           {isLogin ? "Create Account" : "Login Now"}
         </button>

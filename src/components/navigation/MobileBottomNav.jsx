@@ -62,20 +62,20 @@ const MobileBottomNav = ({
               key={item.id}
               onClick={item.action}
               className={`flex-1 flex flex-col items-center justify-center gap-1 h-full relative transition-colors active:scale-95 ${
-                active ? "text-zepto-purple" : "text-slate-500"
+                active ? "text-brand" : "text-slate-500"
               }`}
               aria-label={item.label}
             >
               {/* Active Indicator */}
               {active && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-zepto-purple rounded-b-full" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-brand rounded-b-full" />
               )}
 
               {/* Icon with Badge */}
               <div className="relative">
                 <Icon size={24} strokeWidth={active ? 2.5 : 2} />
                 {item.badge > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-zepto-purple text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
+                  <span className="absolute -top-1 -right-1 bg-brand text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center border-2 border-white">
                     {item.badge > 9 ? "9+" : item.badge}
                   </span>
                 )}

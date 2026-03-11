@@ -95,13 +95,13 @@ const Search = () => {
 
   return (
     <div className="bg-white min-h-screen pb-20">
-      <SEO title="Search" />
+      <SEO title="Search Food | FoodFlie" />
       {/* Search Header for Mobile/Desktop */}
       <div className="sticky top-0 z-30 bg-white border-b border-slate-100 p-4">
         <div className="responsive-container flex items-center gap-3">
           <Link
             to="/"
-            className="p-2 -ml-2 text-slate-400 hover:text-zepto-purple transition-colors"
+            className="p-2 -ml-2 text-slate-400 hover:text-brand transition-colors"
           >
             <ArrowLeft size={20} strokeWidth={2.5} />
           </Link>
@@ -115,7 +115,7 @@ const Search = () => {
               onChange={handleInputChange}
               onKeyDown={onKeyDown}
               placeholder="Search for 'biryani', 'pizza', 'milk'..."
-              className="w-full bg-slate-50 border border-slate-100 focus:bg-white focus:border-zepto-purple focus:ring-4 focus:ring-zepto-purple/5 h-12 pl-12 pr-4 rounded-xl text-base font-medium transition-all outline-none shadow-sm"
+              className="w-full bg-slate-50 border border-slate-100 focus:bg-white focus:border-brand focus:ring-4 focus:ring-brand/5 h-12 pl-12 pr-4 rounded-xl text-base font-medium transition-all outline-none shadow-sm"
               autoFocus
             />
           </div>
@@ -125,7 +125,7 @@ const Search = () => {
       <main className="responsive-container py-6 px-4">
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 gap-4">
-            <Loader2 className="w-10 h-10 text-zepto-purple animate-spin" />
+            <Loader2 className="w-10 h-10 text-brand animate-spin" />
             <p className="text-slate-400 font-bold text-sm uppercase tracking-widest">
               Searching for "{query}"...
             </p>
@@ -139,7 +139,7 @@ const Search = () => {
             <p className="text-slate-500 text-sm mb-6">{error}</p>
             <button
               onClick={() => handleSearch(query)}
-              className="px-8 py-3 bg-zepto-purple text-white rounded-xl font-bold text-sm shadow-lg shadow-zepto-purple/20 active:scale-95 transition-all"
+              className="px-8 py-3 bg-brand text-white rounded-xl font-bold text-sm shadow-lg shadow-brand/20 active:scale-95 transition-all"
             >
               Try Again
             </button>
@@ -174,12 +174,12 @@ const Search = () => {
                         setSearchInput(term);
                         setSearchParams({ q: term });
                       }}
-                      className="group flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-100 rounded-full text-sm font-bold text-slate-600 hover:border-zepto-purple hover:bg-white hover:text-zepto-purple transition-all"
+                      className="group flex items-center gap-2 px-4 py-2 bg-slate-50 border border-slate-100 rounded-full text-sm font-bold text-slate-600 hover:border-brand hover:bg-white hover:text-brand transition-all"
                     >
                       {term}
                       <X
                         size={14}
-                        className="text-slate-300 group-hover:text-zepto-purple transition-colors"
+                        className="text-slate-300 group-hover:text-brand transition-colors"
                         onClick={(e) => removeRecent(e, term)}
                       />
                     </button>
@@ -191,7 +191,7 @@ const Search = () => {
             {/* Popular Suggestions */}
             <section>
               <div className="flex items-center gap-2 mb-4">
-                <TrendingUp size={16} className="text-zepto-purple" />
+                <TrendingUp size={16} className="text-brand" />
                 <h2 className="text-sm font-black text-slate-800 uppercase tracking-wider">
                   Popular Suggestions
                 </h2>
@@ -204,14 +204,14 @@ const Search = () => {
                       setSearchInput(c.title);
                       setSearchParams({ q: c.title });
                     }}
-                    className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl hover:border-zepto-purple/30 hover:shadow-md transition-all group text-left"
+                    className="flex items-center justify-between p-4 bg-white border border-slate-100 rounded-2xl hover:border-brand/30 hover:shadow-md transition-all group text-left"
                   >
-                    <span className="text-sm font-bold text-slate-700 group-hover:text-zepto-purple transition-colors">
+                    <span className="text-sm font-bold text-slate-700 group-hover:text-brand transition-colors">
                       {c.title}
                     </span>
                     <ChevronRight
                       size={16}
-                      className="text-slate-300 group-hover:text-zepto-purple transition-colors"
+                      className="text-slate-300 group-hover:text-brand transition-colors"
                     />
                   </button>
                 ))}
@@ -255,7 +255,7 @@ const Search = () => {
             {results.partners.length > 0 && (
               <section>
                 <div className="flex items-center gap-2 mb-6">
-                  <div className="p-2 bg-zepto-purple/10 text-zepto-purple rounded-lg">
+                  <div className="p-2 bg-brand/10 text-brand rounded-lg">
                     <Store size={20} />
                   </div>
                   <h2 className="text-xl font-black text-slate-800 tracking-tight">
@@ -270,9 +270,9 @@ const Search = () => {
                     <Link
                       key={partner.id}
                       to={`/restaurant/${partner.id}`}
-                      className="flex items-center gap-4 p-4 border border-slate-100 rounded-2xl hover:border-zepto-purple/30 hover:shadow-md transition-all group bg-white"
+                      className="flex items-center gap-4 p-4 border border-slate-100 rounded-2xl hover:border-brand/30 hover:shadow-md transition-all group bg-white"
                     >
-                      <div className="w-16 h-16 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 shadow-sm border border-slate-100">
+                      <div className="w-16 h-16 rounded-xl overflow-hidden bg-slate-100 shrink-0 shadow-sm border border-slate-100">
                         {partner.image ? (
                           <img
                             src={partner.image}
@@ -286,14 +286,14 @@ const Search = () => {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-black text-slate-800 truncate group-hover:text-zepto-purple transition-colors">
+                        <h3 className="font-black text-slate-800 truncate group-hover:text-brand transition-colors">
                           {partner.store_name}
                         </h3>
                         <p className="text-xs font-bold text-slate-400 truncate mb-1">
                           {partner.area || partner.address}
                         </p>
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-black uppercase tracking-widest text-zepto-green">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-brand">
                             Open Now
                           </span>
                           <ChevronRight
@@ -312,7 +312,7 @@ const Search = () => {
             {results.products.length > 0 && (
               <section>
                 <div className="flex items-center gap-2 mb-6">
-                  <div className="p-2 bg-zepto-purple/10 text-zepto-purple rounded-lg">
+                  <div className="p-2 bg-brand/10 text-brand rounded-lg">
                     <ShoppingBag size={20} />
                   </div>
                   <h2 className="text-xl font-black text-slate-800 tracking-tight">
@@ -330,7 +330,7 @@ const Search = () => {
                       {product.partner && (
                         <Link
                           to={`/restaurant/${product.partner_id}`}
-                          className="mt-2 block text-[10px] font-bold text-slate-400 hover:text-zepto-purple transition-colors truncate"
+                          className="mt-2 block text-[10px] font-bold text-slate-400 hover:text-brand transition-colors truncate"
                         >
                           from{" "}
                           <span className="text-slate-600 font-black">

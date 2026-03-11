@@ -168,7 +168,7 @@ const Menu = () => {
           <input
             type="text"
             placeholder="Search for an item or category"
-            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium focus:outline-none focus:border-zepto-purple focus:ring-1 focus:ring-zepto-purple transition-all"
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all"
           />
         </div>
         {/* Filter buttons could go here */}
@@ -184,7 +184,7 @@ const Menu = () => {
             </h3>
             <button
               onClick={() => setShowCategoryModal(true)}
-              className="text-zepto-purple text-xs font-bold hover:underline"
+              className="text-brand text-xs font-bold hover:underline"
             >
               + ADD NEW
             </button>
@@ -225,7 +225,7 @@ const Menu = () => {
             </h3>
             <button
               onClick={() => openItemModal()}
-              className="text-zepto-purple text-xs font-bold hover:underline"
+              className="text-brand text-xs font-bold hover:underline"
             >
               + ADD NEW
             </button>
@@ -301,7 +301,7 @@ const Menu = () => {
                 </label>
                 <input
                   type="text"
-                  className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-zepto-purple"
+                  className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand"
                   placeholder="e.g. Starters"
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value)}
@@ -309,7 +309,7 @@ const Menu = () => {
               </div>
               <button
                 onClick={handleAddCategory}
-                className="w-full py-3 bg-zepto-purple text-white font-bold rounded-xl hover:bg-zepto-purple/90 transition-colors"
+                className="w-full py-3 bg-brand text-white font-bold rounded-xl hover:bg-brand/90 transition-colors"
               >
                 Save Category
               </button>
@@ -338,7 +338,7 @@ const Menu = () => {
                   </label>
                   <input
                     type="text"
-                    className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-zepto-purple"
+                    className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand"
                     placeholder="e.g. Chicken Biryani"
                     value={newItem.name}
                     onChange={(e) =>
@@ -352,7 +352,7 @@ const Menu = () => {
                   </label>
                   <input
                     type="number"
-                    className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-zepto-purple"
+                    className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand"
                     placeholder="299"
                     value={newItem.price}
                     onChange={(e) =>
@@ -367,7 +367,7 @@ const Menu = () => {
                   Category
                 </label>
                 <select
-                  className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-zepto-purple"
+                  className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand"
                   value={newItem.category}
                   onChange={(e) =>
                     setNewItem({ ...newItem, category: Number(e.target.value) })
@@ -387,7 +387,7 @@ const Menu = () => {
                   Description
                 </label>
                 <textarea
-                  className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-zepto-purple h-24 resize-none"
+                  className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand h-24 resize-none"
                   placeholder="Brief description of the item..."
                   value={newItem.description}
                   onChange={(e) =>
@@ -424,7 +424,7 @@ const Menu = () => {
 
               <button
                 onClick={handleSaveItem}
-                className="w-full py-3 bg-zepto-purple text-white font-bold rounded-xl hover:bg-zepto-purple/90 transition-colors mt-2"
+                className="w-full py-3 bg-brand text-white font-bold rounded-xl hover:bg-brand/90 transition-colors mt-2"
               >
                 {editingItem ? "Update Item" : "Add Item"}
               </button>

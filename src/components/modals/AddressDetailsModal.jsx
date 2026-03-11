@@ -255,7 +255,7 @@ const AddressDetailsModal = ({
                     onClick={() => setAddressCategory(key)}
                     className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 font-bold text-sm transition-all duration-200 ${
                       addressCategory === key
-                        ? "bg-pink-50 border-[#FC105F] text-[#FC105F] shadow-sm"
+                        ? "bg-brand-muted border-brand text-brand shadow-sm"
                         : "bg-white border-slate-100 text-slate-400 hover:border-slate-200"
                     }`}
                   >
@@ -416,7 +416,7 @@ const AddressDetailsModal = ({
               type="submit"
               className={`w-full h-14 rounded-2xl font-bold text-base transition-all duration-200 mt-2 flex items-center justify-center gap-2 ${
                 isFormValid && !isSaving
-                  ? "bg-[#FC105F] text-white shadow-lg shadow-pink-200 hover:shadow-xl active:scale-[0.98]"
+                  ? "bg-brand text-white shadow-lg shadow-brand/20 hover:shadow-xl active:scale-[0.98]"
                   : "bg-slate-100 text-slate-400 cursor-not-allowed"
               }`}
               disabled={!isFormValid || isSaving}

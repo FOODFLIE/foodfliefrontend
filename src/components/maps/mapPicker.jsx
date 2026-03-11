@@ -205,7 +205,7 @@ export default function MapPicker({ initialCoords, onClose, onConfirm }) {
                 </div>
 
                 <div className="relative mt-[-4px]">
-                  <div className="w-10 h-10 bg-[#FC105F] rounded-full flex items-center justify-center shadow-lg border-2 border-white">
+                  <div className="w-10 h-10 bg-brand rounded-full flex items-center justify-center shadow-lg border-2 border-white">
                     <MapPin size={24} className="text-white fill-current" />
                   </div>
                   {/* Shadow */}
@@ -224,7 +224,7 @@ export default function MapPicker({ initialCoords, onClose, onConfirm }) {
           {/* Locate Me Button - Floating Targeted */}
           <button
             onClick={handleLocateMe}
-            className="absolute bottom-6 right-6 z-40 bg-white p-3 rounded-full shadow-2xl text-pink-600 hover:text-pink-700 transition-all border border-slate-100 active:scale-90"
+            className="absolute bottom-6 right-6 z-40 bg-white p-3 rounded-full shadow-2xl text-brand hover:text-brand-dark transition-all border border-slate-100 active:scale-90"
             title="Reset to current location"
           >
             <Target size={24} />
@@ -243,13 +243,13 @@ export default function MapPicker({ initialCoords, onClose, onConfirm }) {
             <div className="flex gap-4">
               <button
                 onClick={() => {}} // Could trigger search focus
-                className="flex-1 border-2 border-pink-500 text-pink-500 h-14 rounded-2xl font-bold text-sm hover:bg-pink-50 transition-colors flex items-center justify-center px-4"
+                className="flex-1 border-2 border-brand text-brand h-14 rounded-2xl font-bold text-sm hover:bg-brand-muted transition-colors flex items-center justify-center px-4"
               >
                 Search Location
               </button>
               <button
                 onClick={handleLocateMe}
-                className="flex-1 bg-pink-500 text-white h-14 rounded-2xl font-bold text-sm hover:bg-pink-600 transition-colors flex items-center justify-center px-4"
+                className="flex-1 bg-brand text-white h-14 rounded-2xl font-bold text-sm hover:bg-brand-dark transition-colors flex items-center justify-center px-4"
               >
                 Current Location
               </button>
@@ -261,7 +261,7 @@ export default function MapPicker({ initialCoords, onClose, onConfirm }) {
             <div className="w-12 h-1 bg-slate-100 rounded-full self-center mb-2" />
 
             <div className="flex items-start gap-4">
-              <div className="p-3 bg-pink-50 rounded-2xl text-pink-500 shrink-0">
+              <div className="p-3 bg-brand-muted rounded-2xl text-brand shrink-0">
                 <MapPin size={28} className="fill-current" />
               </div>
               <div className="flex flex-col flex-1 overflow-hidden min-h-[60px]">
@@ -278,7 +278,7 @@ export default function MapPicker({ initialCoords, onClose, onConfirm }) {
               onClick={() =>
                 onConfirm(center.lat, center.lng, address, shortAddress)
               }
-              className="w-full bg-[#FC105F] text-white h-14 rounded-2xl font-bold text-base hover:bg-[#E50E56] transition-colors shadow-lg shadow-pink-100 flex items-center justify-center active:scale-[0.98]"
+              className="w-full bg-brand text-white h-14 rounded-2xl font-bold text-base hover:bg-brand-dark transition-colors shadow-lg shadow-brand/20 flex items-center justify-center active:scale-[0.98]"
             >
               Confirm & Continue
             </button>

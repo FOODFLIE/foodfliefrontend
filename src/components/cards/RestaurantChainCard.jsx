@@ -45,7 +45,7 @@ const RestaurantChainCard = ({
 
       {/* Content */}
       <div className="mt-2 px-0.5">
-        <h3 className="text-sm sm:text-lg font-black text-slate-900 tracking-tight truncate group-hover:text-zepto-purple transition-colors capitalize mb-1">
+        <h3 className="text-sm sm:text-lg font-black text-slate-900 tracking-tight truncate group-hover:text-brand transition-colors capitalize mb-1">
           {name}
         </h3>
         

@@ -24,7 +24,7 @@ const FormInput = ({
       </label>
       <div className="relative">
         {Icon && (
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-zepto-purple transition-colors">
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-brand transition-colors">
             <Icon size={18} />
           </div>
         )}
@@ -38,7 +38,7 @@ const FormInput = ({
           value={value}
           onChange={onChange}
           placeholder={placeholder}
-          className={`w-full bg-slate-50 border border-slate-100 focus:bg-white focus:border-zepto-purple/20 h-12 ${Icon ? "pl-12" : "pl-4"} pr-4 rounded-xl text-sm font-semibold transition-all outline-none disabled:opacity-75 ${className}`}
+          className={`w-full bg-slate-50 border border-slate-100 focus:bg-white focus:border-brand/20 h-12 ${Icon ? "pl-12" : "pl-4"} pr-4 rounded-xl text-sm font-semibold transition-all outline-none disabled:opacity-75 ${className}`}
         />
       </div>
     </div>
