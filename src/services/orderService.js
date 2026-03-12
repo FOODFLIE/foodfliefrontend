@@ -1,10 +1,16 @@
 import apiClient from "../utils/apiClient";
 
-export const placeOrder = async (address, payment_method) => {
-  const response = await apiClient.post("/api/order/place", {
+export const placeOrder = async (address, payment_method, cookingInstructions = null) => {
+  const payload = {
     address,
     payment_method,
-  });
+  };
+  
+  if (cookingInstructions) {
+    payload.cooking_instructions = cookingInstructions;
+  }
+  
+  const response = await apiClient.post("/api/order/place", payload);
   return response.data;
 };
 

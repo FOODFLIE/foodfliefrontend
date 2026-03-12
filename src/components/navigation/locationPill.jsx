@@ -42,7 +42,7 @@ const LocationPill = ({ address, loading, onClick }) => {
 
       <div className="hidden lg:flex items-center justify-center bg-brand text-white px-2 py-0.5 rounded-lg shadow-sm shadow-brand/10">
         <span className="text-[9px] font-semibold italic tracking-tighter">
-          10 MIN
+          13 MIN
         </span>
       </div>
     </div>

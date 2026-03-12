@@ -14,7 +14,7 @@ import {
   removeFromCart,
 } from "../services/cartService";
 import { placeOrder } from "../services/orderService";
-import { useUserLocation } from "../context/locationContext";
+import { useCartLocation } from "../context/cartLocationContext";
 import EmptyCart from "../components/emptyCart";
 import LoadingCart from "../components/loadingCart";
 import CartItem from "../components/cartItem";
@@ -29,13 +29,15 @@ const Cart = () => {
     addressDetails,
     loading: locationLoading,
     coords,
-  } = useUserLocation();
+  } = useCartLocation();
   console.log("1", addressDetails);
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [cookingInstructions, setCookingInstructions] = useState("");
 
+console.log("cookingInstructions", cookingInstructions);
   console.log("2", addressDetails); 
 
   useEffect(() => {
@@ -79,7 +81,11 @@ const Cart = () => {
     }
 
     try {
-      const response = await placeOrder(addressDetails, "COD");
+      const orderPayload = {
+        ...addressDetails,
+      };
+      
+      const response = await placeOrder(orderPayload, "COD", cookingInstructions.trim() || null);
       const redirectUrl = response?.redirect_url;
       const orderId = response?.order_id;
 
@@ -300,7 +306,15 @@ const Cart = () => {
                     placeholder="Any cooking instructions? (e.g. Less spicy, extra sauce)"
                     className="w-full bg-transparent outline-none resize-none font-medium text-slate-700 placeholder:text-slate-400 text-xs md:text-sm"
                     rows="2"
+                    value={cookingInstructions}
+                    onChange={(e) => setCookingInstructions(e.target.value)}
+                    maxLength={200}
                   ></textarea>
+                  {cookingInstructions.length > 0 && (
+                    <div className="mt-2 text-xs text-slate-500">
+                      {cookingInstructions.length}/200 characters
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -322,6 +336,7 @@ const Cart = () => {
       <LocationModal
         isOpen={isLocationModalOpen}
         onClose={() => setIsLocationModalOpen(false)}
+        hideCurrentLocation={true}
       />
     </>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Rocket, Instagram, Twitter, Linkedin, Facebook } from "lucide-react";
+import logo from "../assets/food_trans.svg";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -16,13 +17,12 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-6 group">
-              <div className="bg-white p-2 rounded-xl group-hover:rotate-12 transition-transform duration-300">
-                <span className="text-brand font-black text-2xl">F</span>
-              </div>
-              <span className="text-2xl font-black tracking-tighter">
-                FOOD<span className="text-brand">FLIE</span>
-              </span>
+            <Link to="/" className="flex items-center mb-6 group">
+              <img
+                src={logo}
+                alt="FoodFlie"
+                className="h-12 object-contain group-hover:rotate-12 transition-transform duration-300"
+              />
             </Link>
             <p className="text-slate-300 text-sm leading-relaxed mb-6">
               Experience the fastest delivery service in town. Fresh groceries,
@@ -100,7 +100,10 @@ const Footer = () => {
                 </a>
               </li>
               <li>
-                <a href="/contact" className="hover:text-white transition-colors">
+                <a
+                  href="/contact"
+                  className="hover:text-white transition-colors"
+                >
                   Contact Us
                 </a>
               </li>

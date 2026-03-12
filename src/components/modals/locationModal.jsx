@@ -17,7 +17,7 @@ import MapPicker from "../maps/mapPicker";
 import AddressDetailsModal from "./addressDetailsModal";
 import { fetchAddresses } from "../../services/addressService";
 
-const LocationModal = ({ isOpen, onClose }) => {
+const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false }) => {
   const { coords, address, error, loading, updateLocation } = useUserLocation();
 
   const [showMapPicker, setShowMapPicker] = useState(false);
@@ -129,47 +129,49 @@ const LocationModal = ({ isOpen, onClose }) => {
               </div>
 
               {/* Use Current Location */}
-              <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm">
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex items-start gap-3">
-                    <div className="p-2 rounded-xl bg-brand-muted text-brand">
+              {!hideCurrentLocation && (
+                <div className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm">
+                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start gap-3">
+                      <div className="p-2 rounded-xl bg-brand-muted text-brand">
+                        {loading ? (
+                          <Target size={20} className="animate-spin" />
+                        ) : (
+                          <Navigation size={20} className="rotate-45" />
+                        )}
+                      </div>
+
+                      <div className="flex flex-col">
+                        <span className="text-sm font-bold text-brand">
+                          Use My Current Location
+                        </span>
+
+                        <span className="text-xs text-slate-400">
+                          Enable your current location for better services
+                        </span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={updateLocation}
+                      disabled={loading}
+                      className="px-4 py-1.5 border text-brand text-xs font-bold rounded-lg"
+                    >
                       {loading ? (
-                        <Target size={20} className="animate-spin" />
+                        <Loader2 size={12} className="animate-spin" />
                       ) : (
-                        <Navigation size={20} className="rotate-45" />
+                        "Enable"
                       )}
-                    </div>
-
-                    <div className="flex flex-col">
-                      <span className="text-sm font-bold text-brand">
-                        Use My Current Location
-                      </span>
-
-                      <span className="text-xs text-slate-400">
-                        Enable your current location for better services
-                      </span>
-                    </div>
+                    </button>
                   </div>
 
-                  <button
-                    onClick={updateLocation}
-                    disabled={loading}
-                    className="px-4 py-1.5 border text-brand text-xs font-bold rounded-lg"
-                  >
-                    {loading ? (
-                      <Loader2 size={12} className="animate-spin" />
-                    ) : (
-                      "Enable"
-                    )}
-                  </button>
+                  {address && !loading && (
+                    <div className="mt-3 text-xs text-slate-600 bg-slate-50 p-2 rounded-xl">
+                      📍 {address}
+                    </div>
+                  )}
                 </div>
-
-                {address && !loading && (
-                  <div className="mt-3 text-xs text-slate-600 bg-slate-50 p-2 rounded-xl">
-                    📍 {address}
-                  </div>
-                )}
-              </div>
+              )}
 
               {/* Add New Address */}
               <button

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import CategoryProduct from "./pages/category/categoryProduct";
 import RestaurantDetail from "./pages/restaurant/restaurantDetail";
@@ -12,6 +12,7 @@ import Orders from "./pages/partner/components/orders";
 import Menu from "./pages/partner/components/menu";
 import { AuthProvider } from "./context/authContext";
 import { LocationProvider } from "./context/locationContext";
+import { CartLocationProvider } from "./context/cartLocationContext";
 import Navbar from "./components/navbar";
 import OrderHistory from "./pages/profile/orderHistory";
 import OrderDetail from "./pages/profile/orderDetail";
@@ -20,13 +21,32 @@ import AboutUs from "./pages/legals/aboutUs";
 import ContactUs from "./pages/legals/contactUs";
 import Search from "./pages/search";
 import { Toaster } from "react-hot-toast";
+import Preloader from "./components/Preloader";
 
 const App = () => {
+  const [loading, setLoading] = useState(true);
+
+  // Check if it's the first visit in this session
+  useEffect(() => {
+    const hasLoaded = sessionStorage.getItem("appLoaded");
+    if (hasLoaded) {
+      setLoading(false);
+    }
+  }, []);
+
+  const handleLoadingFinish = () => {
+    setLoading(false);
+    sessionStorage.setItem("appLoaded", "true");
+  };
+
   return (
     <LocationProvider>
       <AuthProvider>
+        {loading && <Preloader onFinish={handleLoadingFinish} />}
         <Toaster position="top-center" reverseOrder={false} />
-        <div className="min-h-screen">
+        <div
+          className={`min-h-screen transition-opacity duration-700 ${loading ? "opacity-0" : "opacity-100"}`}
+        >
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />} />
@@ -39,7 +59,11 @@ const App = () => {
               <Route path="order/:id" element={<OrderDetail />} />
               <Route path="addresses" element={<Addresses />} />
             </Route>
-            <Route path="/cart" element={<Cart />} />
+            <Route path="/cart" element={
+              <CartLocationProvider>
+                <Cart />
+              </CartLocationProvider>
+            } />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route

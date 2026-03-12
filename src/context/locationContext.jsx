@@ -10,11 +10,13 @@ import { fetchAddresses } from "../services/addressService";
 const LocationContext = createContext();
 
 const STORAGE_KEY = "foodflie_selected_address";
+const CART_STORAGE_KEY = "foodflie_cart_address";
 
 // Helper to load persisted address from localStorage
-const loadPersistedAddress = () => {
+const loadPersistedAddress = (isCartContext = false) => {
   try {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const key = isCartContext ? CART_STORAGE_KEY : STORAGE_KEY;
+    const stored = localStorage.getItem(key);
     if (stored) return JSON.parse(stored);
   } catch (e) {
     console.warn("Failed to load persisted address:", e);
@@ -23,10 +25,11 @@ const loadPersistedAddress = () => {
 };
 
 // Helper to persist the current address to localStorage
-const persistAddress = (coords, address, addressDetails) => {
+const persistAddress = (coords, address, addressDetails, isCartContext = false) => {
   try {
+    const key = isCartContext ? CART_STORAGE_KEY : STORAGE_KEY;
     localStorage.setItem(
-      STORAGE_KEY,
+      key,
       JSON.stringify({ coords, address, addressDetails }),
     );
   } catch (e) {
@@ -42,9 +45,9 @@ export const useUserLocation = () => {
   return context;
 };
 
-export const LocationProvider = ({ children }) => {
+export const LocationProvider = ({ children, isCartContext = false }) => {
   // Try to restore from localStorage immediately
-  const persisted = loadPersistedAddress();
+  const persisted = loadPersistedAddress(isCartContext);
 
   const [coords, setCoords] = useState(
     persisted?.coords || { latitude: null, longitude: null },
@@ -98,12 +101,12 @@ export const LocationProvider = ({ children }) => {
         const displayAddr =
           details.shortAddress || details.buildingName || "Custom Location";
         setAddress(displayAddr);
-        persistAddress(newCoords, displayAddr, details);
+        persistAddress(newCoords, displayAddr, details, isCartContext);
       } else {
         setAddressDetails(null);
         fetchReverseGeocode(lat, lng).then((resolvedAddr) => {
           setAddress(resolvedAddr);
-          persistAddress(newCoords, resolvedAddr, null);
+          persistAddress(newCoords, resolvedAddr, null, isCartContext);
         });
       }
       return;
@@ -129,7 +132,7 @@ export const LocationProvider = ({ children }) => {
 
         fetchReverseGeocode(latitude, longitude).then((resolvedAddr) => {
           setAddress(resolvedAddr);
-          persistAddress(newCoords, resolvedAddr, null);
+          persistAddress(newCoords, resolvedAddr, null, isCartContext);
         });
       },
       (err) => {
@@ -139,7 +142,7 @@ export const LocationProvider = ({ children }) => {
       },
       { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 },
     );
-  }, []);
+  }, [isCartContext]);
 
   // On mount: load from localStorage → fallback to default saved address from API → no auto-detect
   useEffect(() => {
@@ -179,7 +182,7 @@ export const LocationProvider = ({ children }) => {
             setCoords(newCoords);
             setAddress(displayAddr);
             setAddressDetails(details);
-            persistAddress(newCoords, displayAddr, details);
+            persistAddress(newCoords, displayAddr, details, isCartContext);
             setLoading(false);
             return;
           }
