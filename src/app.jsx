@@ -23,6 +23,7 @@ import Search from "./pages/search";
 import { Toaster } from "react-hot-toast";
 import Preloader from "./components/Preloader";
 import { CartProvider } from "./context/cartContext";
+import ProtectedRoute from "./components/common/protectedRoute";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -62,9 +63,11 @@ const App = () => {
                 <Route path="addresses" element={<Addresses />} />
               </Route>
               <Route path="/cart" element={
-                <CartLocationProvider>
-                  <Cart />
-                </CartLocationProvider>
+                <ProtectedRoute>
+                  <CartLocationProvider>
+                    <Cart />
+                  </CartLocationProvider>
+                </ProtectedRoute>
               } />
               <Route path="/about" element={<AboutUs />} />
               <Route path="/contact" element={<ContactUs />} />

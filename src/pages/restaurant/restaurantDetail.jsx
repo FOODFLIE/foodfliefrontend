@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../../context/authContext";
 import Navbar from "../../components/navbar";
 import MenuItem from "../../components/menuItem";
 import CartFooter from "../../components/cartFooter";
@@ -25,7 +26,8 @@ const RestaurantDetail = () => {
   const [addingToCart, setAddingToCart] = useState({});
   const [error, setError] = useState(null);
   const [cartCount, setCartCount] = useState(0);
-  const { refreshCartCount } = useCart();
+  const { refreshCartCount, addToGuestCart } = useCart();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -94,13 +96,19 @@ const RestaurantDetail = () => {
   const handleAddToCart = async (item) => {
     try {
       setAddingToCart((prev) => ({ ...prev, [item.sku]: true }));
-      await addToCart(item.sku, 1);
-      setCartCount((c) => c + 1);
-      refreshCartCount();
-      // alert("Added to cart!"); // Simple feedback for now
+      if (isAuthenticated) {
+        // Authenticated: add to DB cart
+        await addToCart(item.sku, 1);
+        setCartCount((c) => c + 1);
+        refreshCartCount();
+      } else {
+        // Guest: add to localStorage cart
+        const partnerId = restaurantData?.id || item.partner_id || null;
+        addToGuestCart(item.sku, item.name, item.price, 1, String(partnerId));
+        setCartCount((c) => c + 1);
+      }
     } catch (err) {
       console.error("Failed to add to cart:", err);
-      // alert("Failed to add to cart. Are you logged in?");
     } finally {
       setAddingToCart((prev) => ({ ...prev, [item.sku]: false }));
     }

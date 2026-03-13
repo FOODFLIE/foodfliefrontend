@@ -13,12 +13,22 @@ import {
   Briefcase,
 } from "lucide-react";
 import { useUserLocation } from "../../context/locationContext";
+import { useCartLocation } from "../../context/cartLocationContext";
 import MapPicker from "../maps/mapPicker";
 import AddressDetailsModal from "./addressDetailsModal";
 import { fetchAddresses } from "../../services/addressService";
 
-const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false }) => {
-  const { coords, address, error, loading, updateLocation } = useUserLocation();
+const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartContext = false }) => {
+  // Use different context based on prop
+  let locationContext;
+  try {
+    locationContext = useCartContext ? useCartLocation() : useUserLocation();
+  } catch (error) {
+    // Fallback to regular location context if cart context is not available
+    locationContext = useUserLocation();
+  }
+  
+  const { coords, address, error, loading, updateLocation } = locationContext;
 
   const [showMapPicker, setShowMapPicker] = useState(false);
   const [showAddressDetails, setShowAddressDetails] = useState(false);

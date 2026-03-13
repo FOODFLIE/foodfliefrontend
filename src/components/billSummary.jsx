@@ -8,6 +8,7 @@ const BillSummary = ({
   handlingFee,
   totalAmount,
   onOrderComplete,
+  isAddressSelected = false,
 }) => {
   return (
     <div className="bg-white rounded-3xl md:rounded-4xl border border-slate-200/60 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] p-5 md:p-8 sticky top-28">
@@ -84,7 +85,11 @@ const BillSummary = ({
         </div>
       </div>
 
-      <SlideToOrder onComplete={onOrderComplete} />
+      <SlideToOrder 
+        onComplete={onOrderComplete} 
+        disabled={!isAddressSelected}
+        label={isAddressSelected ? "Slide to Order" : "Set Address to Order"}
+      />
 
       <div className="mt-6 md:mt-8 flex items-center justify-center gap-3">
         <ShieldCheck size={16} className="text-brand md:w-[18px]" />

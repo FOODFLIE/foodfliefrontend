@@ -230,7 +230,7 @@ console.log("cookingInstructions", cookingInstructions);
                     {!address && (
                       <button
                         onClick={() => setIsLocationModalOpen(true)}
-                        className="mt-4 md:mt-6 w-full py-3 md:py-4 border-2 border-dashed border-slate-200 rounded-xl md:rounded-2xl flex items-center justify-center gap-2 text-slate-400 font-bold hover:border-pink-200 hover:text-pink-500 hover:bg-pink-50/30 transition-all group text-xs md:text-base"
+                        className="mt-4 md:mt-6 w-full py-3 md:py-4 border-2 border-dashed border-slate-200 rounded-xl md:rounded-2xl flex items-center justify-center gap-2 text-slate-400 font-bold hover:border-pink-200 hover:text-pink-500 hover:bg-pink-50/30 transition-all group text-xs md:text-base animate-pulse"
                       >
                         <Navigation
                           size={16}
@@ -330,6 +330,7 @@ console.log("cookingInstructions", cookingInstructions);
                   handlingFee={handlingFee}
                   totalAmount={totalAmount}
                   onOrderComplete={handleOrderComplete}
+                  isAddressSelected={!!address}
                 />
               </div>
             </div>
@@ -341,6 +342,7 @@ console.log("cookingInstructions", cookingInstructions);
         isOpen={isLocationModalOpen}
         onClose={() => setIsLocationModalOpen(false)}
         hideCurrentLocation={true}
+        useCartContext={true}
       />
     </>
   );

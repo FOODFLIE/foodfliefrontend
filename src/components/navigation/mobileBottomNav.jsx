@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Home, Search, ShoppingCart, User } from "lucide-react";
+import { useCart } from "../../context/cartContext";
 
 /**
  * Mobile bottom navigation bar - only visible on mobile devices
@@ -10,10 +11,11 @@ const MobileBottomNav = ({
   onSearchClick,
   onLoginClick,
   isAuthenticated,
-  cartCount = 0,
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { cartCount, guestCartCount } = useCart();
+  const displayCount = isAuthenticated ? cartCount : guestCartCount;
 
   const navItems = [
     {
@@ -33,9 +35,9 @@ const MobileBottomNav = ({
       id: "cart",
       icon: ShoppingCart,
       label: "Cart",
-      badge: cartCount,
-      path: "/cart",
-      action: () => navigate("/cart"),
+      badge: displayCount,
+      path: isAuthenticated ? "/cart" : null,
+      action: () => (isAuthenticated ? navigate("/cart") : onLoginClick()),
     },
     {
       id: "account",

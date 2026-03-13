@@ -19,3 +19,8 @@ export const removeFromCart = async (cartItemId) => {
   const response = await apiClient.delete(`/api/cart/${cartItemId}`);
   return response.data;
 };
+
+export const syncGuestCart = async (items) => {
+  const response = await apiClient.post("/api/cart/sync", { items });
+  return response.data;
+};

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthModal from "./authModal";
 import LocationModal from "./modals/locationModal";
@@ -9,16 +9,13 @@ import SearchBar from "./navigation/searchBar";
 import NavActions from "./navigation/navActions";
 import { useAuth } from "../context/authContext";
 import { useUserLocation } from "../context/locationContext";
-import { useCart } from "../context/cartContext";
 
 const Navbar = () => {
   const { user, isAuthenticated } = useAuth();
   const { address, loading: locationLoading } = useUserLocation();
-  const { cartCount } = useCart();
   const navigate = useNavigate();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
     <>
@@ -40,7 +37,7 @@ const Navbar = () => {
             user={user}
             onLoginClick={() => setIsAuthModalOpen(true)}
             onProfileClick={() => navigate("/profile")}
-            cartCount={cartCount}
+            onCartClick={() => navigate("/cart")}
           />
         </div>
       </nav>
@@ -58,7 +55,6 @@ const Navbar = () => {
         onSearchClick={() => navigate("/search")}
         onLoginClick={() => setIsAuthModalOpen(true)}
         isAuthenticated={isAuthenticated}
-        cartCount={cartCount}
       />
     </>
   );

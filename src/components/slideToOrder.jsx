@@ -5,7 +5,7 @@ import { ChevronRight, ArrowRight, Check } from "lucide-react";
  * SlideToOrder Component
  * A premium sliding button for finalizing orders with smooth physics and rich aesthetics.
  */
-const SlideToOrder = ({ onComplete }) => {
+const SlideToOrder = ({ onComplete, disabled = false, label = "Slide to Order" }) => {
   const [sliderPosition, setSliderPosition] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -19,7 +19,7 @@ const SlideToOrder = ({ onComplete }) => {
 
   // Stable handler for movement calculation
   const handleMove = useCallback((currentX) => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || disabled) return;
 
     const containerRect = containerRef.current.getBoundingClientRect();
     const maxSlide = containerRect.width - THUMB_WIDTH - PADDING * 2;
@@ -28,7 +28,7 @@ const SlideToOrder = ({ onComplete }) => {
 
     positionRef.current = newPosition;
     setSliderPosition(newPosition);
-  }, []);
+  }, [disabled]);
 
   useEffect(() => {
     const onMouseMove = (e) => {
@@ -76,7 +76,7 @@ const SlideToOrder = ({ onComplete }) => {
   }, [isDragging, handleMove, onComplete]);
 
   const handleStart = (e) => {
-    if (isSuccess) return;
+    if (isSuccess || disabled) return;
     setIsDragging(true);
     const clientX = e.type === "mousedown" ? e.clientX : e.touches[0].clientX;
     startXRef.current = clientX - sliderPosition;
@@ -92,11 +92,11 @@ const SlideToOrder = ({ onComplete }) => {
   const progress = getPercentage();
 
   return (
-    <div className="mt-8 relative overflow-hidden rounded-[1.5rem] select-none touch-none">
+    <div className={`mt-8 relative overflow-hidden rounded-[1.5rem] select-none touch-none ${disabled ? "opacity-60 grayscale-[0.5]" : ""}`}>
       <div
         ref={containerRef}
         className={`w-full h-[72px] rounded-[1.5rem] relative overflow-hidden flex items-center shadow-lg transition-colors duration-500 ${
-          isSuccess ? "bg-emerald-500" : "bg-slate-900"
+          isSuccess ? "bg-emerald-500" : disabled ? "bg-slate-200" : "bg-slate-900"
         }`}
         style={{ touchAction: "none" }}
       >
@@ -109,12 +109,14 @@ const SlideToOrder = ({ onComplete }) => {
                 : "opacity-100 translate-y-0"
             }`}
           >
-            <span className="relative inline-block text-white/20">
-              Slide to Order
+            <span className={`relative inline-block ${disabled ? "text-slate-500" : "text-white/20"}`}>
+              {label}
               {/* Shimmer overlay */}
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent bg-[length:200%_100%] animate-shimmer bg-clip-text text-transparent">
-                Slide to Order
-              </span>
+              {!disabled && (
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent bg-[length:200%_100%] animate-shimmer bg-clip-text text-transparent">
+                  {label}
+                </span>
+              )}
             </span>
           </span>
 
@@ -135,7 +137,7 @@ const SlideToOrder = ({ onComplete }) => {
           className="absolute top-0 left-0 h-full bg-gradient-to-r from-emerald-500/0 via-emerald-500/20 to-emerald-500/40 transition-all z-10"
           style={{
             width: `${progress + 15}%`,
-            opacity: isSuccess ? 0 : 1,
+            opacity: isSuccess || disabled ? 0 : 1,
             transition: isDragging
               ? "none"
               : "width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
@@ -144,9 +146,9 @@ const SlideToOrder = ({ onComplete }) => {
 
         {/* The Slide Thumb */}
         <div
-          className={`absolute left-2 top-2 bottom-2 w-16 bg-white rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.15)] flex items-center justify-center cursor-grab z-20 transition-transform ${
-            isDragging ? "cursor-grabbing scale-95 shadow-xl" : "scale-100"
-          }`}
+          className={`absolute left-2 top-2 bottom-2 w-16 rounded-2xl shadow-[0_4px_12px_rgba(0,0,0,0.15)] flex items-center justify-center z-20 transition-transform ${
+            isDragging ? "scale-95 shadow-xl" : "scale-100"
+          } ${disabled ? "bg-slate-100 cursor-not-allowed" : "bg-white cursor-grab"}`}
           style={{
             transform: `translateX(${sliderPosition}px)`,
             transition: isDragging
@@ -158,14 +160,14 @@ const SlideToOrder = ({ onComplete }) => {
         >
           <div className="relative w-full h-full flex items-center justify-center overflow-hidden rounded-2xl">
             {/* Glossy overlay */}
-            <div className="absolute inset-0 bg-gradient-to-br from-white via-transparent to-slate-200/50" />
+            <div className={`absolute inset-0 bg-gradient-to-br from-white via-transparent ${disabled ? "to-slate-100" : "to-slate-200/50"}`} />
 
             {!isSuccess ? (
               <div className="relative z-10 flex items-center transition-all duration-300">
                 <ChevronRight
                   size={24}
                   strokeWidth={3}
-                  className={`text-slate-900 transition-all duration-300 ${
+                  className={`${disabled ? "text-slate-400" : "text-slate-900"} transition-all duration-300 ${
                     progress > 50
                       ? "opacity-0 -translate-x-2"
                       : "opacity-100 translate-x-0"
@@ -174,7 +176,7 @@ const SlideToOrder = ({ onComplete }) => {
                 <ArrowRight
                   size={24}
                   strokeWidth={3}
-                  className={`absolute text-slate-900 transition-all duration-300 ${
+                  className={`absolute ${disabled ? "text-slate-400" : "text-slate-900"} transition-all duration-300 ${
                     progress > 50
                       ? "opacity-100 translate-x-0 scale-110"
                       : "opacity-0 translate-x-2 scale-75"
@@ -189,7 +191,7 @@ const SlideToOrder = ({ onComplete }) => {
             )}
 
             {/* Inner thumb pulse when idle */}
-            {!isDragging && !isSuccess && (
+            {!isDragging && !isSuccess && !disabled && (
               <div className="absolute inset-0 bg-slate-400/10 animate-ping rounded-full scale-50" />
             )}
           </div>
