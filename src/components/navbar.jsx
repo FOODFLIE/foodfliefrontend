@@ -9,32 +9,16 @@ import SearchBar from "./navigation/searchBar";
 import NavActions from "./navigation/navActions";
 import { useAuth } from "../context/authContext";
 import { useUserLocation } from "../context/locationContext";
-import { getCart } from "../services/cartService";
+import { useCart } from "../context/cartContext";
 
 const Navbar = () => {
   const { user, isAuthenticated } = useAuth();
   const { address, loading: locationLoading } = useUserLocation();
+  const { cartCount } = useCart();
   const navigate = useNavigate();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
-
-  useEffect(() => {
-    const fetchCartCount = async () => {
-      if (isAuthenticated) {
-        try {
-          const cart = await getCart();
-          setCartCount(cart?.items?.length || 0);
-        } catch (err) {
-          setCartCount(0);
-        }
-      } else {
-        setCartCount(0);
-      }
-    };
-    fetchCartCount();
-  }, [isAuthenticated]);
 
   return (
     <>

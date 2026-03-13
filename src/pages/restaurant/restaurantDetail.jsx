@@ -7,6 +7,7 @@ import { RESTAURANTS } from "../../data";
 import { Star, Clock, Zap, Search, Loader2 } from "lucide-react";
 import { getProductsByPartner } from "../../services/productService";
 import { addToCart } from "../../services/cartService";
+import { useCart } from "../../context/cartContext";
 import SEO from "../../components/common/seo";
 import { 
   generateRestaurantSchema, 
@@ -24,6 +25,7 @@ const RestaurantDetail = () => {
   const [addingToCart, setAddingToCart] = useState({});
   const [error, setError] = useState(null);
   const [cartCount, setCartCount] = useState(0);
+  const { refreshCartCount } = useCart();
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -94,6 +96,7 @@ const RestaurantDetail = () => {
       setAddingToCart((prev) => ({ ...prev, [item.sku]: true }));
       await addToCart(item.sku, 1);
       setCartCount((c) => c + 1);
+      refreshCartCount();
       // alert("Added to cart!"); // Simple feedback for now
     } catch (err) {
       console.error("Failed to add to cart:", err);

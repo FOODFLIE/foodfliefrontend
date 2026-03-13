@@ -15,6 +15,7 @@ import {
 } from "../services/cartService";
 import { placeOrder } from "../services/orderService";
 import { useCartLocation } from "../context/cartLocationContext";
+import { useCart } from "../context/cartContext";
 import EmptyCart from "../components/emptyCart";
 import LoadingCart from "../components/loadingCart";
 import CartItem from "../components/cartItem";
@@ -30,6 +31,7 @@ const Cart = () => {
     loading: locationLoading,
     coords,
   } = useCartLocation();
+  const { refreshCartCount } = useCart();
   console.log("1", addressDetails);
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -63,6 +65,7 @@ console.log("cookingInstructions", cookingInstructions);
     try {
       await updateCartItem(itemId, newQuantity);
       fetchCart();
+      refreshCartCount();
     } catch (err) {
       setError(err.message);
     }
@@ -114,6 +117,7 @@ console.log("cookingInstructions", cookingInstructions);
     try {
       await removeFromCart(itemId);
       fetchCart();
+      refreshCartCount();
     } catch (err) {
       setError(err.message);
     }

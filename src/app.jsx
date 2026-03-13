@@ -22,6 +22,7 @@ import ContactUs from "./pages/legals/contactUs";
 import Search from "./pages/search";
 import { Toaster } from "react-hot-toast";
 import Preloader from "./components/Preloader";
+import { CartProvider } from "./context/cartContext";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -42,44 +43,46 @@ const App = () => {
   return (
     <LocationProvider>
       <AuthProvider>
-        {loading && <Preloader onFinish={handleLoadingFinish} />}
-        <Toaster position="top-center" reverseOrder={false} />
-        <div
-          className={`min-h-screen transition-opacity duration-700 ${loading ? "opacity-0" : "opacity-100"}`}
-        >
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/search" element={<Search />} />
-            <Route path="/category/:id" element={<CategoryProduct />} />
-            <Route path="/restaurant/:id" element={<RestaurantDetail />} />
-            <Route path="/profile">
-              <Route index element={<Profile />} />
-              <Route path="orders" element={<OrderHistory />} />
-              <Route path="order/:id" element={<OrderDetail />} />
-              <Route path="addresses" element={<Addresses />} />
-            </Route>
-            <Route path="/cart" element={
-              <CartLocationProvider>
-                <Cart />
-              </CartLocationProvider>
-            } />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/contact" element={<ContactUs />} />
-            <Route
-              path="/orderConfirmation/:id"
-              element={<OrderConfirmation />}
-            />
-            <Route path="/order-confirmation" element={<OrderConfirmation />} />
-            <Route path="/orders/:id" element={<OrderConfirmation />} />
-            <Route path="/partner" element={<SellerAuth />} />
-            <Route path="/partner/dashboard" element={<SellerDashboard />}>
-              <Route index element={<Orders />} />
-              <Route path="orders" element={<Orders />} />
-              <Route path="menu" element={<Menu />} />
-            </Route>
-          </Routes>
-        </div>
+        <CartProvider>
+          {loading && <Preloader onFinish={handleLoadingFinish} />}
+          <Toaster position="top-center" reverseOrder={false} />
+          <div
+            className={`min-h-screen transition-opacity duration-700 ${loading ? "opacity-0" : "opacity-100"}`}
+          >
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/category/:id" element={<CategoryProduct />} />
+              <Route path="/restaurant/:id" element={<RestaurantDetail />} />
+              <Route path="/profile">
+                <Route index element={<Profile />} />
+                <Route path="orders" element={<OrderHistory />} />
+                <Route path="order/:id" element={<OrderDetail />} />
+                <Route path="addresses" element={<Addresses />} />
+              </Route>
+              <Route path="/cart" element={
+                <CartLocationProvider>
+                  <Cart />
+                </CartLocationProvider>
+              } />
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/contact" element={<ContactUs />} />
+              <Route
+                path="/orderConfirmation/:id"
+                element={<OrderConfirmation />}
+              />
+              <Route path="/order-confirmation" element={<OrderConfirmation />} />
+              <Route path="/orders/:id" element={<OrderConfirmation />} />
+              <Route path="/partner" element={<SellerAuth />} />
+              <Route path="/partner/dashboard" element={<SellerDashboard />}>
+                <Route index element={<Orders />} />
+                <Route path="orders" element={<Orders />} />
+                <Route path="menu" element={<Menu />} />
+              </Route>
+            </Routes>
+          </div>
+        </CartProvider>
       </AuthProvider>
     </LocationProvider>
   );
