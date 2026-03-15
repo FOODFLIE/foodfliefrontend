@@ -4,7 +4,7 @@ import CategoryProduct from "./pages/category/categoryProduct";
 import RestaurantDetail from "./pages/restaurant/restaurantDetail";
 import Home from "./pages/home/home";
 import Profile from "./pages/profile/profile";
-import Cart from "./pages/Cart";
+import Cart from "./pages/cart";
 import OrderConfirmation from "./pages/orderConfirmation";
 import SellerAuth from "./pages/partner/sellerAuth";
 import SellerDashboard from "./pages/partner/sellerDashboard";
