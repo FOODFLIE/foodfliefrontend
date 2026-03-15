@@ -1,0 +1,43 @@
+import React from "react";
+import { Plus, Loader2 } from "lucide-react";
+
+const MenuItem = ({ name, description, price, image, onAdd, isAdding }) => {
+  return (
+    <div className="flex gap-6 p-6 rounded-3xl border border-slate-50 bg-white hover:border-brand/20 transition-all group shadow-sm hover:shadow-xl">
+      <div className="flex-1 space-y-3">
+        <h4 className="font-black text-slate-800 text-lg tracking-tight group-hover:text-brand transition-colors font-poppins">
+          {name}
+        </h4>
+        <p className="text-xs text-slate-400 font-medium leading-relaxed italic">
+          {description}
+        </p>
+        <div className="pt-2 flex items-center justify-between">
+          <span className="text-xl font-black text-slate-800 font-display">
+            ₹{price}
+          </span>
+          <button
+            onClick={onAdd}
+            disabled={isAdding}
+            className="bg-white border-2 border-brand text-brand px-8 py-2 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-brand hover:text-white transition-all flex items-center gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isAdding ? (
+              <Loader2 className="animate-spin" size={14} />
+            ) : (
+              <Plus size={14} strokeWidth={3} />
+            )}
+            {isAdding ? "Adding..." : "Add"}
+          </button>
+        </div>
+      </div>
+      <div className="w-28 h-28 rounded-2xl overflow-hidden shrink-0 shadow-lg rotate-3 group-hover:rotate-0 transition-transform bg-slate-100">
+        <img
+          src={image}
+          className="w-full h-full object-cover p-1 rounded-2xl"
+          alt={name}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default MenuItem;

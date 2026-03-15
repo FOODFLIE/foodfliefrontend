@@ -90,11 +90,20 @@ export const useOTPAuth = (onSuccess) => {
     setIsLogin(!isLogin);
     setStep("send");
     setError("");
+    setFormData({ phone: "", name: "", email: "", otp: "" });
   };
 
   // Reset to send step
   const resetToSend = () => {
     setStep("send");
+    setFormData({ ...formData, otp: "" });
+  };
+
+  // Reset all state
+  const resetAuth = () => {
+    setStep("send");
+    setError("");
+    setFormData({ phone: "", name: "", email: "", otp: "" });
   };
 
   return {
@@ -110,5 +119,6 @@ export const useOTPAuth = (onSuccess) => {
     handleVerifyOTP,
     toggleAuthMode,
     resetToSend,
+    resetAuth,
   };
 };

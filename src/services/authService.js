@@ -8,7 +8,7 @@ export const sendRegisterOTP = async (phone, name, email) => {
       name,
       email,
     });
-    console.log("1",response.data)
+   
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Failed to send OTP");
@@ -33,7 +33,7 @@ export const sendLoginOTP = async (phone) => {
     const response = await apiClient.post("/api/customer/login/send-otp", {
       phone,
     });
-    console.log("2",response.data)
+ 
     return response.data;
   } catch (error) {
     throw new Error(error.response?.data?.message || "Failed to send OTP");

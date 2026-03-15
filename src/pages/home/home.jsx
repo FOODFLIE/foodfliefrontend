@@ -1,57 +1,70 @@
 import React from "react";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../components/navbar";
 import Banner from "../../components/Banner";
-import CategoryItem from "../../components/CategoryItem";
-import RestaurantSection from "../../components/RestaurantSection";
-import { CATEGORIES, RESTAURANTS } from "../../data";
-import { ChevronRight, Zap } from "lucide-react";
+import CategorySection from "../../components/home/categorySection";
+import RestaurantChainSection from "../../components/home/restaurantChainSection";
+import Footer from "../../components/footer";
+import SEO from "../../components/common/seo";
+import { 
+  generateOrganizationSchema, 
+  generateWebSiteSchema, 
+  generateServiceSchema,
+  generateLocalBusinessSchema,
+  generateFAQSchema
+} from "../../utils/seoSchemas";
 
 const Home = () => {
+  const faqs = [
+    {
+      question: "How fast is FoodFlie delivery?",
+      answer: "FoodFlie delivers your food in just 13 minutes, making us one of the fastest food delivery services."
+    },
+    {
+      question: "Are there any hidden charges?",
+      answer: "No! We guarantee menu prices only. What you see on the restaurant menu is what you pay."
+    },
+    {
+      question: "Do you accept cash on delivery?",
+      answer: "Yes, we accept both online payments and cash on delivery for your convenience."
+    }
+  ];
+
+  const schemas = [
+    generateOrganizationSchema(),
+    generateWebSiteSchema(),
+    generateServiceSchema(),
+    generateLocalBusinessSchema("Hyderabad"),
+    generateFAQSchema(faqs)
+  ];
+
   return (
-    <div className="bg-white pb-20">
-      <Navbar />
+    <div>
+      <SEO
+        title="13 Minute Food Delivery in Hyderabad | Menu Prices Guaranteed"
+        description="Order food online in Hyderabad and get delivery in just 13 minutes. Menu prices guaranteed, no hidden charges. Cash on delivery available. Order biryani, pizza, burgers & more from top restaurants near you."
+        keywords="food delivery near me, 13 minute food delivery, fast food delivery hyderabad, menu price food delivery, instant food delivery, biryani delivery, pizza delivery, online food order, restaurant delivery near me, quick food delivery"
+        schema={schemas}
+        canonical="https://foodflie.com"
+      />
+      <div className="bg-white pb-12">
+        <main className="responsive-container py-3">
+          {/* Banner Section */}
+          <Banner
+            // image="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=1200&h=400&fit=crop"
+            badgeText="13-Minute Delivery • Menu Prices Guaranteed • Cash on Delivery"
+            title="HOT BIRYANI"
+            titleHighlight="NO OVERPAYING"
+            subtitle="Limited launch in KPHB.Get hot biryani delivered in minutes at menu prices."
+          />
 
-      <main className="responsive-container py-6">
-        {/* Banner Section */}
-        <Banner
-          image="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=1200&h=400&fit=crop"
-          badgeText="10 Minutes.  Menu Prices Guaranteed."
-          title="HOT BIRYANI"
-          titleHighlight="NO OVERPAYING"
-          subtitle="We’re testing in your neighborhood. Get biryani in minutes at Menu prices."
-        />
+          {/* New Categories Section */}
+          <CategorySection />
 
-        {/* Categories Grid */}
-        <section className="mb-12">
-          <div className="flex items-center justify-between mb-6 px-1">
-            <h3 className="text-xl font-black text-slate-800 tracking-tight font-poppins">
-              Categories At Menu Price
-            </h3>
-            <button className="text-zepto-purple text-sm font-bold flex items-center gap-1 hover:underline">
-              See All <ChevronRight size={16} />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-y-8 gap-x-4">
-            {CATEGORIES.map((cat) => (
-              <CategoryItem
-                key={cat.id}
-                id={cat.id}
-                title={cat.title}
-                image={cat.image}
-              />
-            ))}
-          </div>
-        </section>
-
-        {/* Featured Section - Compact & Extracted */}
-        <RestaurantSection
-          title="10-Min Delivery At Menu Price"
-          restaurants={RESTAURANTS}
-          icon={Zap}
-          compact={true}
-        />
-      </main>
+          {/* Top Restaurant Chains */}
+          <RestaurantChainSection title="Top restaurant chains in Ongole" />
+        </main>
+      </div>
+      <Footer />
     </div>
   );
 };

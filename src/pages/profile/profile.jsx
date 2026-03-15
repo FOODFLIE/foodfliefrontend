@@ -1,0 +1,361 @@
+import React, { useState, useEffect } from "react";
+import { useAuth } from "../../context/authContext";
+import {
+  Calendar,
+  Phone,
+  User,
+  LogOut,
+  ChevronRight,
+  Package,
+  MapPin,
+  CreditCard,
+  BadgeCheck,
+  Store,
+  Clock,
+  CheckCircle2,
+  XCircle,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import AuthModal from "../../components/authModal";
+import { getCustomerOrders } from "../../services/orderService";
+import SEO from "../../components/common/seo";
+
+const Profile = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [loadingOrders, setLoadingOrders] = useState(true);
+
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("user"));
+    if (userData) {
+      setUser(userData);
+      fetchRecentOrders();
+    } else {
+      setShowAuthModal(true);
+    }
+  }, []);
+
+  const fetchRecentOrders = async () => {
+    try {
+      const data = await getCustomerOrders();
+      setRecentOrders(data.slice(0, 3));
+    } catch (error) {
+      console.error("Error fetching recent orders:", error);
+    } finally {
+      setLoadingOrders(false);
+    }
+  };
+
+  if (!user) {
+    return <AuthModal isOpen={showAuthModal} onClose={() => navigate("/")} />;
+  }
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-IN", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-50/50">
+      <SEO title="My Profile | FoodFlie" />
+      {/* Header/Banner Area */}
+      <div className="bg-brand h-48 w-full relative">
+        <div className="absolute inset-0 bg-linear-to-b from-black/20 to-transparent"></div>
+      </div>
+
+      <div className="responsive-container -mt-24 pb-20 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column: Profile Card */}
+          <div className="lg:col-span-1 space-y-6">
+            <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/60 p-8 border border-white">
+              <div className="flex flex-col items-center text-center">
+                <div className="w-24 h-24 bg-brand-muted rounded-3xl flex items-center justify-center mb-6 shadow-inner rotate-3 hover:rotate-0 transition-transform duration-500">
+                  <span className="text-4xl font-black text-brand uppercase">
+                    {user?.name?.charAt(0) || user?.phone?.charAt(0) || "U"}
+                  </span>
+                </div>
+                <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+                  {user?.name || "Food Flie User"}
+                </h1>
+                <p className="text-slate-500 font-bold text-sm tracking-wide mt-1">
+                  Premium Member
+                </p>
+
+                <div className="w-full my-8 space-y-4">
+                  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100/50 group hover:border-brand/20 transition-colors">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-brand-muted text-slate-400 group-hover:text-brand transition-all">
+                      <BadgeCheck size={18} />
+                    </div>
+                    <div className="text-left">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        Member ID
+                      </p>
+                      <p className="text-sm font-bold text-slate-700">
+                        {user?.id
+                          ? `#FF-${user.id.toString().padStart(4, "0")}`
+                          : "Guest User"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100/50 group hover:border-brand/20 transition-colors">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-brand-muted text-slate-400 group-hover:text-brand transition-all">
+                      <Phone size={18} />
+                    </div>
+                    <div className="text-left">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        Phone
+                      </p>
+                      <p className="text-sm font-bold text-slate-700">
+                        {user?.phone || "No phone added"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-100/50 group hover:border-brand/20 transition-colors">
+                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-sm group-hover:bg-brand-muted text-slate-400 group-hover:text-brand transition-all">
+                      <Calendar size={18} />
+                    </div>
+                    <div className="text-left">
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                        Joined On
+                      </p>
+                      <p className="text-sm font-bold text-slate-700">
+                        {user?.created_at
+                          ? formatDate(user.created_at)
+                          : "Join Date Unknown"}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center justify-center gap-2 py-4 text-rose-500 font-bold text-sm bg-rose-50 rounded-2xl hover:bg-rose-100 transition-colors border border-rose-100"
+                >
+                  <LogOut size={18} />
+                  Logout Session
+                </button>
+              </div>
+            </div>
+
+            {/* Loyalty Card */}
+            <div className="bg-brand-dark rounded-3xl p-8 text-white relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 group-hover:scale-110 transition-transform duration-700"></div>
+              <p className="text-sm font-bold opacity-60 italic">
+                Food Flie Gold
+              </p>
+              <h3 className="text-2xl font-black mt-1">Save ₹240/mo</h3>
+              <p className="text-xs mt-4 font-medium opacity-80 leading-relaxed">
+                Enjoy free deliveries on orders above ₹149 and extra 10% off on
+                all restaurants.
+              </p>
+              <button className="mt-6 text-xs font-black uppercase tracking-widest bg-white text-brand px-6 py-3 rounded-xl hover:shadow-xl transition-all">
+                Know More
+              </button>
+            </div>
+          </div>
+
+          {/* Right Column: Content Area */}
+          <div className="lg:col-span-2 space-y-8">
+            {/* Partner Card */}
+            <div
+              className="bg-linear-to-r from-brand to-brand-dark rounded-3xl p-6 text-white flex items-center justify-between relative overflow-hidden group cursor-pointer"
+              onClick={() => navigate("/partner")}
+            >
+              <div className="absolute right-0 bottom-0 opacity-10 transform translate-x-1/4 translate-y-1/4">
+                <Store size={120} />
+              </div>
+              <div className="relative z-10">
+                <h3 className="text-xl font-black italic tracking-tight">
+                  Partner with FoodFlie
+                </h3>
+                <p className="text-sm font-medium opacity-90 mt-1 max-w-[200px]">
+                  Grow your business with 0% commission for the first month.
+                </p>
+                <button className="mt-4 bg-white text-brand px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:shadow-lg transition-all">
+                  Register Now
+                </button>
+              </div>
+              <div className="relative z-10 bg-white/10 p-4 rounded-2xl backdrop-blur-sm border border-white/10">
+                <Store size={32} />
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                {
+                  icon: Package,
+                  label: "Orders",
+                  count: "12",
+                  path: "/profile/orders",
+                },
+                {
+                  icon: MapPin,
+                  label: "Addresses",
+                  count: "3",
+                  path: "/profile/addresses",
+                },
+                { icon: CreditCard, label: "Payments", count: "2", path: null },
+                { icon: User, label: "Help", count: null, path: null },
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  onClick={() => item.path && navigate(item.path)}
+                  className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition-all cursor-pointer group"
+                >
+                  <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-brand-muted transition-colors">
+                    <item.icon
+                      size={22}
+                      className="text-slate-400 group-hover:text-brand transition-colors"
+                    />
+                  </div>
+                  <p className="text-sm font-black text-slate-800 tracking-tight">
+                    {item.label}
+                  </p>
+                  {item.count && (
+                    <p className="text-xs font-bold text-brand mt-1">
+                      {item.count} Active
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Recent Orders Section */}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between px-2">
+                <h2 className="text-xl font-black text-slate-900 tracking-tight italic">
+                  Recent Orders
+                </h2>
+                <button
+                  onClick={() => navigate("/profile/orders")}
+                  className="text-xs font-bold text-brand hover:underline"
+                >
+                  View All
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {loadingOrders ? (
+                  <div className="bg-white rounded-3xl p-12 text-center border border-slate-100 shadow-sm">
+                    <div className="w-12 h-12 bg-brand/10 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                      <Clock size={24} className="text-brand/40" />
+                    </div>
+                    <p className="text-slate-400 font-bold text-sm">
+                      Loading your orders...
+                    </p>
+                  </div>
+                ) : recentOrders.length === 0 ? (
+                  <div className="bg-white rounded-3xl p-12 text-center border border-slate-100 shadow-sm">
+                    <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Package size={28} className="text-slate-200" />
+                    </div>
+                    <p className="text-slate-400 font-bold text-sm">
+                      No recent orders found
+                    </p>
+                    <p className="text-xs text-slate-300 mt-1 uppercase tracking-widest font-black">
+                      Ready to order something delicious?
+                    </p>
+                  </div>
+                ) : (
+                  recentOrders.map((order) => (
+                    <div
+                      key={order.id}
+                      onClick={() => navigate(`order/${order.id}`)}
+                      className="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-300 overflow-hidden cursor-pointer group"
+                    >
+                      <div className="p-6">
+                        {/* Order Items Preview */}
+                        <div className="flex gap-4 mb-4 overflow-x-auto pb-2 scrollbar-hide">
+                          {order.items?.map((item, idx) => (
+                            <div key={idx} className="shrink-0">
+                              <img
+                                src={
+                                  item.product?.image || "/placeholder-food.png"
+                                }
+                                alt=""
+                                className="w-16 h-16 object-cover rounded-2xl border border-slate-50 group-hover:scale-110 transition-transform duration-300"
+                              />
+                            </div>
+                          ))}
+                        </div>
+
+                        <div className="flex justify-between items-start">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-black text-slate-900 text-lg">
+                                {order.status?.toLowerCase() === "delivered"
+                                  ? "Order delivered"
+                                  : order.status?.toLowerCase() === "cancelled"
+                                    ? "Order cancelled"
+                                    : order.status || "Order placed"}
+                              </span>
+                              {order.status?.toLowerCase() === "delivered" ? (
+                                <CheckCircle2
+                                  size={18}
+                                  className="text-green-500"
+                                />
+                              ) : order.status?.toLowerCase() ===
+                                "cancelled" ? (
+                                <XCircle size={18} className="text-slate-400" />
+                              ) : (
+                                <Clock size={18} className="text-amber-500" />
+                              )}
+                            </div>
+                            <p className="text-slate-400 text-sm font-medium">
+                              Placed at {formatDate(order.created_at)}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-lg font-black text-slate-900">
+                              ₹{order.total_amount}
+                            </span>
+                            <ChevronRight
+                              size={18}
+                              className="text-slate-400"
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      {order.status?.toLowerCase() === "delivered" && (
+                        <div className="px-6 py-4 bg-slate-50/30 border-t border-slate-50 flex justify-center">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              window.open(
+                                "https://www.instagram.com/foodflie?igsh=MWNraGIxdHdqbmYycg==",
+                                "_blank",
+                                "noopener,noreferrer",
+                              );
+                            }}
+                            className="text-slate-700 font-medium text-[11px] sm:text-xs underline underline-offset-4 decoration-brand/70 hover:text-brand transition-colors"
+                          >
+                            Thanks for ordering – follow us on Instagram
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Profile;

@@ -1,11 +1,10 @@
-// src/services/apiClient.js
+// src/utils/partnerApiClient.js
 import axios from "axios";
 import { getFlieOptions } from "./flieUtils";
 const flies = getFlieOptions();
 const API_URL = flies.base_url;
 
-
-export const apiClient = axios.create({
+export const partnerApiClient = axios.create({
   baseURL: API_URL,
   withCredentials: true,
   headers: {
@@ -14,49 +13,40 @@ export const apiClient = axios.create({
 });
 
 // Request Interceptor
-apiClient.interceptors.request.use(
+partnerApiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
+    // Attempting to fetch a partner-specific token if there's a distinction
+    const token = localStorage.getItem("token"); 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-
     return config;
   },
   (error) => Promise.reject(error),
 );
 
-// Response Interceptor (Optional)
-apiClient.interceptors.response.use(
-  (response) => {
-   
-    return response;
-  },
+// Response Interceptor
+partnerApiClient.interceptors.response.use(
+  (response) => response,
   (error) => {
-    // Network error (no response from server)
     if (!error.response) {
       console.error("❌ Network Error - Backend not reachable:", {
         message: error.message,
-        code: error.code,
-        url: error.config?.url,
-        baseURL: error.config?.baseURL,
       });
     } else {
-      // API responded with error
-      console.error("❌ API Error Response:", {
+      console.error("❌ Partner API Error:", {
         status: error.response.status,
         data: error.response.data,
-        url: error.config?.url,
       });
     }
 
-    // Suppress 401 errors as they are handled by session logic
     if (error.response?.status === 401) {
-      localStorage.removeItem("accessToken");
+      localStorage.removeItem("token");
+      // Handle partner logout event here if needed
     }
 
     return Promise.reject(error);
   },
 );
 
-export default apiClient;
+export default partnerApiClient;
