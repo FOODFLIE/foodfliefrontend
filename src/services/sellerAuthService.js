@@ -5,7 +5,7 @@ import apiClient from "../utils/apiClient";
 // Send Seller OTP
 export const sendSellerOTP = async (phone) => {
   try {
-    const response = await apiClient.post("/api/seller/send-otp", {
+    const response = await apiClient.post("/api/partner/send-otp", {
       phone,
     });
     return response.data;
@@ -17,7 +17,7 @@ export const sendSellerOTP = async (phone) => {
 // Verify Seller OTP
 export const verifySellerOTP = async (phone, otp) => {
   try {
-    const response = await apiClient.post("/api/seller/verify-otp", {
+    const response = await apiClient.post("/api/partner/verify-otp", {
       phone,
       otp,
     });
@@ -30,7 +30,7 @@ export const verifySellerOTP = async (phone, otp) => {
 // Register Seller
 export const registerSeller = async (data) => {
   try {
-    const response = await apiClient.post("/api/seller/register", data);
+    const response = await apiClient.post("/api/partner/register", data);
     return response.data;
   } catch (error) {
     throw new Error(

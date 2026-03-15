@@ -1,74 +1,76 @@
-import React, { useState } from "react";
-import { Search, Plus, MoreVertical, Edit2, X } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Search, Plus, MoreVertical, Edit2, X, Trash2 } from "lucide-react";
 import SEO from "../../../components/common/seo";
+import { useAuth } from "../../../context/authContext";
+import {
+  addProduct,
+  getAllProducts,
+  updateProduct,
+  deleteProduct,
+  toggleProductAvailability,
+} from "../../../services/partnerProductService";
 
 const Menu = () => {
+  const { user } = useAuth();
   // --- State for Modals & Forms ---
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showItemModal, setShowItemModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [newItem, setNewItem] = useState({
     name: "",
     price: "",
-    category: "",
-    isVeg: true,
+    category_id: "",
+    is_veg: true,
     description: "",
+    preparation_time: 30, // Default prep time
   });
 
   const [newCategory, setNewCategory] = useState("");
 
-  // --- Mock Data State ---
+  // --- Data State ---
+  // If a category API existed, we'd fetch it. For now, we'll maintain standard categories or extract from items
   const [categories, setCategories] = useState([
-    { id: 1, name: "Bowls And Salads", count: 11, active: true },
-    { id: 2, name: "SipnSized Combos", count: 8, active: true },
-    { id: 3, name: "Fruit Juices", count: 15, active: true },
-    { id: 4, name: "Smoothies", count: 6, active: false },
-    { id: 5, name: "Healthy Coldpressed Juices", count: 9, active: true },
-    { id: 6, name: "Hot servings", count: 4, active: true },
-    { id: 7, name: "Desserts", count: 12, active: true },
+    { id: 1, name: "Bowls And Salads", count: 0, active: true },
+    { id: 2, name: "SipnSized Combos", count: 0, active: true },
+    { id: 3, name: "Fruit Juices", count: 0, active: true },
+    { id: 4, name: "Smoothies", count: 0, active: true },
+    { id: 5, name: "Healthy Coldpressed Juices", count: 0, active: true },
+    { id: 6, name: "Hot servings", count: 0, active: true },
+    { id: 7, name: "Desserts", count: 0, active: true },
   ]);
 
-  const [menuItems, setMenuItems] = useState([
-    {
-      id: 101,
-      name: "Fruits and nuts bowl",
-      price: "169",
-      isVeg: true,
-      variants: 4,
-      onStock: true,
-      categoryId: 1,
-    },
-    {
-      id: 102,
-      name: "Exotic Fruit Bowl",
-      price: "169",
-      isVeg: true,
-      variants: 4,
-      onStock: true,
-      categoryId: 1,
-    },
-    {
-      id: 103,
-      name: "Mixed Fruit Bowl",
-      price: "139",
-      isVeg: true,
-      variants: 5,
-      onStock: true,
-      categoryId: 1,
-    },
-    {
-      id: 104,
-      name: "Melon Bowl",
-      price: "121",
-      isVeg: true,
-      variants: 5,
-      onStock: false,
-      categoryId: 1,
-    },
-  ]);
-
+  const [menuItems, setMenuItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(categories[0].id);
+
+  // --- Fetch Initial Data ---
+  const fetchMenuData = async () => {
+    if (!user?.partner_id && !user?.id) return;
+    const partnerId = user.partner_id || user.id; // Adapt based on actual user object structure
+
+    try {
+      setIsLoading(true);
+      const products = await getAllProducts(partnerId);
+      setMenuItems(products || []);
+      
+      // Update Category counts based on products
+      setCategories((prevCats) => 
+        prevCats.map(cat => ({
+          ...cat,
+          count: (products || []).filter(p => p.category_id === cat.id).length
+        }))
+      );
+    } catch (error) {
+      console.error("Failed to fetch menu items", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMenuData();
+  }, [user]);
 
   // --- Handlers ---
 
@@ -85,51 +87,60 @@ const Menu = () => {
     setShowCategoryModal(false);
   };
 
-  const handleSaveItem = () => {
+  const handleSaveItem = async () => {
     if (!newItem.name || !newItem.price) return;
+    const partnerId = user?.partner_id || user?.id;
 
-    if (editingItem) {
-      // Edit Logic
-      setMenuItems(
-        menuItems.map((item) =>
-          item.id === editingItem.id ? { ...item, ...newItem } : item,
-        ),
-      );
-    } else {
-      // Add Logic
-      const item = {
-        id: menuItems.length + 101,
-        ...newItem,
-        variants: 0,
-        onStock: true,
-        categoryId: selectedCategory,
+    try {
+      const payload = {
+        partner_id: partnerId,
+        name: newItem.name,
+        description: newItem.description,
+        price: parseFloat(newItem.price),
+        category_id: newItem.category_id || selectedCategory,
+        is_veg: newItem.is_veg,
+        preparation_time: newItem.preparation_time,
+        is_available: newItem.is_available !== undefined ? newItem.is_available : true,
       };
-      setMenuItems([...menuItems, item]);
 
-      // Update category count
-      setCategories(
-        categories.map((cat) =>
-          cat.id === Number(item.categoryId)
-            ? { ...cat, count: cat.count + 1 }
-            : cat,
-        ),
-      );
+      if (editingItem) {
+        // Edit API Call
+        await updateProduct(editingItem.id, payload);
+      } else {
+        // Add API Call
+        await addProduct(payload);
+      }
+      
+      // Refresh list
+      await fetchMenuData();
+      closeItemModal();
+    } catch (error) {
+      console.error("Failed to save item", error);
     }
-    closeItemModal();
   };
 
   const openItemModal = (item = null) => {
     if (item) {
       setEditingItem(item);
-      setNewItem(item);
+      setNewItem({
+        name: item.name,
+        price: item.price,
+        category_id: item.category_id,
+        is_veg: item.is_veg,
+        description: item.description || "",
+        preparation_time: item.preparation_time || 30,
+        is_available: item.is_available,
+      });
     } else {
       setEditingItem(null);
       setNewItem({
         name: "",
         price: "",
-        category: selectedCategory,
-        isVeg: true,
+        category_id: selectedCategory,
+        is_veg: true,
         description: "",
+        preparation_time: 30,
+        is_available: true,
       });
     }
     setShowItemModal(true);
@@ -141,18 +152,39 @@ const Menu = () => {
     setNewItem({
       name: "",
       price: "",
-      category: "",
-      isVeg: true,
+      category_id: selectedCategory,
+      is_veg: true,
       description: "",
+      preparation_time: 30,
     });
   };
 
-  const toggleItemStock = (id) => {
-    setMenuItems(
-      menuItems.map((item) =>
-        item.id === id ? { ...item, onStock: !item.onStock } : item,
-      ),
-    );
+  const toggleItemStock = async (item) => {
+    const partnerId = user?.partner_id || user?.id;
+    try {
+      // Optimistic update
+      setMenuItems(
+        menuItems.map((m) =>
+          m.id === item.id ? { ...m, is_available: !m.is_available } : m,
+        ),
+      );
+      await toggleProductAvailability(item.id, partnerId, !item.is_available);
+    } catch (error) {
+      // Revert optimism if failed
+      console.error("Failed to toggle availability", error);
+      fetchMenuData(); 
+    }
+  };
+
+  const handleDeleteItem = async (item) => {
+    if(!window.confirm(`Are you sure you want to delete ${item.name}?`)) return;
+    const partnerId = user?.partner_id || user?.id;
+    try {
+      await deleteProduct(item.id, partnerId);
+      await fetchMenuData();
+    } catch (error) {
+      console.error("Failed to delete item", error);
+    }
   };
 
   return (
@@ -218,7 +250,7 @@ const Menu = () => {
             <h3 className="font-bold text-slate-700 text-sm uppercase">
               Item (
               {
-                menuItems.filter((i) => i.categoryId === selectedCategory)
+                menuItems.filter((i) => i.category_id === selectedCategory)
                   .length
               }
               )
@@ -231,53 +263,67 @@ const Menu = () => {
             </button>
           </div>
           <div className="p-4 space-y-4">
-            {menuItems
-              .filter((i) => i.categoryId === selectedCategory)
-              .map((item) => (
-                <div
-                  key={item.id}
-                  className="border border-slate-100 rounded-lg p-4 flex items-start justify-between hover:border-slate-300 transition-colors bg-white group"
-                >
-                  <div className="flex gap-3">
-                    <div
-                      className={`mt-1 w-4 h-4 border ${item.isVeg ? "border-green-600" : "border-red-600"} flex items-center justify-center shrink-0`}
-                    >
+            {isLoading ? (
+              <div className="flex justify-center p-8 text-slate-400">Loading menu...</div>
+            ) : menuItems.filter((i) => i.category_id === selectedCategory).length === 0 ? (
+              <div className="flex justify-center p-8 text-slate-400">No items in this category.</div>
+            ) : (
+              menuItems
+                .filter((i) => i.category_id === selectedCategory)
+                .map((item) => (
+                  <div
+                    key={item.id}
+                    className="border border-slate-100 rounded-lg p-4 flex items-start justify-between hover:border-slate-300 transition-colors bg-white group"
+                  >
+                    <div className="flex gap-3">
                       <div
-                        className={`w-2 h-2 rounded-full ${item.isVeg ? "bg-green-600" : "bg-red-600"}`}
-                      ></div>
+                        className={`mt-1 w-4 h-4 border ${item.is_veg ? "border-green-600" : "border-red-600"} flex items-center justify-center shrink-0`}
+                      >
+                        <div
+                          className={`w-2 h-2 rounded-full ${item.is_veg ? "bg-green-600" : "bg-red-600"}`}
+                        ></div>
+                      </div>
+                      <div>
+                        <h4 className="text-slate-900 font-bold text-sm">
+                          {item.name}
+                        </h4>
+                        <p className="text-sm font-semibold text-slate-700">
+                          ₹{item.price}
+                        </p>
+                        <span className="text-xs text-slate-400 block mt-1">
+                          {item.description || "No description"}
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="text-slate-900 font-bold text-sm">
-                        {item.name}
-                      </h4>
-                      <p className="text-sm font-semibold text-slate-700">
-                        ₹{item.price}
-                      </p>
-                      <span className="text-xs text-slate-400 block mt-1">
-                        {item.description || "No description"}
-                      </span>
-                    </div>
-                  </div>
 
-                  <div className="flex items-center gap-6">
-                    <button
-                      onClick={() => openItemModal(item)}
-                      className="text-orange-500 text-xs font-bold flex items-center gap-1 hover:text-orange-600 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      EDIT <Edit2 size={12} />
-                    </button>
-                    {/* Toggle */}
-                    <button
-                      onClick={() => toggleItemStock(item.id)}
-                      className={`w-10 h-5 rounded-full relative transition-colors ${item.onStock ? "bg-green-500" : "bg-slate-300"}`}
-                    >
-                      <div
-                        className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all shadow-sm ${item.onStock ? "right-1" : "left-1"}`}
-                      ></div>
-                    </button>
+                    <div className="flex items-center gap-6">
+                      <button
+                        onClick={() => openItemModal(item)}
+                        title="Edit Item"
+                        className="text-slate-400 text-xs font-bold flex items-center gap-1 hover:text-orange-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                         <Edit2 size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteItem(item)}
+                        title="Delete Item"
+                        className="text-slate-400 text-xs font-bold flex items-center gap-1 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                      {/* Toggle */}
+                      <button
+                        onClick={() => toggleItemStock(item)}
+                        className={`w-10 h-5 rounded-full relative transition-colors ${item.is_available ? "bg-green-500" : "bg-slate-300"}`}
+                      >
+                        <div
+                          className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all shadow-sm ${item.is_available ? "right-1" : "left-1"}`}
+                        ></div>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+            )}
           </div>
         </div>
       </div>
@@ -368,9 +414,9 @@ const Menu = () => {
                 </label>
                 <select
                   className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand"
-                  value={newItem.category}
+                  value={newItem.category_id}
                   onChange={(e) =>
-                    setNewItem({ ...newItem, category: Number(e.target.value) })
+                    setNewItem({ ...newItem, category_id: Number(e.target.value) })
                   }
                   disabled={editingItem} // Disable changing category while editing for simplicity
                 >
@@ -403,9 +449,9 @@ const Menu = () => {
                     <input
                       type="radio"
                       name="type"
-                      checked={newItem.isVeg}
-                      onChange={() => setNewItem({ ...newItem, isVeg: true })}
-                      className="w-4 h-4 text-green-600 focus:ring-green-500"
+                      checked={newItem.is_veg}
+                      onChange={() => setNewItem({ ...newItem, is_veg: true })}
+                      className="w-4 h-4 text-green-600 focus:ring-green-500 cursor-pointer"
                     />
                     <span className="text-sm font-medium">Veg</span>
                   </label>
@@ -413,9 +459,9 @@ const Menu = () => {
                     <input
                       type="radio"
                       name="type"
-                      checked={!newItem.isVeg}
-                      onChange={() => setNewItem({ ...newItem, isVeg: false })}
-                      className="w-4 h-4 text-red-600 focus:ring-red-500"
+                      checked={!newItem.is_veg}
+                      onChange={() => setNewItem({ ...newItem, is_veg: false })}
+                      className="w-4 h-4 text-red-600 focus:ring-red-500 cursor-pointer"
                     />
                     <span className="text-sm font-medium">Non-Veg</span>
                   </label>
