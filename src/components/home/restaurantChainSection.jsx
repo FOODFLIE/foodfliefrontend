@@ -9,27 +9,23 @@ const RestaurantChainSection = ({ title }) => {
   const [loading, setLoading] = React.useState(true);
   const scrollRef = React.useRef(null);
   const { coords } = useUserLocation();
-  console.log("User coordinates in RestaurantChainSection:", coords);
-  console.log("lat", coords.latitude, "lng", coords.longitude);
+ 
 
   React.useEffect(() => {
-    console.log("useEffect triggered with coords:", coords);
+
     
     const fetchStores = async () => {
-      console.log("fetchStores called");
-      console.log("Checking coords - lat:", coords.latitude, "lng:", coords.longitude);
-      
+   
       if (!coords.latitude || !coords.longitude) {
-        console.log("Coords not available, returning early");
+      
         return;
       }
       
       try {
-        console.log("Starting API call with:", coords.latitude, coords.longitude);
+   
         setLoading(true);
         const data = await getAllStores(coords.latitude, coords.longitude);
-        console.log("Fetched stores data:", data);
-        console.log("Data type:", typeof data, "Is array:", Array.isArray(data));
+  
 
         // Handle various response structures
         const storesList = Array.isArray(data) ? data : data?.data || [];
@@ -53,7 +49,7 @@ const RestaurantChainSection = ({ title }) => {
       } catch (error) {
         console.error("Failed to fetch stores for chain section:", error);
       } finally {
-        console.log("Setting loading to false");
+      
         setLoading(false);
       }
     };

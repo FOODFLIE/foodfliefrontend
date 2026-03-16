@@ -79,7 +79,7 @@ const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartCo
   };
 
   const handleFinalSave = (details) => {
-    console.log("Saving full address details:", details);
+   
     updateLocation(details.coords.lat, details.coords.lng, details);
     setShowAddressDetails(false);
     onClose();

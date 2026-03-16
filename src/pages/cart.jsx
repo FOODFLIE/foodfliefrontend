@@ -32,15 +32,13 @@ const Cart = () => {
     coords,
   } = useCartLocation();
   const { refreshCartCount } = useCart();
-  console.log("1", addressDetails);
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [cookingInstructions, setCookingInstructions] = useState("");
 
-console.log("cookingInstructions", cookingInstructions);
-  console.log("2", addressDetails); 
+
 
   useEffect(() => {
     fetchCart();

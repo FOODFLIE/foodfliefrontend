@@ -24,9 +24,13 @@ import { Toaster } from "react-hot-toast";
 import Preloader from "./components/preloader";
 import { CartProvider } from "./context/cartContext";
 import ProtectedRoute from "./components/common/protectedRoute";
+import { usePageTracking } from "./hooks/usePageTracking";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
+  
+  // Track page views automatically
+  usePageTracking();
 
   // Check if it's the first visit in this session
   useEffect(() => {

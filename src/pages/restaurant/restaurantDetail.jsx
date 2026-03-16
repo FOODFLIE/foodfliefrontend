@@ -35,7 +35,7 @@ const RestaurantDetail = () => {
       try {
         setLoading(true);
         const responseData = await getProductsByPartner(id);
-        console.log("Restaurant menu response:", responseData);
+      
 
         let menuItemsData = [];
         let rData = null;

@@ -26,7 +26,7 @@ const OrderDetail = () => {
     const fetchOrder = async () => {
       try {
         const data = await getOrderById(id);
-        console.log("1", data);
+       
         setOrder(data);
       } catch (error) {
         console.error("Error fetching order details:", error);
