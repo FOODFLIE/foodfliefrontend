@@ -6,11 +6,13 @@ import React, {
   useCallback,
 } from "react";
 import { fetchAddresses } from "../services/addressService";
+import { trackEvent } from "../utils/analytics";
 
 const LocationContext = createContext();
 
 const STORAGE_KEY = "foodflie_selected_address";
 const CART_STORAGE_KEY = "foodflie_cart_address";
+const LOCATION_ASKED_KEY = 'foodflie_location_asked';
 
 // Helper to load persisted address from localStorage
 const loadPersistedAddress = (isCartContext = false) => {
@@ -144,7 +146,7 @@ export const LocationProvider = ({ children, isCartContext = false }) => {
     );
   }, [isCartContext]);
 
-  // On mount: load from localStorage → fallback to default saved address from API → no auto-detect
+  // On mount: load from localStorage → fallback to default saved address from API → ask for location permission
   useEffect(() => {
     const initializeAddress = async () => {
       // 1. Already have a persisted address? Use it. Do nothing further.
@@ -193,12 +195,57 @@ export const LocationProvider = ({ children, isCartContext = false }) => {
         setLoading(false);
       }
 
-      // 3. No saved addresses and no persistence: show empty state, don't auto-detect
-      setAddress("");
+      // 3. No saved addresses and no persistence: ask for location permission (only for main context, not cart)
+      if (!isCartContext) {
+        const hasAsked = localStorage.getItem(LOCATION_ASKED_KEY);
+        
+        if (!hasAsked && 'geolocation' in navigator) {
+          // Delay to let page load
+          setTimeout(() => {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                console.log('Location granted:', position.coords);
+                const { latitude, longitude } = position.coords;
+                
+                // Update location with fetched coordinates
+                updateLocation(latitude, longitude);
+                
+                // Track location permission granted
+                trackEvent('location_permission_granted', 'user_interaction', 'geolocation');
+                
+                localStorage.setItem(LOCATION_ASKED_KEY, 'granted');
+              },
+              (error) => {
+                console.log('Location denied or error:', error.message);
+                
+                // Track location permission denied
+                trackEvent('location_permission_denied', 'user_interaction', 'geolocation', error.code);
+                
+                localStorage.setItem(LOCATION_ASKED_KEY, 'denied');
+                setAddress("");
+              },
+              {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 300000 // 5 minutes
+              }
+            );
+          }, 1500);
+        } else if (!hasAsked) {
+          console.log('Geolocation not supported');
+          trackEvent('geolocation_not_supported', 'browser_capability', 'geolocation');
+          localStorage.setItem(LOCATION_ASKED_KEY, 'not_supported');
+          setAddress("");
+        } else {
+          setAddress("");
+        }
+      } else {
+        setAddress("");
+      }
     };
 
     initializeAddress();
-  }, []); // Run only once on mount
+  }, [isCartContext, updateLocation]); // Add updateLocation to dependencies
 
   return (
     <LocationContext.Provider
