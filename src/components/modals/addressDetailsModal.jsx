@@ -19,12 +19,6 @@ const validators = {
     if (value.trim().length < 2) return "Too short (min 2 characters)";
     return "";
   },
-  pincode: (value) => {
-    if (!value.trim()) return "Pincode is required";
-    if (!/^\d{6}$/.test(value.trim()))
-      return "Pincode must be exactly 6 digits";
-    return "";
-  },
   receiverName: (value) => {
     if (!value.trim()) return "Receiver name is required";
     if (value.trim().length < 2) return "Name too short (min 2 characters)";
@@ -122,7 +116,6 @@ const AddressDetailsModal = ({
     setErrors(newErrors);
     setTouched({
       buildingName: true,
-      pincode: true,
       receiverName: true,
       receiverNumber: true,
     });

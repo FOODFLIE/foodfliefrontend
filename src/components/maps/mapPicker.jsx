@@ -31,9 +31,10 @@ export default function MapPicker({ initialCoords, onClose, onConfirm }) {
   });
 
   const [map, setMap] = useState(null);
-  const [center, setCenter] = useState({
-    lat: initialCoords?.latitude || 17.385,
-    lng: initialCoords?.longitude || 78.486,
+  const [center, setCenter] = useState(() => {
+    const lat = parseFloat(initialCoords?.latitude);
+    const lng = parseFloat(initialCoords?.longitude);
+    return isFinite(lat) && isFinite(lng) ? { lat, lng } : null;
   });
   const [address, setAddress] = useState("");
   const [shortAddress, setShortAddress] = useState("");
@@ -171,6 +172,7 @@ export default function MapPicker({ initialCoords, onClose, onConfirm }) {
 
         {/* Map Container */}
         <div className="flex-1 relative mt-[1px]">
+          {center && (
           <GoogleMap
             mapContainerStyle={mapContainerStyle}
             center={center}
@@ -220,6 +222,7 @@ export default function MapPicker({ initialCoords, onClose, onConfirm }) {
               </div>
             </div>
           </GoogleMap>
+          )}
 
           {/* Locate Me Button - Floating Targeted */}
           <button
