@@ -13,7 +13,7 @@ import {
 } from "../../../services/partnerProductService";
 
 const Menu = () => {
-  const { user } = useAuth();
+  const { partner } = useAuth();
   // --- State for Modals & Forms ---
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [showItemModal, setShowItemModal] = useState(false);
@@ -39,14 +39,14 @@ const Menu = () => {
 
   // --- Fetch Initial Data ---
   const fetchMenuData = async () => {
-    if (!user?.partner_id && !user?.id) return;
-    const partnerId = user.partner_id || user.id;
+    if (!partner?.id) return;
+    const partnerId = partner.id;
 
     try {
       setIsLoading(true);
       const categoriesData = await getAllCategories();
-      console.log("CATGEORIES", categoriesData);
-      const catsWithCount = (categoriesData.data || []).map(cat => ({
+      const catsArray = categoriesData.data || [];
+      const catsWithCount = catsArray.map(cat => ({
         ...cat,
         count: 0,
         active: true
@@ -67,7 +67,7 @@ const Menu = () => {
 
   useEffect(() => {
     fetchMenuData();
-  }, [user]);
+  }, [partner]);
 
   // --- Handlers ---
 
@@ -86,8 +86,8 @@ const Menu = () => {
 
   const handleCategoryChange = async (categoryId) => {
     setSelectedCategory(categoryId);
-    if (!user?.partner_id && !user?.id) return;
-    const partnerId = user.partner_id || user.id;
+    if (!partner?.id) return;
+    const partnerId = partner.id;
 
     try {
       setIsLoading(true);
@@ -104,7 +104,7 @@ const Menu = () => {
 
   const handleSaveItem = async () => {
     if (!newItem.name || !newItem.price) return;
-    const partnerId = user?.partner_id || user?.id;
+    const partnerId = partner?.id;
 
     try {
       const payload = {
@@ -119,14 +119,11 @@ const Menu = () => {
       };
 
       if (editingItem) {
-        // Edit API Call
         await updateProduct(editingItem.id, payload);
       } else {
-        // Add API Call
         await addProduct(payload);
       }
       
-      // Refresh list
       await fetchMenuData();
       closeItemModal();
     } catch (error) {
@@ -175,9 +172,8 @@ const Menu = () => {
   };
 
   const toggleItemStock = async (item) => {
-    const partnerId = user?.partner_id || user?.id;
+    const partnerId = partner?.id;
     try {
-      // Optimistic update
       setMenuItems(
         menuItems.map((m) =>
           m.id === item.id ? { ...m, is_available: !m.is_available } : m,
@@ -185,7 +181,6 @@ const Menu = () => {
       );
       await toggleProductAvailability(item.id, partnerId, !item.is_available);
     } catch (error) {
-      // Revert optimism if failed
       console.error("Failed to toggle availability", error);
       fetchMenuData(); 
     }
@@ -193,7 +188,7 @@ const Menu = () => {
 
   const handleDeleteItem = async (item) => {
     if(!window.confirm(`Are you sure you want to delete ${item.name}?`)) return;
-    const partnerId = user?.partner_id || user?.id;
+    const partnerId = partner?.id;
     try {
       await deleteProduct(item.id, partnerId);
       await fetchMenuData();
