@@ -17,6 +17,13 @@ import { useCartLocation } from "../../context/cartLocationContext";
 import MapPicker from "../maps/mapPicker";
 import AddressDetailsModal from "./addressDetailsModal";
 import { fetchAddresses } from "../../services/addressService";
+import { useLoadScript } from "@react-google-maps/api";
+import { getFlieOptions } from "../../utils/flieUtils";
+
+const flies = getFlieOptions();
+const googleMapsApiKey = flies.googleMapsApiKey;
+const libraries = ["places"];
+
 
 const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartContext = false }) => {
   // Use different context based on prop
@@ -39,8 +46,59 @@ const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartCo
     shortAddress: "",
   });
   const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
   const [savedAddresses, setSavedAddresses] = useState([]);
   const [loadingAddresses, setLoadingAddresses] = useState(false);
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: googleMapsApiKey,
+    libraries: libraries,
+  });
+
+  const [autocompleteService, setAutocompleteService] = useState(null);
+  const [placesService, setPlacesService] = useState(null);
+
+  useEffect(() => {
+    if (isLoaded && !autocompleteService) {
+      setAutocompleteService(new window.google.maps.places.AutocompleteService());
+    }
+    if (isLoaded && !placesService) {
+      // Dummy element for PlacesService
+      const dummyElement = document.createElement("div");
+      setPlacesService(new window.google.maps.places.PlacesService(dummyElement));
+    }
+  }, [isLoaded, autocompleteService, placesService]);
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (!searchQuery || searchQuery.length < 3 || !autocompleteService) {
+        setSuggestions([]);
+        return;
+      }
+
+      setIsSearching(true);
+      try {
+        autocompleteService.getPlacePredictions(
+          { input: searchQuery, componentRestrictions: { country: "in" } },
+          (predictions, status) => {
+            if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
+              setSuggestions(predictions);
+            } else {
+              setSuggestions([]);
+            }
+            setIsSearching(false);
+          }
+        );
+      } catch (err) {
+        console.error("Autocomplete error:", err);
+        setIsSearching(false);
+      }
+    };
+
+    const timeoutId = setTimeout(fetchSuggestions, 300);
+    return () => clearTimeout(timeoutId);
+  }, [searchQuery, autocompleteService]);
 
   useEffect(() => {
     if (isOpen) {
@@ -102,6 +160,35 @@ const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartCo
     onClose();
   };
 
+  const handleSelectSuggestion = (suggestion) => {
+    if (!placesService) return;
+
+    placesService.getDetails(
+      { placeId: suggestion.place_id, fields: ["geometry", "formatted_address", "name", "address_components"] },
+      (place, status) => {
+        if (status === window.google.maps.places.PlacesServiceStatus.OK && place.geometry) {
+          const lat = place.geometry.location.lat();
+          const lng = place.geometry.location.lng();
+          
+          let pincode = "";
+          const pinObj = place.address_components.find(c => c.types.includes("postal_code"));
+          if (pinObj) pincode = pinObj.long_name;
+
+          const addressDetails = {
+            fullAddress: place.formatted_address,
+            shortAddress: place.name || suggestion.structured_formatting.main_text,
+            coords: { lat, lng },
+            pincode,
+            buildingName: place.name || "",
+          };
+
+          updateLocation(lat, lng, addressDetails);
+          onClose();
+        }
+      }
+    );
+  };
+
   return (
     <>
       <div className="fixed inset-0 z-[1000] flex items-end sm:items-center justify-center sm:p-4 bg-black/60 backdrop-blur-sm">
@@ -134,9 +221,55 @@ const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartCo
                   placeholder="Search for a new address"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-[#F5F5FA] h-12 pl-12 pr-4 rounded-xl text-sm outline-none"
+                  className="w-full bg-[#F5F5FA] h-12 pl-12 pr-10 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand/20 transition-all"
                 />
+                {searchQuery && (
+                  <button 
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                  >
+                    <X size={16} />
+                  </button>
+                )}
               </div>
+
+              {/* Suggestions List */}
+              {searchQuery.length >= 3 && (
+                <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                  {isSearching ? (
+                    <div className="flex items-center gap-3 p-4 text-slate-400">
+                      <Loader2 size={18} className="animate-spin" />
+                      <span className="text-sm">Searching...</span>
+                    </div>
+                  ) : suggestions.length > 0 ? (
+                    <div className="bg-white border border-slate-100 rounded-2xl overflow-hidden shadow-sm">
+                      {suggestions.map((suggestion) => (
+                        <div
+                          key={suggestion.place_id}
+                          onClick={() => handleSelectSuggestion(suggestion)}
+                          className="flex items-start gap-4 p-4 hover:bg-slate-50 cursor-pointer transition-colors border-b border-slate-50 last:border-0"
+                        >
+                          <div className="p-2 rounded-xl bg-slate-100 text-slate-500 shrink-0">
+                            <MapPin size={18} />
+                          </div>
+                          <div className="flex flex-col min-w-0">
+                            <span className="text-sm font-bold text-slate-800 line-clamp-1">
+                              {suggestion.structured_formatting.main_text}
+                            </span>
+                            <span className="text-xs text-slate-400 line-clamp-1 mt-0.5">
+                              {suggestion.structured_formatting.secondary_text}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : searchQuery.length >= 3 && (
+                    <div className="p-4 text-sm text-slate-400 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                      No results found for "{searchQuery}"
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Use Current Location */}
               {!hideCurrentLocation && (
