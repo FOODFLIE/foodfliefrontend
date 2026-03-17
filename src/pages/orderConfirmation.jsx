@@ -106,7 +106,7 @@ const OrderConfirmation = () => {
                 Total Amount
               </span>
               <span className="text-lg font-black text-green-600">
-                ₹{parseFloat(order.total_amount || 0).toFixed(2)}
+                ₹{parseFloat(order.final_amount || 0).toFixed(2)}
               </span>
             </div>
             <div className="flex justify-between items-center">

@@ -132,8 +132,8 @@ const Cart = () => {
   // Calculate taxes/fees nicely
   const subtotal = parseFloat(cart.subtotal) || 0;
   const deliveryFee = parseFloat(cart.delivery_fee) || 0;
-  const handlingFee = 5.0; // Mock fixed handling/platform fee
-  const totalAmount = subtotal + deliveryFee + handlingFee;
+  // const handlingFee = 5.0; // Mock fixed handling/platform fee
+  const totalAmount = subtotal + deliveryFee;
 
   return (
     <>
@@ -330,7 +330,7 @@ const Cart = () => {
                 <BillSummary
                   subtotal={subtotal}
                   deliveryFee={deliveryFee}
-                  handlingFee={handlingFee}
+                  // handlingFee={handlingFee}
                   totalAmount={totalAmount}
                   onOrderComplete={handleOrderComplete}
                   isAddressSelected={!!address}

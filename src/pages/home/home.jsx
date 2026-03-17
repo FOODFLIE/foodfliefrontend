@@ -61,7 +61,7 @@ const Home = () => {
           <CategorySection />
 
           {/* Top Restaurant Chains */}
-          <RestaurantChainSection title="Top restaurant chains in Ongole" />
+          <RestaurantChainSection title="Most Ordered on FoodFlie 🔥" />
         </main>
       </div>
       <Footer />

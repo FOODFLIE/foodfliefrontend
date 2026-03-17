@@ -157,7 +157,7 @@ const Addresses = () => {
                     <button 
                       onClick={() => setDeleteConfirm(address.id)}
                       disabled={deleting === address.id}
-                      className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-rose-500 disabled:opacity-50"
+                      className=" text-slate-400 hover:text-rose-500 disabled:opacity-50"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
