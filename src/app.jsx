@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import CategoryProduct from "./pages/category/categoryProduct";
 import RestaurantDetail from "./pages/restaurant/restaurantDetail";
 import Home from "./pages/home/home";
@@ -28,9 +28,13 @@ import { usePageTracking } from "./hooks/usePageTracking";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
   
   // Track page views automatically
   usePageTracking();
+
+  // Check if current route is a partner route
+  const isPartnerRoute = location.pathname.startsWith('/partner');
 
   // Check if it's the first visit in this session
   useEffect(() => {
@@ -54,7 +58,8 @@ const App = () => {
           <div
             className={`min-h-screen transition-opacity duration-700 ${loading ? "opacity-0" : "opacity-100"}`}
           >
-            <Navbar />
+            {/* Only show Navbar for non-partner routes */}
+            {!isPartnerRoute && <Navbar />}
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/search" element={<Search />} />

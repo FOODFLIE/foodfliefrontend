@@ -8,6 +8,8 @@ import {
   updateProduct,
   deleteProduct,
   toggleProductAvailability,
+  getAllCategories,
+  getProductsByCategory,
 } from "../../../services/partnerProductService";
 
 const Menu = () => {
@@ -30,37 +32,31 @@ const Menu = () => {
   const [newCategory, setNewCategory] = useState("");
 
   // --- Data State ---
-  // If a category API existed, we'd fetch it. For now, we'll maintain standard categories or extract from items
-  const [categories, setCategories] = useState([
-    { id: 1, name: "Bowls And Salads", count: 0, active: true },
-    { id: 2, name: "SipnSized Combos", count: 0, active: true },
-    { id: 3, name: "Fruit Juices", count: 0, active: true },
-    { id: 4, name: "Smoothies", count: 0, active: true },
-    { id: 5, name: "Healthy Coldpressed Juices", count: 0, active: true },
-    { id: 6, name: "Hot servings", count: 0, active: true },
-    { id: 7, name: "Desserts", count: 0, active: true },
-  ]);
+  const [categories, setCategories] = useState([]);
 
   const [menuItems, setMenuItems] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState(categories[0].id);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   // --- Fetch Initial Data ---
   const fetchMenuData = async () => {
     if (!user?.partner_id && !user?.id) return;
-    const partnerId = user.partner_id || user.id; // Adapt based on actual user object structure
+    const partnerId = user.partner_id || user.id;
 
     try {
       setIsLoading(true);
-      const products = await getAllProducts(partnerId);
-      setMenuItems(products || []);
+      const categoriesData = await getAllCategories();
+      const catsWithCount = (categoriesData.data || []).map(cat => ({
+        ...cat,
+        count: 0,
+        active: true
+      }));
+      setCategories(catsWithCount);
       
-      // Update Category counts based on products
-      setCategories((prevCats) => 
-        prevCats.map(cat => ({
-          ...cat,
-          count: (products || []).filter(p => p.category_id === cat.id).length
-        }))
-      );
+      if (catsWithCount.length > 0) {
+        setSelectedCategory(catsWithCount[0].id);
+        const productsData = await getProductsByCategory(partnerId, catsWithCount[0].id);
+        setMenuItems(productsData.data?.products || []);
+      }
     } catch (error) {
       console.error("Failed to fetch menu items", error);
     } finally {
@@ -85,6 +81,22 @@ const Menu = () => {
     setCategories([...categories, newCat]);
     setNewCategory("");
     setShowCategoryModal(false);
+  };
+
+  const handleCategoryChange = async (categoryId) => {
+    setSelectedCategory(categoryId);
+    if (!user?.partner_id && !user?.id) return;
+    const partnerId = user.partner_id || user.id;
+
+    try {
+      setIsLoading(true);
+      const productsData = await getProductsByCategory(partnerId, categoryId);
+      setMenuItems(productsData.data?.products || []);
+    } catch (error) {
+      console.error("Failed to fetch category products", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSaveItem = async () => {
@@ -225,12 +237,12 @@ const Menu = () => {
             {categories.map((cat) => (
               <div
                 key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
+                onClick={() => handleCategoryChange(cat.id)}
                 className={`p-4 flex items-center justify-between text-sm font-semibold cursor-pointer transition-colors ${selectedCategory === cat.id ? "bg-[#282c3f] text-white" : "text-slate-600 hover:bg-slate-50"}`}
               >
                 <span>{cat.name}</span>
                 <div className="flex items-center gap-3">
-                  <span className="text-xs opacity-70">({cat.count})</span>
+                  <span className="text-xs opacity-70">({menuItems.filter(i => i.category?.id === cat.id).length})</span>
                   <div
                     className={`w-8 h-4 rounded-full relative ${cat.active ? "bg-green-500" : "bg-slate-300"}`}
                   >
@@ -248,12 +260,7 @@ const Menu = () => {
         <div className="flex-1 bg-white flex flex-col overflow-y-auto">
           <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10">
             <h3 className="font-bold text-slate-700 text-sm uppercase">
-              Item (
-              {
-                menuItems.filter((i) => i.category_id === selectedCategory)
-                  .length
-              }
-              )
+              Item ({menuItems.length})
             </h3>
             <button
               onClick={() => openItemModal()}
@@ -265,12 +272,10 @@ const Menu = () => {
           <div className="p-4 space-y-4">
             {isLoading ? (
               <div className="flex justify-center p-8 text-slate-400">Loading menu...</div>
-            ) : menuItems.filter((i) => i.category_id === selectedCategory).length === 0 ? (
+            ) : menuItems.length === 0 ? (
               <div className="flex justify-center p-8 text-slate-400">No items in this category.</div>
             ) : (
-              menuItems
-                .filter((i) => i.category_id === selectedCategory)
-                .map((item) => (
+              menuItems.map((item) => (
                   <div
                     key={item.id}
                     className="border border-slate-100 rounded-lg p-4 flex items-start justify-between hover:border-slate-300 transition-colors bg-white group"
