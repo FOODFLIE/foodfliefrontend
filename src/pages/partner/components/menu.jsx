@@ -92,9 +92,11 @@ const Menu = () => {
     try {
       setIsLoading(true);
       const productsData = await getProductsByCategory(partnerId, categoryId);
-      setMenuItems(productsData.data?.products || []);
+      const products = productsData.data?.products || [];
+      setMenuItems(products);
     } catch (error) {
       console.error("Failed to fetch category products", error);
+      setMenuItems([]);
     } finally {
       setIsLoading(false);
     }
