@@ -45,6 +45,7 @@ const Menu = () => {
     try {
       setIsLoading(true);
       const categoriesData = await getAllCategories();
+      console.log("CATGEORIES", categoriesData);
       const catsWithCount = (categoriesData.data || []).map(cat => ({
         ...cat,
         count: 0,
