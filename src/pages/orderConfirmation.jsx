@@ -178,7 +178,7 @@ const OrderConfirmation = () => {
 
         <div className="grid grid-cols-2 gap-3 mb-4">
           <button
-            onClick={() => navigate("/profile/orders")}
+            onClick={() => navigate(`/profile/order/${order.id || id}`)}
             className="bg-brand text-white py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base hover:bg-brand-dark transition-colors shadow-lg"
           >
             Track Order

@@ -16,6 +16,7 @@ import {
 import { placeOrder } from "../services/orderService";
 import { useCartLocation } from "../context/cartLocationContext";
 import { useCart } from "../context/cartContext";
+import { useAuth } from "../context/authContext";
 import EmptyCart from "../components/emptyCart";
 import LoadingCart from "../components/loadingCart";
 import CartItem from "../components/cartItem";
@@ -25,6 +26,7 @@ import SEO from "../components/common/seo";
 
 const Cart = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const {
     address,
     addressDetails,
@@ -84,6 +86,9 @@ const Cart = () => {
     try {
       const orderPayload = {
         ...addressDetails,
+        customer_phone: user?.phone || user?.mobile || null,
+        latitude: coords?.latitude || null,
+        longitude: coords?.longitude || null,
       };
       
       const response = await placeOrder(orderPayload, "COD", cookingInstructions.trim() || null);
