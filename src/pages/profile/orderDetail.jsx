@@ -142,7 +142,7 @@ const OrderDetail = () => {
                 Arrived in
               </span>
               <div className="bg-brand-muted text-brand px-3 py-1 rounded-lg text-xs font-black italic mt-1">
-                ⚡ +14 MINS
+                ⚡ +13 MINS
               </div>
             </div>
           </div>
@@ -159,13 +159,13 @@ const OrderDetail = () => {
           <div className="divide-y divide-slate-50">
             {order.items?.map((item, idx) => (
               <div key={idx} className="p-6 flex gap-4 group">
-                <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-100 shrink-0 group-hover:scale-105 transition-transform duration-300">
+                {/* <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-100 shrink-0 group-hover:scale-105 transition-transform duration-300">
                   <img
                     src={item.item_image || "/placeholder-food.png"}
                     alt={item.item_name}
                     className="w-full h-full object-cover"
                   />
-                </div>
+                </div> */}
                 <div className="flex-1 min-w-0 py-1">
                   <h4 className="text-xs font-bold text-slate-900 leading-tight">
                     {item.item_name}
