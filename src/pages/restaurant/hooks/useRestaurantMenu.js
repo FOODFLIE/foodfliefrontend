@@ -12,10 +12,11 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [addingToCart, setAddingToCart] = useState({});
-  const [cartCount, setCartCount] = useState(0);
 
-  const { refreshCartCount, addToGuestCart } = useCart();
+  const { refreshCartCount, addToGuestCart, cartCount, guestCartCount } = useCart();
   const { isAuthenticated } = useAuth();
+  
+  const displayCount = isAuthenticated ? cartCount : guestCartCount;
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -123,12 +124,10 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
       setAddingToCart((prev) => ({ ...prev, [item.sku]: true }));
       if (isAuthenticated) {
         await apiAddToCart(item.sku, 1);
-        setCartCount((c) => c + 1);
         refreshCartCount();
       } else {
         const partnerId = restaurantData?.id || item.partner_id || null;
         addToGuestCart(item.sku, item.name, item.price, 1, String(partnerId));
-        setCartCount((c) => c + 1);
       }
     } catch (err) {
       console.error("Failed to add to cart:", err);
@@ -144,7 +143,7 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
     loading,
     error,
     addingToCart,
-    cartCount,
+    cartCount: displayCount,
     handleAddToCart,
   };
 };

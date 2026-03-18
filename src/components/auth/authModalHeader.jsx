@@ -19,7 +19,12 @@ const AuthModalHeader = ({ isLogin, step, phone }) => (
         ? isLogin
           ? "Enter your phone number to login"
           : "Create an account to start ordering"
-        : `We've sent a 6-digit code to ${phone}`}
+        : (
+          <>
+            We've sent a 6-digit code to <span className="font-bold text-slate-700">{phone}</span> via{" "}
+            <span className="font-bold text-green-600">WhatsApp</span>
+          </>
+        )}
     </p>
   </div>
 );
