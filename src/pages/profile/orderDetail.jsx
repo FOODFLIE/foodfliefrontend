@@ -131,7 +131,7 @@ const OrderDetail = () => {
               <CheckCircle2 size={24} className="text-green-500" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-slate-900 capitalize">
+              <h2 className="text-lg font-black text-slate-900 capitalize">
                 {order.status || "Delivered"}
               </h2>
             </div>
@@ -151,7 +151,7 @@ const OrderDetail = () => {
         {/* Items Section */}
         <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
           <div className="p-6 border-b border-slate-50">
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">
+            <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">
               {order.items?.length || 0}{" "}
               {order.items?.length === 1 ? "item" : "items"} in order
             </h3>
@@ -167,7 +167,7 @@ const OrderDetail = () => {
                   />
                 </div>
                 <div className="flex-1 min-w-0 py-1">
-                  <h4 className="text-sm font-bold text-slate-900 leading-tight">
+                  <h4 className="text-xs font-bold text-slate-900 leading-tight">
                     {item.item_name}
                   </h4>
                   <p className="text-xs text-slate-400 mt-1 capitalize">
@@ -189,7 +189,7 @@ const OrderDetail = () => {
         <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
           <div className="p-6 border-b border-slate-50 flex items-center gap-2">
             <FileText size={18} className="text-slate-400" />
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">
+            <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">
               Bill Summary
             </h3>
           </div>
@@ -241,7 +241,7 @@ const OrderDetail = () => {
         {/* Order Details Grid */}
         <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
           <div className="p-6 border-b border-slate-50">
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">
+            <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">
               Order Details
             </h3>
           </div>

@@ -160,7 +160,7 @@ const RestaurantDetail = () => {
         {/* Header Block */}
         <section className="bg-brand-grey/40 border border-slate-100 rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-12 mb-8 md:mb-12 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 relative overflow-hidden">
           <div className="relative z-10 flex-1">
-            <h1 className="text-3xl md:text-6xl font-black text-slate-800 tracking-tighter mb-4 uppercase italic font-poppins">
+            <h1 className="text-2xl md:text-5xl font-black text-slate-800 tracking-tighter mb-4 uppercase italic font-poppins">
               {restaurantData.name}
             </h1>
             <div className="flex flex-wrap items-center gap-4 md:gap-6 text-slate-500 font-bold text-xs md:text-sm">
@@ -248,7 +248,7 @@ const RestaurantDetail = () => {
           {/* Items List */}
           <div className="lg:col-span-9 space-y-8 md:space-y-12">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-6 gap-4">
-              <h2 className="text-xl md:text-2xl font-black text-slate-800 tracking-tight">
+              <h2 className="text-lg md:text-xl font-black text-slate-800 tracking-tight">
                 Menu Items
               </h2>
               <div className="relative w-full sm:w-auto">

@@ -150,10 +150,10 @@ const Cart = () => {
             {/* Header Title Layer */}
             <div className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <h1 className="text-3xl md:text-5xl leading-none font-bold text-slate-900 tracking-tighter mb-2 md:mb-3">
+                <h1 className="text-2xl md:text-4xl leading-none font-bold text-slate-900 tracking-tighter mb-2 md:mb-3">
                   Review Cart
                 </h1>
-                <div className="flex items-center gap-3 text-slate-500 font-medium text-base md:text-lg">
+                <div className="flex items-center gap-3 text-slate-500 font-medium text-sm md:text-base">
                   <span className="bg-white px-3 py-1 rounded-full border border-slate-200/60 shadow-sm text-slate-700 font-semibold text-xs md:text-sm">
                     {cart.items.length} item{cart.items.length !== 1 ? "s" : ""}
                   </span>
@@ -192,7 +192,7 @@ const Cart = () => {
                         </div>
                         <div className="overflow-hidden">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <h3 className="text-lg md:text-xl font-black text-slate-800 leading-tight">
+                            <h3 className="text-base md:text-lg font-black text-slate-800 leading-tight">
                               Delivery Address
                             </h3>
                             {addressDetails?.category && (

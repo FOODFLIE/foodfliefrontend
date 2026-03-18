@@ -195,7 +195,7 @@ const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartCo
         <div className="bg-white w-full sm:max-w-md max-h-[95vh] sm:max-h-[90vh] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden relative flex flex-col">
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-            <h2 className="text-lg font-black text-slate-800 capitalize">
+            <h2 className="text-base font-bold text-slate-800 capitalize tracking-tight">
               Your Location
             </h2>
 
@@ -221,7 +221,7 @@ const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartCo
                   placeholder="Search for a new address"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-[#F5F5FA] h-12 pl-12 pr-10 rounded-xl text-sm outline-none focus:ring-2 focus:ring-brand/20 transition-all"
+                  className="w-full bg-[#F5F5FA] h-11 pl-12 pr-10 rounded-xl text-[13px] outline-none focus:ring-2 focus:ring-brand/20 transition-all placeholder:text-slate-400"
                 />
                 {searchQuery && (
                   <button 
@@ -253,10 +253,10 @@ const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartCo
                             <MapPin size={18} />
                           </div>
                           <div className="flex flex-col min-w-0">
-                            <span className="text-sm font-bold text-slate-800 line-clamp-1">
+                            <span className="text-[13px] font-semibold text-slate-800 line-clamp-1">
                               {suggestion.structured_formatting.main_text}
                             </span>
-                            <span className="text-xs text-slate-400 line-clamp-1 mt-0.5">
+                            <span className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
                               {suggestion.structured_formatting.secondary_text}
                             </span>
                           </div>
@@ -285,11 +285,11 @@ const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartCo
                       </div>
 
                       <div className="flex flex-col">
-                        <span className="text-sm font-bold text-brand">
+                        <span className="text-[13px] font-semibold text-brand">
                           Use My Current Location
                         </span>
 
-                        <span className="text-xs text-slate-400">
+                        <span className="text-[11px] text-slate-400">
                           Enable your current location for better services
                         </span>
                       </div>
@@ -326,7 +326,7 @@ const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartCo
                     <Plus size={20} />
                   </div>
 
-                  <span className="text-sm font-bold text-pink-500">
+                  <span className="text-[13px] font-semibold text-pink-500">
                     Add New Address
                   </span>
                 </div>
@@ -336,7 +336,7 @@ const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartCo
 
               {/* Saved Addresses */}
               <div className="space-y-4">
-                <h3 className="text-xs font-bold text-slate-400 uppercase">
+                <h3 className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
                   Saved Addresses
                 </h3>
 
@@ -364,14 +364,14 @@ const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartCo
                         </div>
 
                         <div className="flex flex-col flex-1 min-w-0">
-                          <span className="text-sm font-bold text-slate-800 capitalize">
+                          <span className="text-[13px] font-semibold text-slate-800 capitalize">
                             {addr.address_type || "Other"}
                           </span>
 
-                          <p className="text-xs text-slate-400 truncate mt-0.5">
+                          <p className="text-[11px] text-slate-400 truncate mt-0.5">
                             {addr.address_line1}
                           </p>
-                          <p className="text-xs text-slate-400 truncate">
+                          <p className="text-[11px] text-slate-400 truncate">
                             {addr.city}, {addr.pincode}
                           </p>
                         </div>

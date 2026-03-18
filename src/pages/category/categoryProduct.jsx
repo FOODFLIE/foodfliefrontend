@@ -67,7 +67,7 @@ const CategoryProduct = () => {
 
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-black text-slate-800 tracking-tighter font-poppins capitalize">
+          <h1 className="text-2xl md:text-4xl font-black text-slate-800 tracking-tighter font-poppins capitalize">
             {categoryName || category?.title || "Category"}
           </h1>
           <div className="flex items-center gap-4">

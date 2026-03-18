@@ -210,7 +210,7 @@ const Menu = () => {
           <input
             type="text"
             placeholder="Search for an item or category"
-            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm font-medium focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all"
+            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-[13px] font-medium focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-all placeholder:text-slate-400"
           />
         </div>
         {/* Filter buttons could go here */}
@@ -221,8 +221,8 @@ const Menu = () => {
         {/* Categories Sidebar */}
         <div className="w-80 bg-white border-r border-slate-200 flex flex-col overflow-y-auto">
           <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10">
-            <h3 className="font-bold text-slate-700 text-sm">
-              CATEGORY ({categories.length})
+            <h3 className="font-bold text-slate-700 text-[11px] tracking-wider uppercase">
+              Category ({categories.length})
             </h3>
             <button
               onClick={() => setShowCategoryModal(true)}
@@ -238,7 +238,7 @@ const Menu = () => {
                 onClick={() => handleCategoryChange(cat.id)}
                 className={`p-4 flex items-center justify-between text-sm font-semibold cursor-pointer transition-colors ${selectedCategory === cat.id ? "bg-[#282c3f] text-white" : "text-slate-600 hover:bg-slate-50"}`}
               >
-                <span>{cat.name}</span>
+                <span className="tracking-tight">{cat.name}</span>
                 <div className="flex items-center gap-3">
                   <span className="text-xs opacity-70">({menuItems.filter(i => i.category?.id === cat.id).length})</span>
                   <div
@@ -257,7 +257,7 @@ const Menu = () => {
         {/* Items List */}
         <div className="flex-1 bg-white flex flex-col overflow-y-auto">
           <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10">
-            <h3 className="font-bold text-slate-700 text-sm uppercase">
+            <h3 className="font-bold text-slate-700 text-[11px] uppercase tracking-wider">
               Item ({menuItems.length})
             </h3>
             <button
@@ -287,13 +287,13 @@ const Menu = () => {
                         ></div>
                       </div>
                       <div>
-                        <h4 className="text-slate-900 font-bold text-sm">
+                        <h4 className="text-slate-900 font-bold text-[13px] tracking-tight">
                           {item.name}
                         </h4>
-                        <p className="text-sm font-semibold text-slate-700">
+                        <p className="text-[13px] font-semibold text-slate-700">
                           ₹{item.price}
                         </p>
-                        <span className="text-xs text-slate-400 block mt-1">
+                        <span className="text-[11px] text-slate-400 font-medium block mt-1">
                           {item.description || "No description"}
                         </span>
                       </div>

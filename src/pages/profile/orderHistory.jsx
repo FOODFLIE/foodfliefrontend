@@ -99,7 +99,7 @@ const OrderHistory = () => {
           >
             <ChevronLeft size={24} className="text-slate-700" />
           </button>
-          <h1 className="text-xl font-black text-slate-900 tracking-tight italic">
+          <h1 className="text-lg md:text-2xl font-black text-slate-900 tracking-tight italic">
             Orders
           </h1>
         </div>
@@ -129,7 +129,7 @@ const OrderHistory = () => {
             {orders.map((order) => (
               <div
                 key={order.id}
-                onClick={() => navigate(`order/${order.id}`)}
+                onClick={() => navigate(`/profile/order/${order.id}`)}
                 className="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-300 overflow-hidden cursor-pointer group"
               >
                 <div className="p-6">
@@ -149,7 +149,7 @@ const OrderHistory = () => {
                   <div className="flex justify-between items-start">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-black text-slate-900 text-lg">
+                        <span className="font-black text-slate-900 text-base">
                           {getStatusText(order.status)}
                         </span>
                         {getStatusIcon(order.status)}

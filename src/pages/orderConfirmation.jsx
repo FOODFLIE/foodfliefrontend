@@ -65,7 +65,7 @@ const OrderConfirmation = () => {
               strokeWidth={3}
             />
           </div>
-          <h1 className="text-2xl sm:text-4xl font-black text-slate-900 mb-2">
+          <h1 className="text-xl sm:text-3xl font-black text-slate-900 mb-2">
             Order Confirmed!
           </h1>
           <p className="text-sm sm:text-base text-slate-600 font-medium">
@@ -81,7 +81,7 @@ const OrderConfirmation = () => {
             </div>
             <div>
               <p className="text-xs text-slate-500 font-bold">Restaurant</p>
-              <p className="text-base font-black text-slate-900">
+              <p className="text-sm font-black text-slate-900">
                 {order.partner_name || "Restaurant"}
               </p>
             </div>

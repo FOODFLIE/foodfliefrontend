@@ -97,10 +97,10 @@ const Addresses = () => {
         <div className="responsive-container max-w-4xl mx-auto px-4">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-black text-slate-900">
+              <h1 className="text-xl sm:text-2xl font-black text-slate-900">
                 My Addresses
               </h1>
-              <p className="text-sm text-slate-600 mt-1">
+              <p className="text-xs text-slate-600 mt-1">
                 Manage your delivery locations
               </p>
             </div>
