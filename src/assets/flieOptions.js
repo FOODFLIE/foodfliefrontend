@@ -1,2 +1,2 @@
-export const base_url = "http://localhost:5000";
-export const googleMapsApiKey = "AIzaSyCD_DfIHXCu1NUeiSsq-m71IzRK9VZQ1sA";
+export const base_url = import.meta.env.VITE_BASE_URL || "";
+export const googleMapsApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
