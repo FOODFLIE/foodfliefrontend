@@ -69,7 +69,7 @@ const ContactUs = () => {
           {/* Left Column: Direct Contact Methods */}
           <div className="lg:col-span-5 space-y-6">
             <a
-              href="mailto:support@foodflie.com"
+              href="mailto:foodflie13@gmail.com"
               className="block bg-white rounded-4xl p-8 shadow-[0_4px_24px_-8px_rgba(0,0,0,0.04)] border border-slate-50 hover:shadow-[0_12px_44px_-12px_rgba(94,23,235,0.15)] hover:-translate-y-1 transition-all duration-500 group relative overflow-hidden"
             >
               <div className="absolute right-0 top-0 w-32 h-32 bg-blue-50 rounded-bl-[100px] -z-10 group-hover:scale-110 transition-transform duration-500"></div>
@@ -83,7 +83,7 @@ const ContactUs = () => {
                 For support, questions, or ideas.
               </p>
               <p className="text-lg font-semibold text-blue-600">
-                support@foodflie.com
+                foodflie13@gmail.com
               </p>
             </a>
 
@@ -96,7 +96,7 @@ const ContactUs = () => {
               <p className="text-slate-500 mb-4">
                 Direct line for urgent matters.
               </p>
-              <p className="text-lg font-semibold text-emerald-600">+91 ————</p>
+              <p className="text-lg font-semibold text-emerald-600">+91 9381972536</p>
             </div>
 
             <div className="grid grid-cols-2 gap-6">
