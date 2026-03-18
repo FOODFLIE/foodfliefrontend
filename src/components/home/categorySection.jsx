@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getCategories } from "../../services/categoryServices";
 
@@ -62,13 +62,20 @@ const CategorySection = () => {
             onClick={() => handleCategoryClick(category.id, category.name)}
             className="flex flex-col items-center gap-1.5 min-w-[65px] sm:min-w-[100px] snap-start group cursor-pointer"
           >
-            <div className="w-[65px] h-[65px] sm:w-[120px] sm:h-[120px] rounded-full overflow-hidden shadow-sm group-hover:shadow-xl transition-all duration-500 relative ring-2 ring-transparent group-hover:ring-brand/10">
+            <div className="w-[65px] h-[65px] sm:w-[120px] sm:h-[120px] rounded-full overflow-hidden shadow-sm group-hover:shadow-xl transition-all duration-500 relative ring-2 ring-transparent group-hover:ring-brand/10 bg-slate-50">
               <img
                 src={category.image}
                 alt={category.name}
                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
               <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+              
+              {/* Delivery Badge */}
+              {category.delivery_type === "fast" && (
+                <div className="absolute bottom-1 inset-x-2 bg-brand/90 text-white text-[7px] sm:text-[9px] font-black py-0.5 sm:py-1 rounded-full flex items-center justify-center gap-0.5 backdrop-blur-sm shadow-sm">
+                  <Zap size={8} fill="currentColor" className="sm:w-2.5 sm:h-2.5" /> {category.delivery_time || 13}m
+                </div>
+              )}
             </div>
             <p className="text-[10px] sm:text-base font-bold text-slate-700 text-center leading-tight capitalize">
               {category.name}

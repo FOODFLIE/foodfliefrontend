@@ -3,38 +3,49 @@ import { Plus, Loader2 } from "lucide-react";
 
 const MenuItem = ({ name, description, price, image, onAdd, isAdding }) => {
   return (
-    <div className="flex gap-6 p-6 rounded-3xl border border-slate-50 bg-white hover:border-brand/20 transition-all group shadow-sm hover:shadow-xl">
-      <div className="flex-1 space-y-3">
-        <h4 className="font-black text-slate-800 text-lg tracking-tight group-hover:text-brand transition-colors font-poppins">
+    <div className="flex gap-4 sm:gap-6 p-4 sm:p-6 rounded-3xl border border-slate-50 bg-white hover:border-brand/20 transition-all group shadow-sm hover:shadow-xl w-full max-w-full overflow-hidden">
+      <div className="flex-1 space-y-2 sm:space-y-3 min-w-0 flex flex-col">
+        <h4 className="font-black text-slate-800 text-base sm:text-lg tracking-tight group-hover:text-brand transition-colors font-poppins truncate pb-1">
           {name}
         </h4>
-        <p className="text-xs text-slate-400 font-medium leading-relaxed italic">
+        <p className="text-[10px] sm:text-xs text-slate-400 font-medium leading-relaxed italic line-clamp-2">
           {description}
         </p>
-        <div className="pt-2 flex items-center justify-between">
-          <span className="text-xl font-black text-slate-800 font-display">
+        
+        <div className="flex-1"></div>
+        
+        <div className="pt-2 flex items-center justify-between gap-2 mt-auto">
+          <span className="text-lg sm:text-xl font-black text-slate-800 font-display truncate">
             ₹{price}
           </span>
+        </div>
+      </div>
+      
+      {/* Image and Add Button Container */}
+      <div className="relative shrink-0 flex flex-col items-center">
+        <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shadow-sm bg-slate-50 relative">
+          <img
+            src={image}
+            className="w-full h-full object-cover"
+            alt={name}
+          />
+        </div>
+        
+        {/* Add Button - Positioned over bottom edge of image */}
+        <div className="absolute -bottom-3 w-[85%]">
           <button
             onClick={onAdd}
             disabled={isAdding}
-            className="bg-white border-2 border-brand text-brand px-8 py-2 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-brand hover:text-white transition-all flex items-center gap-2 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-white border border-slate-200 text-brand py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest hover:bg-slate-50 hover:border-brand hover:shadow-md transition-all flex items-center justify-center gap-1 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isAdding ? (
-              <Loader2 className="animate-spin" size={14} />
+              <Loader2 className="animate-spin text-brand" size={14} />
             ) : (
-              <Plus size={14} strokeWidth={3} />
+              <span className="text-xl leading-none mr-1">+</span> 
             )}
-            {isAdding ? "Adding..." : "Add"}
+            {isAdding ? "Adding" : "Add"}
           </button>
         </div>
-      </div>
-      <div className="w-28 h-28 rounded-2xl overflow-hidden shrink-0 shadow-lg rotate-3 group-hover:rotate-0 transition-transform bg-slate-100">
-        <img
-          src={image}
-          className="w-full h-full object-cover p-1 rounded-2xl"
-          alt={name}
-        />
       </div>
     </div>
   );

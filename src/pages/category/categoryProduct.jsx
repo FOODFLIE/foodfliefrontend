@@ -2,30 +2,33 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link, useLocation } from "react-router-dom";
 import Navbar from "../../components/navbar";
 import ProductCard from "../../components/productCard";
-import { CATEGORIES, RESTAURANTS } from "../../data";
-import { ChevronRight, Filter, Loader2 } from "lucide-react";
 import { getProductsByCategory } from "../../services/productService";
+import { fetchCategories } from "../../services/categoryServices";
+import { ChevronRight, Filter, Loader2, Zap } from "lucide-react";
 import SEO from "../../components/common/seo";
 
 const CategoryProduct = () => {
   const { id } = useParams();
   const location = useLocation();
   const categoryName = location.state?.categoryName;
-  const category = CATEGORIES.find((c) => c.id === parseInt(id));
-
+  const [realCategory, setRealCategory] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchRestaurantsForCategory = async () => {
+    const fetchCategoryAndRestaurants = async () => {
       if (!id) return;
       try {
         setLoading(true);
-        const responseData = await getProductsByCategory(id);
 
-        // Extract the restaurant array from potentially nested data
+        // Always fetch categories to get metadata (time, type)
+        const cats = await fetchCategories();
+        const cat = cats.find((c) => String(c.id) === String(id));
+        if (cat) setRealCategory(cat);
+
+        const responseData = await getProductsByCategory(id);
         const restaurantList = Array.isArray(responseData)
           ? responseData
           : responseData?.data || [];
@@ -33,17 +36,17 @@ const CategoryProduct = () => {
         setRestaurants(restaurantList);
         setError(null);
       } catch (err) {
-        console.error("Failed to fetch products for category:", err);
-        setError("Failed to load restaurants. Please try again later.");
+        console.error("Failed to fetch category data:", err);
+        setError("Failed to load category content. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchRestaurantsForCategory();
-  }, [id]);
+    fetchCategoryAndRestaurants();
+  }, [id, categoryName]);
 
-  if (!category && !categoryName)
+  if (!loading && !categoryName && !realCategory)
     return (
       <div className="p-20 text-center font-bold text-slate-800">
         Category not found
@@ -52,7 +55,9 @@ const CategoryProduct = () => {
 
   return (
     <div className="bg-white min-h-screen pb-20">
-   <SEO title={`${categoryName || category?.title || "Food"} | FoodFlie`} />
+      <SEO
+        title={`${categoryName || realCategory?.name || "Food"} | FoodFlie`}
+      />
       <main className="responsive-container py-6">
         {/* Breadcrumbs */}
         <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-6">
@@ -61,15 +66,26 @@ const CategoryProduct = () => {
           </Link>
           <ChevronRight size={10} />
           <span className="text-slate-600 capitalize">
-            {categoryName || category?.title || "Category"}
+            {categoryName || realCategory?.name || "Category"}
           </span>
         </div>
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl md:text-4xl font-black text-slate-800 tracking-tighter font-poppins capitalize">
-            {categoryName || category?.title || "Category"}
-          </h1>
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+          <div>
+            <h1 className="text-2xl md:text-5xl font-black text-slate-800 tracking-tighter font-display capitalize mb-2">
+              {categoryName || realCategory?.name || "Category"}
+            </h1>
+            {(realCategory?.delivery_type === "fast" ||
+              realCategory?.delivery_time) && (
+              <div className="flex items-center gap-2">
+                <span className="bg-brand text-white text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 shadow-sm uppercase tracking-wider">
+                  <Zap size={10} fill="currentColor" />{" "}
+                  {realCategory?.delivery_time || 13} MINS DELIVERY
+                </span>
+              </div>
+            )}
+          </div>
           <div className="flex items-center gap-4">
             <button className="flex items-center gap-2 px-4 py-2 bg-brand-grey rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-200 transition-colors">
               <Filter size={14} /> Filter
@@ -118,7 +134,8 @@ const CategoryProduct = () => {
         ) : (
           <div className="text-center py-20 text-slate-400 font-bold">
             No restaurants currently serving{" "}
-            {categoryName || category?.title || "this category"} in your area.
+            {categoryName || realCategory?.name || "this category"} in your
+            area.
           </div>
         )}
       </main>
