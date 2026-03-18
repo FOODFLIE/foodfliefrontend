@@ -24,6 +24,7 @@ import { Toaster } from "react-hot-toast";
 import Preloader from "./components/preloader";
 import { CartProvider } from "./context/cartContext";
 import ProtectedRoute from "./components/common/protectedRoute";
+import ScrollToTop from "./components/common/scrollToTop";
 import { usePageTracking } from "./hooks/usePageTracking";
 
 const App = () => {
@@ -55,6 +56,7 @@ const App = () => {
         <CartProvider>
           {loading && <Preloader onFinish={handleLoadingFinish} />}
           <Toaster position="top-center" reverseOrder={false} />
+          <ScrollToTop />
           <div
             className={`min-h-screen transition-opacity duration-700 ${loading ? "opacity-0" : "opacity-100"}`}
           >
