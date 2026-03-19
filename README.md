@@ -48,11 +48,6 @@ Twilio is used in this project for:
 
 This ensures secure authentication and better user communication.
 
-## 📎 Links
-
-* GitHub Repository: (your repo link here)
-* Live App: (if available)
-* LinkedIn: (optional)
 
 ---
 
