@@ -95,6 +95,9 @@ const Cart = () => {
       const redirectUrl = response?.redirect_url;
       const orderId = response?.order_id;
 
+      // Clear cart after successful order
+      await refreshCartCount();
+
       setTimeout(() => {
         if (redirectUrl) {
           try {

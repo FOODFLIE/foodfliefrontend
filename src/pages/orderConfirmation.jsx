@@ -9,15 +9,20 @@ import {
   Store,
 } from "lucide-react";
 import { getOrderById } from "../services/orderService";
+import { useCart } from "../context/cartContext";
 import SEO from "../components/common/seo";
 
 const OrderConfirmation = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { refreshCartCount } = useCart();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Refresh cart count when order confirmation loads
+    refreshCartCount();
+    
     if (id) {
       getOrderById(id)
         .then(setOrder)
@@ -26,7 +31,7 @@ const OrderConfirmation = () => {
     } else {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, refreshCartCount]);
 
   if (loading) {
     return (
