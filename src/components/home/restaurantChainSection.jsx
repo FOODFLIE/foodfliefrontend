@@ -29,6 +29,7 @@ const RestaurantChainSection = ({ title }) => {
 
         // Handle various response structures
         const storesList = Array.isArray(data) ? data : data?.data || [];
+        console.log("Fetched stores for chain section:", storesList); 
 
         // Map API data to component structure
         const mappedStores = storesList
@@ -37,14 +38,14 @@ const RestaurantChainSection = ({ title }) => {
             name: item.store_name || item.name,
             location: item.area || item.address || "Local",
             rating: item.rating || 4.2 ,
-            time: item.time || "25-30 mins",
+            time: item.time || "13 mins",
             cuisine: item.cuisine || "Indian, Fast Food",
             image:
               item.image ||
               "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop",
           }))
           .slice(0, 10);
-
+console.log("Mapped stores for chain section:", mappedStores);
         setRestaurants(mappedStores);
       } catch (error) {
         console.error("Failed to fetch stores for chain section:", error);

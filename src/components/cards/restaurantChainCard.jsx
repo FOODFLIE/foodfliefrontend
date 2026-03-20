@@ -54,8 +54,15 @@ const RestaurantChainCard = ({
                   <Star size={9} fill="currentColor" strokeWidth={0} />
                   <span className="text-[9px] font-bold">{rating}</span>
              </div>
+             
              <span className="text-[10px] font-bold text-slate-600">•</span>
              <span className="text-[10px] sm:text-xs font-black text-slate-900">{time}</span>
+             {location && (
+               <>
+                 <span className="text-[10px] font-bold text-slate-600">•</span>
+                 <span className="text-[10px] sm:text-xs font-medium text-slate-600 truncate">{location}</span>
+               </>
+             )}
         </div>
         
         <p className="text-[10px] sm:text-xs font-medium text-slate-500 truncate">

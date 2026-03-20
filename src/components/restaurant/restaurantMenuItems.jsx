@@ -10,16 +10,19 @@ const RestaurantMenuItems = ({
   addingToCart,
   onAddToCart,
 }) => {
+  console.log("Menu items received in RestaurantMenuItems component:", menuItems);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredItems = menuItems.filter((item) => {
-    const matchesCategory =
-      selectedCategory === "All" || item.resolvedCategoryId === selectedCategory;
-    const matchesSearch = item.name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const filteredItems = menuItems
+    .filter((item) => {
+      const matchesCategory =
+        selectedCategory === "All" || item.resolvedCategoryId === selectedCategory;
+      const matchesSearch = item.name
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase());
+      return matchesCategory && matchesSearch;
+    })
+    .sort((a, b) => (b.rating || 0) - (a.rating || 0));
 
   return (
     <div className="lg:col-span-9 space-y-8 md:space-y-12">
