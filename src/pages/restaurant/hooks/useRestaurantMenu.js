@@ -4,6 +4,7 @@ import { fetchCategories } from "../../../services/categoryServices";
 import { addToCart as apiAddToCart } from "../../../services/cartService";
 import { useCart } from "../../../context/cartContext";
 import { useAuth } from "../../../context/authContext";
+import { trackAddToCart } from "../../../utils/metaPixel";
 
 export const useRestaurantMenu = (id, initialRestaurant = null) => {
   const [restaurantData, setRestaurantData] = useState(initialRestaurant);
@@ -129,6 +130,9 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
         const partnerId = restaurantData?.id || item.partner_id || null;
         addToGuestCart(item.sku, item.name, item.price, 1, String(partnerId));
       }
+      
+      // Track AddToCart event with Meta Pixel
+      trackAddToCart(item, 1);
     } catch (err) {
       console.error("Failed to add to cart:", err);
     } finally {

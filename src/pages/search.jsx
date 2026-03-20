@@ -15,6 +15,7 @@ import { searchProductsAndPartners } from "../services/productService";
 import ProductCard from "../components/productCard";
 import { CATEGORIES } from "../data";
 import SEO from "../components/common/seo";
+import { trackSearch } from "../utils/metaPixel";
 
 const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -73,6 +74,9 @@ const Search = () => {
       setError(null);
       const data = await searchProductsAndPartners(searchQuery);
       setResults(data);
+      
+      // Track search event with Meta Pixel
+      trackSearch(searchQuery);
     } catch (err) {
       console.error("Search error:", err);
       setError("Something went wrong while searching. Please try again.");
