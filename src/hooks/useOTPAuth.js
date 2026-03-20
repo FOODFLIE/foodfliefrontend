@@ -41,12 +41,24 @@ export const useOTPAuth = (onSuccess) => {
 
     try {
       const fullPhone = getFullPhone();
-      if (isLogin) {
-        await sendLoginOTP(fullPhone);
-      } else {
-        await sendRegisterOTP(fullPhone, formData.name, formData.email);
-      }
+      let response;
+     if (isLogin) {
+      response = await sendLoginOTP(fullPhone);
+    } else {
+      response = await sendRegisterOTP(
+        fullPhone,
+        formData.name,
+        formData.email
+      );
+    }
+    console.log("OTP Response:", response);
+        // 🔥 NEW LOGIC: check if backend already returned token
+    if (response?.token && response?.customer) {
+      onSuccess(response.customer, response.token, isLogin);
+    } else {
+      // fallback to OTP step
       setStep("verify");
+    }
     } catch (err) {
       setError(err.message || "Failed to connect to the server.");
     } finally {
