@@ -26,7 +26,7 @@ const OrderDetail = () => {
     const fetchOrder = async () => {
       try {
         const data = await getOrderById(id);
-        console.log("1", data);
+       
         setOrder(data);
       } catch (error) {
         console.error("Error fetching order details:", error);
@@ -131,7 +131,7 @@ const OrderDetail = () => {
               <CheckCircle2 size={24} className="text-green-500" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-slate-900 capitalize">
+              <h2 className="text-lg font-black text-slate-900 capitalize">
                 {order.status || "Delivered"}
               </h2>
             </div>
@@ -142,7 +142,7 @@ const OrderDetail = () => {
                 Arrived in
               </span>
               <div className="bg-brand-muted text-brand px-3 py-1 rounded-lg text-xs font-black italic mt-1">
-                ⚡ +14 MINS
+                ⚡ +13 MINS
               </div>
             </div>
           </div>
@@ -151,7 +151,7 @@ const OrderDetail = () => {
         {/* Items Section */}
         <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
           <div className="p-6 border-b border-slate-50">
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">
+            <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">
               {order.items?.length || 0}{" "}
               {order.items?.length === 1 ? "item" : "items"} in order
             </h3>
@@ -159,15 +159,15 @@ const OrderDetail = () => {
           <div className="divide-y divide-slate-50">
             {order.items?.map((item, idx) => (
               <div key={idx} className="p-6 flex gap-4 group">
-                <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-100 shrink-0 group-hover:scale-105 transition-transform duration-300">
+                {/* <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-100 shrink-0 group-hover:scale-105 transition-transform duration-300">
                   <img
                     src={item.item_image || "/placeholder-food.png"}
                     alt={item.item_name}
                     className="w-full h-full object-cover"
                   />
-                </div>
+                </div> */}
                 <div className="flex-1 min-w-0 py-1">
-                  <h4 className="text-sm font-bold text-slate-900 leading-tight">
+                  <h4 className="text-xs font-bold text-slate-900 leading-tight">
                     {item.item_name}
                   </h4>
                   <p className="text-xs text-slate-400 mt-1 capitalize">
@@ -189,7 +189,7 @@ const OrderDetail = () => {
         <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
           <div className="p-6 border-b border-slate-50 flex items-center gap-2">
             <FileText size={18} className="text-slate-400" />
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">
+            <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">
               Bill Summary
             </h3>
           </div>
@@ -241,7 +241,7 @@ const OrderDetail = () => {
         {/* Order Details Grid */}
         <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
           <div className="p-6 border-b border-slate-50">
-            <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">
+            <h3 className="text-xs font-black text-slate-900 uppercase tracking-widest">
               Order Details
             </h3>
           </div>

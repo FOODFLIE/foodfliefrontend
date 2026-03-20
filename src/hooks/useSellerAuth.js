@@ -16,7 +16,7 @@ export const useSellerAuth = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
-  const { login } = useAuth();
+  const { partnerLogin } = useAuth();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -105,7 +105,7 @@ export const useSellerAuth = () => {
       // Check if existing user (token present) or new user (isNewUser: true)
       if (response.token && response.seller) {
         // Existing seller - login immediately
-        login(response.seller, response.token);
+        partnerLogin(response.seller, response.token);
         navigate("/partner/dashboard"); // Redirect to dashboard
       } else if (response.isNewUser) {
         // New seller - proceed to registration
@@ -136,7 +136,7 @@ export const useSellerAuth = () => {
 
       const response = await registerSeller(payload);
       if (response.token && response.seller) {
-        login(response.seller, response.token);
+        partnerLogin(response.seller, response.token);
         setSuccess(true); // Show success message
         setTimeout(() => {
           navigate("/partner/dashboard");

@@ -40,7 +40,7 @@ const BillSummary = ({
           </span>
         </div>
 
-        <div className="flex justify-between items-center text-[15px] md:text-lg">
+        {/* <div className="flex justify-between items-center text-[15px] md:text-lg">
           <span className="text-slate-500 font-medium flex items-center gap-2">
             Platform Fee
             <span className="text-[10px] md:text-[0.65rem] bg-slate-100 border border-slate-200 text-slate-500 px-1.5 py-0.5 rounded flex items-center justify-center font-bold">
@@ -50,7 +50,7 @@ const BillSummary = ({
           <span className="font-bold text-slate-800">
             ₹{handlingFee.toFixed(2)}
           </span>
-        </div>
+        </div> */}
 
         <div className="w-full h-px bg-slate-100 my-4 md:my-6"></div>
 

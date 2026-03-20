@@ -85,7 +85,7 @@ const Profile = () => {
                     {user?.name?.charAt(0) || user?.phone?.charAt(0) || "U"}
                   </span>
                 </div>
-                <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+                <h1 className="text-xl md:text-3xl font-black text-slate-900 tracking-tight">
                   {user?.name || "Food Flie User"}
                 </h1>
                 <p className="text-slate-500 font-bold text-sm tracking-wide mt-1">
@@ -101,7 +101,7 @@ const Profile = () => {
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                         Member ID
                       </p>
-                      <p className="text-sm font-bold text-slate-700">
+                      <p className="text-xs font-bold text-slate-700">
                         {user?.id
                           ? `#FF-${user.id.toString().padStart(4, "0")}`
                           : "Guest User"}
@@ -235,7 +235,7 @@ const Profile = () => {
             {/* Recent Orders Section */}
             <div className="space-y-6">
               <div className="flex items-center justify-between px-2">
-                <h2 className="text-xl font-black text-slate-900 tracking-tight italic">
+                <h2 className="text-lg md:text-xl font-black text-slate-900 tracking-tight italic">
                   Recent Orders
                 </h2>
                 <button

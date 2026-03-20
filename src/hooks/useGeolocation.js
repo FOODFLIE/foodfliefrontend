@@ -40,7 +40,6 @@ export const useGeolocation = () => {
       setLoading(false);
 
       // Print to console as requested
-      console.log(`📍 Location Captured: Lat ${latitude}, Lng ${longitude}`);
     };
 
     const handleError = (error) => {

@@ -15,10 +15,10 @@ export const partnerApiClient = axios.create({
 // Request Interceptor
 partnerApiClient.interceptors.request.use(
   (config) => {
-    // Attempting to fetch a partner-specific token if there's a distinction
-    const token = localStorage.getItem("token"); 
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+    // Use partner-specific token
+    const partnerToken = localStorage.getItem("partnerToken"); 
+    if (partnerToken) {
+      config.headers.Authorization = `Bearer ${partnerToken}`;
     }
     return config;
   },
@@ -41,7 +41,8 @@ partnerApiClient.interceptors.response.use(
     }
 
     if (error.response?.status === 401) {
-      localStorage.removeItem("token");
+      localStorage.removeItem("partnerToken");
+      localStorage.removeItem("partner");
       // Handle partner logout event here if needed
     }
 

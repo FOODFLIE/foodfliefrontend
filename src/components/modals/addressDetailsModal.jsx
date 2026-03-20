@@ -19,12 +19,6 @@ const validators = {
     if (value.trim().length < 2) return "Too short (min 2 characters)";
     return "";
   },
-  pincode: (value) => {
-    if (!value.trim()) return "Pincode is required";
-    if (!/^\d{6}$/.test(value.trim()))
-      return "Pincode must be exactly 6 digits";
-    return "";
-  },
   receiverName: (value) => {
     if (!value.trim()) return "Receiver name is required";
     if (value.trim().length < 2) return "Name too short (min 2 characters)";
@@ -57,7 +51,7 @@ const AddressDetailsModal = ({
     landmark: "",
     receiverName: "",
     receiverNumber: "",
-    pincode: "",
+   
   });
   const [errors, setErrors] = useState({});
   const [touched, setTouched] = useState({});
@@ -89,7 +83,7 @@ const AddressDetailsModal = ({
     const { name, value } = e.target;
 
     // For pincode & phone: only allow digits
-    if (name === "pincode" && value && !/^\d*$/.test(value)) return;
+   
     if (name === "receiverNumber" && value && !/^\d*$/.test(value)) return;
 
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -122,7 +116,6 @@ const AddressDetailsModal = ({
     setErrors(newErrors);
     setTouched({
       buildingName: true,
-      pincode: true,
       receiverName: true,
       receiverNumber: true,
     });
@@ -143,7 +136,7 @@ const AddressDetailsModal = ({
           formData.companyFloor ? `, ${formData.companyFloor}` : ""
         }${formData.landmark ? `, Near ${formData.landmark}` : ""}`,
         city: shortAddress || "Unknown",
-        pincode: formData.pincode,
+       
         latitude: coords?.lat || 0,
         longitude: coords?.lng || 0,
         address_type: addressCategory,
@@ -193,7 +186,7 @@ const AddressDetailsModal = ({
 
   const isFormValid =
     formData.buildingName.trim() &&
-    formData.pincode.trim() &&
+    
     formData.receiverName.trim() &&
     formData.receiverNumber.trim() &&
     Object.values(errors).every((e) => !e);
@@ -317,28 +310,7 @@ const AddressDetailsModal = ({
                 />
               </div>
 
-              <div>
-                <input
-                  type="text"
-                  name="pincode"
-                  inputMode="numeric"
-                  value={formData.pincode}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  placeholder="Pincode *"
-                  className={getFieldClasses("pincode")}
-                  aria-invalid={!!errors.pincode}
-                  maxLength={6}
-                />
-                {touched.pincode && errors.pincode && (
-                  <p
-                    className="text-red-500 text-[11px] font-medium mt-1 flex items-center gap-1"
-                    role="alert"
-                  >
-                    <AlertCircle size={12} /> {errors.pincode}
-                  </p>
-                )}
-              </div>
+     
             </div>
 
             {/* Receiver Details */}

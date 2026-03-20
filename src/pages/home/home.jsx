@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "../../components/navbar";
-import Banner from "../../components/Banner";
+import Banner from "../../components/banner";
 import CategorySection from "../../components/home/categorySection";
 import RestaurantChainSection from "../../components/home/restaurantChainSection";
 import Footer from "../../components/footer";
@@ -61,7 +61,7 @@ const Home = () => {
           <CategorySection />
 
           {/* Top Restaurant Chains */}
-          <RestaurantChainSection title="Top restaurant chains in Ongole" />
+          <RestaurantChainSection title="Most Ordered on FoodFlie 🔥" />
         </main>
       </div>
       <Footer />

@@ -123,13 +123,23 @@ const AuthModal = ({ isOpen, onClose }) => {
                     required
                     className="tracking-[0.5em] font-black"
                   />
-                  <button
-                    type="button"
-                    onClick={resetToSend}
-                    className="mt-2 text-xs font-bold text-brand hover:underline min-h-[44px] sm:min-h-0 flex items-center"
-                  >
-                    Edit Phone Number?
-                  </button>
+                  <div className="mt-2 flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={resetToSend}
+                      className="text-xs font-bold text-brand hover:underline min-h-[44px] sm:min-h-0 flex items-center"
+                    >
+                      Edit Phone Number?
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleSendOTP}
+                      disabled={loading}
+                      className="text-xs font-bold text-brand hover:underline min-h-[44px] sm:min-h-0 flex items-center disabled:opacity-50"
+                    >
+                      Resend OTP
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

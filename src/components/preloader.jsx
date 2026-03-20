@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Preloader.css";
+import "./preloader.css";
 import MainLogo from "../assets/Main_logo.png";
 
 const Preloader = ({ onFinish }) => {

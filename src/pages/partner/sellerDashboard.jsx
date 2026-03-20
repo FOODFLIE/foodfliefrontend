@@ -40,13 +40,13 @@ const SellerDashboard = () => {
   };
 
   return (
-    <div className="flex h-screen bg-slate-100 font-sans text-slate-900">
+    <div className="flex h-screen bg-slate-100 font-primary text-slate-900">
       <SEO title="Seller Dashboard" />
       {/* Sidebar - Dark Theme */}
       <aside className="w-20 lg:w-24 bg-[#171a29] text-white flex flex-col items-center py-6 fixed h-full z-30">
         {/* Brand/Logo */}
         <div className="mb-8 p-2">
-          <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center font-bold text-xl skew-x-[-10deg]">
+          <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center font-bold text-lg tracking-tighter skew-x-[-10deg]">
             F
           </div>
         </div>
@@ -123,7 +123,7 @@ const SellerDashboard = () => {
         {/* Header - Dark Bar */}
         <header className="bg-[#282c3f] text-white h-16 flex items-center justify-between px-6 shrink-0 z-20 shadow-md">
           <div className="flex items-center gap-6">
-            <h1 className="text-lg font-bold uppercase tracking-wide">
+            <h1 className="text-base font-bold uppercase tracking-wider">
               {location.pathname.includes("menu") ? "Menu" : "Manage Orders"}
             </h1>
             <div className="h-6 w-px bg-slate-600 mx-2"></div>
@@ -138,10 +138,10 @@ const SellerDashboard = () => {
                 ></div>
               </button>
               <div className="flex flex-col leading-tight">
-                <span className="font-bold text-sm">
+                <span className="font-bold text-[13px] tracking-tight">
                   {user?.store_name || "Sip N SliceD"}
                 </span>
-                <span className="text-[10px] text-slate-400">
+                <span className="text-[10px] text-slate-400 font-medium">
                   {user?.address ||
                     "Kothapet & Dilsukhnagar, Gayatri nagar, Hyderabad"}
                   {/* | Closes at 12:00 am, Tomorrow */}
@@ -191,7 +191,7 @@ const NavItem = ({ icon: Icon, label, to, active, badge }) => (
       )}
     </div>
     <span
-      className={`text-[10px] font-bold uppercase tracking-wide ${active ? "text-white" : "text-slate-400"}`}
+      className={`text-[9px] font-bold uppercase tracking-widest ${active ? "text-white" : "text-slate-400"}`}
     >
       {label}
     </span>

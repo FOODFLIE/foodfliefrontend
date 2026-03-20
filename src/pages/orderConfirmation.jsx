@@ -65,7 +65,7 @@ const OrderConfirmation = () => {
               strokeWidth={3}
             />
           </div>
-          <h1 className="text-2xl sm:text-4xl font-black text-slate-900 mb-2">
+          <h1 className="text-xl sm:text-3xl font-black text-slate-900 mb-2">
             Order Confirmed!
           </h1>
           <p className="text-sm sm:text-base text-slate-600 font-medium">
@@ -81,7 +81,7 @@ const OrderConfirmation = () => {
             </div>
             <div>
               <p className="text-xs text-slate-500 font-bold">Restaurant</p>
-              <p className="text-base font-black text-slate-900">
+              <p className="text-sm font-black text-slate-900">
                 {order.partner_name || "Restaurant"}
               </p>
             </div>
@@ -106,7 +106,7 @@ const OrderConfirmation = () => {
                 Total Amount
               </span>
               <span className="text-lg font-black text-green-600">
-                ₹{parseFloat(order.total_amount || 0).toFixed(2)}
+                ₹{parseFloat(order.final_amount || 0).toFixed(2)}
               </span>
             </div>
             <div className="flex justify-between items-center">
@@ -178,7 +178,7 @@ const OrderConfirmation = () => {
 
         <div className="grid grid-cols-2 gap-3 mb-4">
           <button
-            onClick={() => navigate("/profile/orders")}
+            onClick={() => navigate(`/profile/order/${order.id || id}`)}
             className="bg-brand text-white py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base hover:bg-brand-dark transition-colors shadow-lg"
           >
             Track Order

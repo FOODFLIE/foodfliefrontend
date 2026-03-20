@@ -16,6 +16,7 @@ import {
 import { placeOrder } from "../services/orderService";
 import { useCartLocation } from "../context/cartLocationContext";
 import { useCart } from "../context/cartContext";
+import { useAuth } from "../context/authContext";
 import EmptyCart from "../components/emptyCart";
 import LoadingCart from "../components/loadingCart";
 import CartItem from "../components/cartItem";
@@ -25,6 +26,7 @@ import SEO from "../components/common/seo";
 
 const Cart = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const {
     address,
     addressDetails,
@@ -32,15 +34,13 @@ const Cart = () => {
     coords,
   } = useCartLocation();
   const { refreshCartCount } = useCart();
-  console.log("1", addressDetails);
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [cookingInstructions, setCookingInstructions] = useState("");
 
-console.log("cookingInstructions", cookingInstructions);
-  console.log("2", addressDetails); 
+
 
   useEffect(() => {
     fetchCart();
@@ -86,6 +86,9 @@ console.log("cookingInstructions", cookingInstructions);
     try {
       const orderPayload = {
         ...addressDetails,
+        customer_phone: user?.phone || user?.mobile || null,
+        latitude: coords?.latitude || null,
+        longitude: coords?.longitude || null,
       };
       
       const response = await placeOrder(orderPayload, "COD", cookingInstructions.trim() || null);
@@ -129,8 +132,8 @@ console.log("cookingInstructions", cookingInstructions);
   // Calculate taxes/fees nicely
   const subtotal = parseFloat(cart.subtotal) || 0;
   const deliveryFee = parseFloat(cart.delivery_fee) || 0;
-  const handlingFee = 5.0; // Mock fixed handling/platform fee
-  const totalAmount = subtotal + deliveryFee + handlingFee;
+  // const handlingFee = 5.0; // Mock fixed handling/platform fee
+  const totalAmount = subtotal + deliveryFee;
 
   return (
     <>
@@ -147,10 +150,10 @@ console.log("cookingInstructions", cookingInstructions);
             {/* Header Title Layer */}
             <div className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
-                <h1 className="text-3xl md:text-5xl leading-none font-bold text-slate-900 tracking-tighter mb-2 md:mb-3">
+                <h1 className="text-2xl md:text-4xl leading-none font-bold text-slate-900 tracking-tighter mb-2 md:mb-3">
                   Review Cart
                 </h1>
-                <div className="flex items-center gap-3 text-slate-500 font-medium text-base md:text-lg">
+                <div className="flex items-center gap-3 text-slate-500 font-medium text-sm md:text-base">
                   <span className="bg-white px-3 py-1 rounded-full border border-slate-200/60 shadow-sm text-slate-700 font-semibold text-xs md:text-sm">
                     {cart.items.length} item{cart.items.length !== 1 ? "s" : ""}
                   </span>
@@ -189,7 +192,7 @@ console.log("cookingInstructions", cookingInstructions);
                         </div>
                         <div className="overflow-hidden">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <h3 className="text-lg md:text-xl font-black text-slate-800 leading-tight">
+                            <h3 className="text-base md:text-lg font-black text-slate-800 leading-tight">
                               Delivery Address
                             </h3>
                             {addressDetails?.category && (
@@ -327,7 +330,7 @@ console.log("cookingInstructions", cookingInstructions);
                 <BillSummary
                   subtotal={subtotal}
                   deliveryFee={deliveryFee}
-                  handlingFee={handlingFee}
+                  // handlingFee={handlingFee}
                   totalAmount={totalAmount}
                   onOrderComplete={handleOrderComplete}
                   isAddressSelected={!!address}

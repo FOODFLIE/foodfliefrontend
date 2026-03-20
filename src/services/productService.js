@@ -34,13 +34,13 @@ export const getProductBySku = async (sku) => {
   }
 };
 export const getAllStores = async (userLat, userLng) => {
-  console.log("Fetching stores with userLat:", userLat, "userLng:", userLng);
+ 
   try {
     const response = await apiClient.post("/api/customer-product/stores", {
       userLat,
       userLng,
     });
-    console.log("1111", response.data);
+ 
     return response.data;
   } catch (error) {
     console.error("Error fetching all stores:", error);

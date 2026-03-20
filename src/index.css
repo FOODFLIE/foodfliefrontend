@@ -1,8 +1,9 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
 
 @theme {
   --font-primary: "Inter", sans-serif;
-  --font-display: "Inter", sans-serif;
+  --font-display: "Plus Jakarta Sans", sans-serif;
   --font-inter: "Inter", sans-serif;
   --font-poppins: "Poppins", sans-serif;
 
@@ -14,12 +15,16 @@
 }
 
 @layer base {
+  html {
+    font-size: 15px; /* Premium, professional base size */
+  }
+
   body {
-    @apply bg-white text-slate-900 font-primary font-normal leading-relaxed;
+    @apply bg-white text-slate-800 font-primary font-normal leading-relaxed;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    letter-spacing: -0.022em;
+    letter-spacing: -0.015em;
   }
 
   h1,
@@ -28,12 +33,12 @@
   h4,
   h5,
   h6 {
-    @apply font-display font-semibold tracking-tight text-slate-900;
-    line-height: 1.2;
+    @apply font-display font-bold tracking-tight text-slate-900;
+    line-height: 1.1;
   }
 
   h1 {
-    @apply font-black tracking-tighter;
+    @apply font-extrabold tracking-tighter;
   }
 }
 
