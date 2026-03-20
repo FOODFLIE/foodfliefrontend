@@ -204,7 +204,7 @@ export const LocationProvider = ({ children, isCartContext = false }) => {
           setTimeout(() => {
             navigator.geolocation.getCurrentPosition(
               (position) => {
-                console.log('Location granted:', position.coords);
+               
                 const { latitude, longitude } = position.coords;
                 
                 // Update location with fetched coordinates
