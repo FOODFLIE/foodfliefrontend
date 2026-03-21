@@ -50,7 +50,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center sm:p-4 bg-black/40 backdrop-blur-sm animate-in fade-in duration-300">
-      <div className="bg-white w-full sm:max-w-md max-h-[95vh] sm:max-h-[90vh] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 flex flex-col">
+      <div className="bg-white w-full sm:max-w-md max-h-[90vh] sm:max-h-[90vh] rounded-t-3xl sm:rounded-3xl shadow-2xl overflow-hidden relative animate-in slide-in-from-bottom sm:zoom-in-95 duration-300 flex flex-col">
         {/* Close Button */}
         <button
           onClick={handleClose}
@@ -60,7 +60,7 @@ const AuthModal = ({ isOpen, onClose }) => {
         </button>
 
         {/* Scrollable Content */}
-        <div className="flex-1 overflow-y-auto px-6 sm:px-8 pt-12 sm:pt-10 pb-4 sm:pb-8">
+        <div className="flex-1 overflow-y-auto px-6 sm:px-8 pt-12 sm:pt-10 pb-6 sm:pb-8">
           {/* Header */}
           <AuthModalHeader
             isLogin={isLogin}
@@ -170,9 +170,6 @@ const AuthModal = ({ isOpen, onClose }) => {
               )}
             </button>
           </form>
-
-          {/* Extra spacing for sticky footer on mobile */}
-          <div className="h-20 sm:h-0" />
         </div>
 
         {/* Sticky Footer */}
