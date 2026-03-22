@@ -79,6 +79,7 @@ const RestaurantMenuItems = ({
               }
               onAdd={() => onAddToCart(item)}
               isAdding={addingToCart[item.sku]}
+              is_veg={item.is_veg}
             />
           ))}
         </div>

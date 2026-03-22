@@ -1,13 +1,20 @@
 import React from "react";
 import { Plus, Loader2 } from "lucide-react";
 
-const MenuItem = ({ name, description, price, image, onAdd, isAdding }) => {
+const MenuItem = ({ name, description, price, image, onAdd, isAdding, is_veg }) => {
   return (
     <div className="flex gap-4 sm:gap-6 p-4 sm:p-6 rounded-3xl border border-slate-50 bg-white hover:border-brand/20 transition-all group shadow-sm hover:shadow-xl w-full max-w-full overflow-hidden">
       <div className="flex-1 space-y-2 sm:space-y-3 min-w-0 flex flex-col">
-        <h4 className="font-black text-slate-800 text-base sm:text-lg tracking-tight group-hover:text-brand transition-colors font-poppins truncate pb-1">
-          {name}
-        </h4>
+        <div className="flex items-start gap-2">
+          {is_veg !== undefined && is_veg !== null && (
+            <div className={`flex-shrink-0 w-3.5 h-3.5 mt-1 sm:mt-1.5 border ${is_veg ? 'border-green-500' : 'border-red-500'} flex items-center justify-center rounded-sm`}>
+              <div className={`w-1.5 h-1.5 ${is_veg ? 'bg-green-500' : 'bg-red-500'} rounded-full`}></div>
+            </div>
+          )}
+          <h4 className="font-black text-slate-800 text-base sm:text-lg tracking-tight group-hover:text-brand transition-colors font-poppins truncate pb-1">
+            {name}
+          </h4>
+        </div>
         <p className="text-[10px] sm:text-xs text-slate-400 font-medium leading-relaxed italic line-clamp-2">
           {description}
         </p>

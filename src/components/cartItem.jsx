@@ -7,9 +7,11 @@ const CartItem = ({ item, onUpdateQuantity, onRemove }) => {
       <div className="flex flex-col sm:flex-row items-start justify-between gap-4 md:gap-6">
         <div className="flex-1 w-full">
           <div className="flex items-start gap-3 mb-1.5 md:mb-2 text-sm md:text-base">
-            <div className="flex-shrink-0 w-3.5 h-3.5 mt-0.5 md:w-4 md:h-4 md:mt-1 border border-green-500 flex items-center justify-center rounded-sm">
-              <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-            </div>
+            {item.is_veg !== undefined && item.is_veg !== null && (
+              <div className={`flex-shrink-0 w-3.5 h-3.5 mt-0.5 md:w-4 md:h-4 md:mt-1 border ${item.is_veg ? 'border-green-500' : 'border-red-500'} flex items-center justify-center rounded-sm`}>
+                <div className={`w-1.5 h-1.5 ${item.is_veg ? 'bg-green-500' : 'bg-red-500'} rounded-full`}></div>
+              </div>
+            )}
             <div>
               <h3 className="text-base md:text-[1.25rem] leading-tight font-black text-slate-800 group-hover:text-brand transition-colors">
                 {item.product_name}
