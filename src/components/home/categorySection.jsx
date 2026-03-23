@@ -2,20 +2,23 @@ import React, { useState, useEffect } from "react";
 import { ChevronRight, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getCategories } from "../../services/categoryServices";
+import { useUserLocation } from "../../context/locationContext";
 
 const CategorySection = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
-
   const [loading, setLoading] = useState(true);
-
+  const {coords} = useUserLocation();
   useEffect(() => {
     fetchCategories();
   }, []);
 
   const fetchCategories = async () => {
+    if(!coords.latitude || !coords.longitude) {
+      return;
+    }
     try {
-      const data = await getCategories();
+      const data = await getCategories(coords.latitude, coords.longitude  );
 
       setCategories(data);
     } catch (error) {

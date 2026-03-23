@@ -29,6 +29,7 @@ const RestaurantChainSection = ({ title }) => {
 
         // Handle various response structures
         const storesList = Array.isArray(data) ? data : data?.data || [];
+    
 
         // Map API data to component structure
         const mappedStores = storesList
@@ -37,7 +38,7 @@ const RestaurantChainSection = ({ title }) => {
             name: item.store_name || item.name,
             location: item.area || item.address || "Local",
             rating: item.rating || 4.2 ,
-            time: item.time || "25-30 mins",
+            time: item.time || "13 mins",
             cuisine: item.cuisine || "Indian, Fast Food",
             image:
               item.image ||

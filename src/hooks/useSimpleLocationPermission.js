@@ -21,7 +21,7 @@ export const useSimpleLocationPermission = () => {
         // Ask for location permission and fetch location if granted
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            console.log('Location granted:', position.coords);
+           
             const { latitude, longitude } = position.coords;
             
             // Update location context with the fetched coordinates

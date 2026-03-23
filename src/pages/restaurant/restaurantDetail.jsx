@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import CartFooter from "../../components/cartFooter";
 import SEO from "../../components/common/seo";
@@ -10,6 +10,7 @@ import {
   generateBreadcrumbSchema,
   generateFoodEstablishmentSchema,
 } from "../../utils/seoSchemas";
+import { trackViewContent } from "../../utils/metaPixel";
 
 // Custom Hooks & Sub-components
 import { useRestaurantMenu } from "./hooks/useRestaurantMenu";
@@ -33,6 +34,17 @@ const RestaurantDetail = () => {
   } = useRestaurantMenu(id, localRestaurant);
 
   const [selectedCategory, setSelectedCategory] = useState("All");
+
+  // Track ViewContent when restaurant page loads
+  useEffect(() => {
+    if (restaurantData && !loading) {
+      trackViewContent({
+        name: restaurantData.name,
+        id: id,
+        type: 'restaurant',
+      });
+    }
+  }, [restaurantData, loading, id]);
 
   if (!restaurantData && !loading)
     return (

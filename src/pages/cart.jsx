@@ -23,6 +23,7 @@ import CartItem from "../components/cartItem";
 import BillSummary from "../components/billSummary";
 import LocationModal from "../components/modals/locationModal";
 import SEO from "../components/common/seo";
+import { trackInitiateCheckout, trackPurchase } from "../utils/metaPixel";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -45,6 +46,16 @@ const Cart = () => {
   useEffect(() => {
     fetchCart();
   }, []);
+
+  // Track InitiateCheckout when cart loads
+  useEffect(() => {
+    if (cart && cart.items && cart.items.length > 0) {
+      trackInitiateCheckout({
+        totalAmount: parseFloat(cart.subtotal) + parseFloat(cart.delivery_fee || 0),
+        items: cart.items,
+      });
+    }
+  }, [cart]);
 
   const fetchCart = async () => {
     try {
@@ -94,6 +105,18 @@ const Cart = () => {
       const response = await placeOrder(orderPayload, "COD", cookingInstructions.trim() || null);
       const redirectUrl = response?.redirect_url;
       const orderId = response?.order_id;
+
+      // Track Purchase event with Meta Pixel
+      if (orderId) {
+        trackPurchase({
+          orderId: orderId,
+          totalAmount: totalAmount,
+          items: cart.items,
+        });
+      }
+
+      // Clear cart after successful order
+      await refreshCartCount();
 
       setTimeout(() => {
         if (redirectUrl) {

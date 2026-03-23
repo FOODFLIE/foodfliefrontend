@@ -69,7 +69,7 @@ const AboutUs = () => {
               <p className="text-xl text-slate-600 leading-relaxed mb-10 font-medium">
                 For years, I faced the same problems many people deal with every
                 day — high delivery charges, long waiting times, and food that
-                arrives late or cold. I spent a lot of money on food delivery,
+                arrives late. I spent a lot of money on food delivery,
                 and every time I felt the same frustration.
               </p>
 
