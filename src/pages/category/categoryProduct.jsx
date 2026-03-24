@@ -6,11 +6,14 @@ import { getProductsByCategory } from "../../services/productService";
 import { fetchCategories } from "../../services/categoryServices";
 import { ChevronRight, Filter, Loader2, Zap } from "lucide-react";
 import SEO from "../../components/common/seo";
+import { useUserLocation } from "../../context/locationContext";
+import NoStoresFound from "../../components/common/NoStoresFound";
 
 const CategoryProduct = () => {
   const { id } = useParams();
   const location = useLocation();
   const categoryName = location.state?.categoryName;
+  const { coords } = useUserLocation();
   const [realCategory, setRealCategory] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
 console.log("restaurants", restaurants);
@@ -44,7 +47,7 @@ console.log("restaurants", restaurants);
     };
 
     fetchCategoryAndRestaurants();
-  }, [id, categoryName]);
+  }, [id, categoryName, coords?.latitude, coords?.longitude]);
 
   if (!loading && !categoryName && !realCategory)
     return (
@@ -132,11 +135,10 @@ console.log("restaurants", restaurants);
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 text-slate-400 font-bold">
-            No restaurants currently serving{" "}
-            {categoryName || realCategory?.name || "this category"} in your
-            area.
-          </div>
+          <NoStoresFound 
+            title={`No ${categoryName || realCategory?.name || "Items"} Found`}
+            description={`We couldn't find any restaurants serving ${categoryName || realCategory?.name || "this category"} in your area. Try a different location.`}
+          />
         )}
       </main>
     </div>

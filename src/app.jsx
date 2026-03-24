@@ -19,7 +19,7 @@ import OrderDetail from "./pages/profile/orderDetail";
 import Addresses from "./pages/profile/addresses";
 import AboutUs from "./pages/legals/aboutUs";
 import ContactUs from "./pages/legals/contactUs";
-import Search from "./pages/search";
+import Search from "./pages/home/search";
 import { Toaster } from "react-hot-toast";
 import Preloader from "./components/preloader";
 import { CartProvider } from "./context/cartContext";
