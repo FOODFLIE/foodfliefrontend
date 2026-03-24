@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthModal from "./authModal";
 import LocationModal from "./modals/locationModal";
@@ -16,6 +16,17 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOpenLocationModal = () => {
+      setIsLocationModalOpen(true);
+    };
+
+    window.addEventListener("open-location-modal", handleOpenLocationModal);
+    return () => {
+      window.removeEventListener("open-location-modal", handleOpenLocationModal);
+    };
+  }, []);
 
   return (
     <>

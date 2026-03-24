@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import RestaurantChainCard from "../cards/restaurantChainCard";
 import { getAllStores } from "../../services/productService";
 import { useUserLocation } from "../../context/locationContext";
+import NoStoresFound from "../common/NoStoresFound";
 
 const RestaurantChainSection = ({ title }) => {
   const [restaurants, setRestaurants] = React.useState([]);
@@ -21,6 +22,7 @@ const RestaurantChainSection = ({ title }) => {
           coords.latitude,
           coords.longitude
         );
+        console.log("data", data);
 
         const storesList = Array.isArray(data) ? data : data?.data || [];
 
@@ -59,7 +61,7 @@ const RestaurantChainSection = ({ title }) => {
   if (loading) return null;
 
   if (restaurants.length === 0) {
-    return <p className="text-center py-6">No restaurants nearby</p>;
+    return <NoStoresFound compact title="No Restaurants Nearby" description="We couldn't find any restaurants serving your area. Try changing your location." />;
   }
 
   return (

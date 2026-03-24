@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getCategories } from "../../services/categoryServices";
 import { useUserLocation } from "../../context/locationContext";
 
+
 const CategorySection = () => {
   const navigate = useNavigate();
   const [categories, setCategories] = useState([]);
@@ -11,7 +12,7 @@ const CategorySection = () => {
   const {coords} = useUserLocation();
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [coords?.latitude, coords?.longitude]);
 
   const fetchCategories = async () => {
     if(!coords.latitude || !coords.longitude) {
