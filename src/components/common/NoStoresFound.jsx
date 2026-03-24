@@ -20,7 +20,7 @@ const NoStoresFound = ({
   };
 
   return (
-    <div className={`flex flex-col items-center justify-center ${compact ? 'py-6 px-2' : 'py-10 px-4'} text-center animate-fade-in max-w-xl mx-auto`}>
+    <div className={`flex flex-col items-center justify-center ${compact ? 'py-6 px-2' : 'py-10 px-4'} text-center animate-fade-in max-w-sm mx-auto`}>
       <div className={`relative ${compact ? 'mb-4' : 'mb-6'}`}>
         {/* Animated Background Rings */}
         <div className={`absolute inset-0 bg-brand/5 rounded-full ${compact ? 'scale-[1.8]' : 'scale-[2.2]'} animate-pulse-soft`}></div>
