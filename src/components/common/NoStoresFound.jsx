@@ -20,7 +20,8 @@ const NoStoresFound = ({
   };
 
   return (
-    <div className={`flex flex-col items-center justify-center ${compact ? 'py-6 px-2' : 'py-10 px-4'} text-center animate-fade-in max-w-xl mx-auto`}>
+    <div className={`flex flex-col items-center justify-center ${compact ? 'py-6 px-4' : 'py-10 px-4'} text-center animate-fade-in w-full`}>
+      <div className={`max-w-xl mx-auto w-full`}>
       <div className={`relative ${compact ? 'mb-4' : 'mb-6'}`}>
         {/* Animated Background Rings */}
         <div className={`absolute inset-0 bg-brand/5 rounded-full ${compact ? 'scale-[1.8]' : 'scale-[2.2]'} animate-pulse-soft`}></div>
@@ -66,7 +67,8 @@ const NoStoresFound = ({
       </div>
       
       {/* Decorative Blur Blobs */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-[500px] h-[500px] bg-brand/5 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 w-full max-w-[500px] h-[500px] bg-brand/5 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
+      </div>
     </div>
   );
 };
