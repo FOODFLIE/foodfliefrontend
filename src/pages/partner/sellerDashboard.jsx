@@ -1,26 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   ClipboardList,
-  TrendingUp,
   Utensils,
-  AlertCircle,
-  Star,
-  FileText,
-  DollarSign,
   HelpCircle,
-  Megaphone,
-  User,
   Power,
 } from "lucide-react";
 import { Outlet, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
+import { storeToggle } from "../../services/partnerStoreService";
 import SEO from "../../components/common/seo";
 
 const SellerDashboard = () => {
-  const { user, logout } = useAuth();
-  const [isOnline, setIsOnline] = useState(true);
+  const { partner, partnerLogout } = useAuth();
+  console.log("Authenticated Partner:", partner);
+  const [isOnline, setIsOnline] = useState(false);
+  const [isToggling, setIsToggling] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (partner?.is_active !== undefined) {
+      setIsOnline(partner.is_active);
+    }
+  }, [partner?.is_active]);
 
   // Highlight active link based on path
   const isActive = (path) => {
@@ -35,8 +37,32 @@ const SellerDashboard = () => {
   };
 
   const handleLogout = () => {
-    logout();
+    partnerLogout();
     navigate("/partner");
+  };
+
+  const handleToggleStore = async () => {
+    if (isToggling) return;
+    
+    const newStatus = !isOnline;
+    setIsToggling(true);
+    
+    try {
+      await storeToggle(newStatus);
+      setIsOnline(newStatus);
+      
+      // Update partner data in localStorage
+      if (partner) {
+        const updatedPartner = { ...partner, is_active: newStatus };
+        localStorage.setItem("partner", JSON.stringify(updatedPartner));
+      }
+    } catch (error) {
+      console.error("Failed to toggle store status:", error);
+      // Revert on error
+      setIsOnline(!newStatus);
+    } finally {
+      setIsToggling(false);
+    }
   };
 
   return (
@@ -60,41 +86,10 @@ const SellerDashboard = () => {
             active={isActive("")}
           />
           <NavItem
-            icon={TrendingUp}
-            label="GROWTH"
-            to="growth"
-            active={isActive("growth")}
-          />
-          <NavItem
             icon={Utensils}
             label="MENU"
             to="menu"
             active={isActive("menu")}
-          />
-          <NavItem
-            icon={AlertCircle}
-            label="COMPLAINTS"
-            to="complaints"
-            active={isActive("complaints")}
-            badge="0"
-          />
-          <NavItem
-            icon={Star}
-            label="RATINGS"
-            to="ratings"
-            active={isActive("ratings")}
-          />
-          <NavItem
-            icon={FileText}
-            label="REPORTS"
-            to="reports"
-            active={isActive("reports")}
-          />
-          <NavItem
-            icon={DollarSign}
-            label="FINANCE"
-            to="finance"
-            active={isActive("finance")}
           />
         </nav>
 
@@ -130,8 +125,9 @@ const SellerDashboard = () => {
             {/* Online Toggle */}
             <div className="flex items-center gap-3">
               <button
-                onClick={() => setIsOnline(!isOnline)}
-                className={`w-12 h-6 rounded-full flex items-center transition-colors duration-300 ${isOnline ? "bg-green-500" : "bg-slate-500"}`}
+                onClick={handleToggleStore}
+                disabled={isToggling}
+                className={`w-12 h-6 rounded-full flex items-center transition-colors duration-300 ${isOnline ? "bg-green-500" : "bg-slate-500"} ${isToggling ? "opacity-50 cursor-not-allowed" : ""}`}
               >
                 <div
                   className={`w-5 h-5 bg-white rounded-full shadow-sm transform transition-transform duration-300 ml-0.5 ${isOnline ? "translate-x-6" : "translate-x-0"}`}
@@ -139,12 +135,10 @@ const SellerDashboard = () => {
               </button>
               <div className="flex flex-col leading-tight">
                 <span className="font-bold text-[13px] tracking-tight">
-                  {user?.store_name || "Sip N SliceD"}
+                  {partner?.store_name || "Store Name"}
                 </span>
                 <span className="text-[10px] text-slate-400 font-medium">
-                  {user?.address ||
-                    "Kothapet & Dilsukhnagar, Gayatri nagar, Hyderabad"}
-                  {/* | Closes at 12:00 am, Tomorrow */}
+                  {partner?.address || "Address not available"}
                 </span>
               </div>
             </div>
@@ -153,12 +147,6 @@ const SellerDashboard = () => {
           <div className="flex items-center gap-4">
             <button className="bg-[#fc8019] hover:bg-[#e67312] text-white text-xs font-bold px-4 py-2 rounded shadow-sm transition-colors uppercase">
               FAQs
-            </button>
-            <button className="text-white hover:text-slate-300 transition-colors">
-              <Megaphone size={20} />
-            </button>
-            <button className="text-white hover:text-slate-300 transition-colors">
-              <User size={20} />
             </button>
           </div>
         </header>
