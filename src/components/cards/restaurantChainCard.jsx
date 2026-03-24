@@ -23,11 +23,11 @@ const RestaurantChainCard = ({
   return (
     <div
       onClick={handleClick}
-      className="relative min-w-[calc(50%-8px)] sm:min-w-[180px] cursor-pointer group snap-start"
+      className="relative min-w-[calc(50%-8px)] sm:min-w-[180px] cursor-pointer group snap-start transition-all duration-300 hover:-translate-y-1"
       style={{ opacity: is_active ? 1 : 0.5 }} // ✅ fade effect
     >
       {/* Image Container */}
-      <div className="relative h-36 sm:h-52 w-full rounded-xl sm:rounded-2xl overflow-hidden shadow-sm">
+      <div className="relative h-36 sm:h-52 w-full rounded-xl sm:rounded-2xl overflow-hidden shadow-md group-hover:shadow-xl transition-all duration-500">
         <img
           src={image}
           alt={name}

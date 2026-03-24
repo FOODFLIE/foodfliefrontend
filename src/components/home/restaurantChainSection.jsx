@@ -58,7 +58,22 @@ const RestaurantChainSection = ({ title }) => {
     }
   };
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <div className="py-4">
+        <div className="h-6 w-48 bg-slate-200 animate-pulse rounded-md mb-4 px-4 sm:px-0 ml-4 sm:ml-0"></div>
+        <div className="flex overflow-x-auto gap-4 px-4 scrollbar-hide">
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="min-w-[200px] sm:min-w-[280px] space-y-3">
+              <div className="h-36 sm:h-52 w-full bg-slate-200 animate-pulse rounded-xl sm:rounded-2xl"></div>
+              <div className="h-4 w-3/4 bg-slate-200 animate-pulse rounded"></div>
+              <div className="h-3 w-1/2 bg-slate-100 animate-pulse rounded"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   if (restaurants.length === 0) {
     return <NoStoresFound compact title="No Restaurants Nearby" description="We couldn't find any restaurants serving your area. Try changing your location." />;
