@@ -34,7 +34,7 @@ const CategorySection = () => {
   const handleCategoryClick = (id, name) => {
     navigate(`/category/${id}`, { state: { categoryName: name } });
   };
-  if(!loading && (!coords?.latitude || categories.length === 0)) {
+  if(!loading && (!coords?.latitude )) {
     return(
     <LocationFallback
     onSelectLocation={() => {
