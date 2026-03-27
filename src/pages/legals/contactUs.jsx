@@ -83,7 +83,7 @@ const ContactUs = () => {
                 For support, questions, or ideas.
               </p>
               <p className="text-lg font-semibold text-blue-600">
-                foodflie13@gmail.com
+                support@foodflie.com
               </p>
             </a>
 
@@ -96,7 +96,7 @@ const ContactUs = () => {
               <p className="text-slate-500 mb-4">
                 Direct line for urgent matters.
               </p>
-              <p className="text-lg font-semibold text-emerald-600">+91 9381972536</p>
+              <p className="text-lg font-semibold text-emerald-600">+91 8309180145</p>
             </div>
 
             <div className="grid grid-cols-2 gap-6">
