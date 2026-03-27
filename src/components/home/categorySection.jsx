@@ -3,6 +3,7 @@ import { ChevronRight, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getCategories } from "../../services/categoryServices";
 import { useUserLocation } from "../../context/locationContext";
+import { LocationFallback } from "./locationFallback";
 
 
 const CategorySection = () => {
@@ -16,6 +17,7 @@ const CategorySection = () => {
 
   const fetchCategories = async () => {
     if(!coords.latitude || !coords.longitude) {
+      setLoading(false);
       return;
     }
     try {
@@ -32,6 +34,15 @@ const CategorySection = () => {
   const handleCategoryClick = (id, name) => {
     navigate(`/category/${id}`, { state: { categoryName: name } });
   };
+  if(!loading && (!coords?.latitude || categories.length === 0)) {
+    return(
+    <LocationFallback
+    onSelectLocation={() => {
+      window.dispatchEvent(new Event("open-location-modal"));
+    }}
+    />
+    )
+  }
 
   if (loading) {
     return (
