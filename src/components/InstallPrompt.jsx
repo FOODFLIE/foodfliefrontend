@@ -32,7 +32,7 @@ const InstallPrompt = () => {
         setIsVisible(true);
         startAutoCloseTimer();
       }
-    }, 3000);
+    }, 7000);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
