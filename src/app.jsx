@@ -27,6 +27,8 @@ import ProtectedRoute from "./components/common/protectedRoute";
 import ScrollToTop from "./components/common/scrollToTop";
 import { usePageTracking } from "./hooks/usePageTracking";
 
+import InstallPrompt from "./components/InstallPrompt";
+
 const App = () => {
   const [loading, setLoading] = useState(true);
   const location = useLocation();
@@ -95,6 +97,7 @@ const App = () => {
                 <Route path="menu" element={<Menu />} />
               </Route>
             </Routes>
+            <InstallPrompt />
           </div>
         </CartProvider>
       </AuthProvider>
