@@ -9,7 +9,7 @@ const InstallPrompt = () => {
   const STORAGE_KEY = 'foodflie_a2hs_dismissed';
 
   useEffect(() => {
-    // Check if device is iOS
+    // 1. Device detection for iOS
     const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
     setIsIos(ios);
 
@@ -19,33 +19,48 @@ const InstallPrompt = () => {
       return (new Date().getTime() - parseInt(dismissedAt)) < (24 * 60 * 60 * 1000);
     };
 
+    if (isDismissed()) return;
+
+    // Helper to display the prompt safely
+    const showPrompt = (promptEvent) => {
+      if (promptEvent) setDeferredPrompt(promptEvent);
+      setIsVisible(true);
+      startAutoCloseTimer();
+    };
+
+    // 2. Logic for Android/Chrome (Requires beforeinstallprompt)
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+      // Wait 3 seconds after capturing prompt before bothering the user
+      setTimeout(() => showPrompt(e), 3000); 
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
-    // Initial 3-second delay to show the prompt
-    const showTimer = setTimeout(() => {
-      if (!isDismissed()) {
-        setIsVisible(true);
-        startAutoCloseTimer();
-      }
-    }, 7000);
+    // CRITICAL FIX: If event fired before React mounted, catch it from the global window object
+    if (window.__customDeferredPrompt) {
+      setTimeout(() => showPrompt(window.__customDeferredPrompt), 3000);
+    }
+
+    // 3. Logic for iOS (Safari doesn't use beforeinstallprompt, so we just show instruction)
+    let iosTimer = null;
+    if (ios) {
+      iosTimer = setTimeout(() => showPrompt(null), 3000);
+    }
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-      clearTimeout(showTimer);
+      if (iosTimer) clearTimeout(iosTimer);
       if (autoCloseTimer.current) clearTimeout(autoCloseTimer.current);
     };
   }, []);
 
   const startAutoCloseTimer = () => {
     if (autoCloseTimer.current) clearTimeout(autoCloseTimer.current);
+    // User requested 7000ms auto-close timer
     autoCloseTimer.current = setTimeout(() => {
       dismissPopup();
-    }, 3000);
+    }, 7000); 
   };
 
   const pauseAutoCloseTimer = () => {
@@ -59,13 +74,18 @@ const InstallPrompt = () => {
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) {
+      // Best Practice: If no valid prompt was caught, just hide it.
       dismissPopup();
       return;
     }
+    
     deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log(`Install prompt outcome: ${outcome}`);
+    
     setDeferredPrompt(null);
-    dismissPopup(); // Close right after they interact with the native prompt
+    window.__customDeferredPrompt = null;
+    dismissPopup(); // Close immediately after they make a choice
   };
 
   return (

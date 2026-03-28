@@ -41,6 +41,16 @@
     <noscript><img height="1" width="1" style="display:none"
     src="https://www.facebook.com/tr?id=915907111429762&ev=PageView&noscript=1"
     /></noscript>
+    
+    <!-- Catch PWA install prompt before React mounts -->
+    <script>
+      window.__customDeferredPrompt = null;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        window.__customDeferredPrompt = e;
+      });
+    </script>
+
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
