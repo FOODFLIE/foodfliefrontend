@@ -148,7 +148,7 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-8 flex flex-col md:row items-center justify-between gap-4 text-white text-xs">
-          <p>© {currentYear} Srava Technologies Private Limited.</p>
+          <p>© {currentYear} foodflie Technologies Private Limited.</p>
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 bg-slate-700 rounded-full"></span>
