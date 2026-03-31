@@ -3,7 +3,7 @@ import SEO from "../../../components/common/seo";
 import { getOrderDetails, getPendingOrders } from "../../../services/partnerOrderService";
 import { Package, RefreshCw } from "lucide-react";
 import { useKitchenAlert } from "../../../hooks/useKitchenAlert";
-import OrderCard from "./OrderCard";
+import OrderCard from "./orderCard";
 
 export default function Orders() {
   const [activeTab, setActiveTab] = useState("New");
