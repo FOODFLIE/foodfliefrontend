@@ -198,7 +198,7 @@ const Menu = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col h-[calc(100vh-64px)] bg-slate-100 overflow-hidden">
+    <div className="flex-1 flex flex-col h-full bg-slate-100 overflow-hidden">
       <SEO title="Manage Menu" />
       {/* Toolbar */}
       <div className="bg-white p-4 border-b border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4 shrink-0">
@@ -219,8 +219,8 @@ const Menu = () => {
       {/* Split View Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Categories Sidebar */}
-        <div className="w-80 bg-white border-r border-slate-200 flex flex-col overflow-y-auto">
-          <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10">
+        <div className="w-80 bg-white border-r border-slate-200 flex flex-col">
+          <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center shrink-0">
             <h3 className="font-bold text-slate-700 text-[11px] tracking-wider uppercase">
               Category ({categories.length})
             </h3>
@@ -231,7 +231,7 @@ const Menu = () => {
               + ADD NEW
             </button>
           </div>
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100 overflow-y-auto flex-1">
             {categories.map((cat) => (
               <div
                 key={cat.id}
@@ -255,8 +255,8 @@ const Menu = () => {
         </div>
 
         {/* Items List */}
-        <div className="flex-1 bg-white flex flex-col overflow-y-auto">
-          <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10">
+        <div className="flex-1 bg-white flex flex-col">
+          <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center shrink-0">
             <h3 className="font-bold text-slate-700 text-[11px] uppercase tracking-wider">
               Item ({menuItems.length})
             </h3>
@@ -267,7 +267,7 @@ const Menu = () => {
               + ADD NEW
             </button>
           </div>
-          <div className="p-4 space-y-4">
+          <div className="p-4 space-y-4 overflow-y-auto flex-1">
             {isLoading ? (
               <div className="flex justify-center p-8 text-slate-400">Loading menu...</div>
             ) : menuItems.length === 0 ? (
