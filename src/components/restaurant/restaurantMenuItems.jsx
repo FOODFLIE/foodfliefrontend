@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Search, Loader2, ChevronDown } from "lucide-react";
 import MenuItem from "../menuItem";
 import VariantModal from "../modals/variantModal";
@@ -16,6 +16,7 @@ const RestaurantMenuItems = ({
   const [openSubcategory, setOpenSubcategory] = useState(null);
   const [selectedItemForVariant, setSelectedItemForVariant] = useState(null);
   const [isVariantModalOpen, setIsVariantModalOpen] = useState(false);
+
 
   const handleItemAdd = (item) => {
     if (item.has_variants && item.variants && item.variants.length > 0) {
@@ -71,6 +72,11 @@ const RestaurantMenuItems = ({
   const handleSubcategory = (sub) => {
     setOpenSubcategory((prev) => (prev === sub ? null : sub));
   };
+    useEffect(() => {
+    if(subcategories.length > 0 && !openSubcategory) {
+      setOpenSubcategory(subcategories[0])
+    }
+  }, [subcategories])
 
   return (
     <div className="lg:col-span-9 space-y-8">
