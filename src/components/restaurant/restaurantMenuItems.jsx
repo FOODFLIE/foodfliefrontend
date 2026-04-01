@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Search, Loader2 } from "lucide-react";
+import { Search, Loader2, ChevronDown } from "lucide-react";
 import MenuItem from "../menuItem";
 import VariantModal from "../modals/variantModal";
 
@@ -13,6 +13,7 @@ const RestaurantMenuItems = ({
   onAddToCart,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [openSubcategory, setOpenSubcategory] = useState(null);
   const [selectedItemForVariant, setSelectedItemForVariant] = useState(null);
   const [isVariantModalOpen, setIsVariantModalOpen] = useState(false);
 
@@ -67,9 +68,12 @@ const RestaurantMenuItems = ({
     // Sort by highest rating descending
     return bHighestRating - aHighestRating;
   });
+  const handleSubcategory = (sub) => {
+    setOpenSubcategory((prev) => (prev === sub ? null : sub));
+  };
 
   return (
-    <div className="lg:col-span-9 space-y-12 md:space-y-16">
+    <div className="lg:col-span-9 space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-6 gap-4">
         <h2 className="text-lg md:text-xl font-black text-slate-800 tracking-tight flex items-center gap-2">
           {selectedCategory === "All"
@@ -113,43 +117,52 @@ const RestaurantMenuItems = ({
           </button>
         </div>
       ) : filteredItems.length > 0 ? (
-        <div className="space-y-12 md:space-y-16">
-          {subcategories.map((sub) => (
-            <div key={sub} className="space-y-8">
-              {/* Only show subcategory title if there are multiple subcategories or if it's not "Other" */}
-              {(subcategories.length > 1 ||
-                (sub !== "Other" && sub !== "")) && (
-                <div className="flex items-center gap-4">
-                  <h3 className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.3em] whitespace-nowrap bg-slate-50 px-3 py-1 rounded-full">
-                    {sub} • {groupedItems[sub].length}
+        <div className="flex flex-col">
+          {subcategories.map((sub, index) => (
+            <div key={sub} className="bg-white">
+              {/* Thick separator between subcategories (except before the first one if it's the only one) */}
+              {index > 0 && <div className="h-2 md:h-2.5 bg-slate-100/60 -mx-4 md:-mx-8"></div>}
+              
+              {/* Only show subcategory title if it matches the criteria */}
+              {(subcategories.length > 1 || (sub !== "Other" && sub !== "")) && (
+                <div
+                  onClick={() => handleSubcategory(sub)}
+                  className="flex items-center justify-between py-6 px-1 md:px-2 cursor-pointer border-b border-slate-100 group transition-all"
+                >
+                  <h3 className="text-sm md:text-base font-black text-slate-800 uppercase tracking-tight flex items-center gap-2">
+                    {sub} ({groupedItems[sub].length})
                   </h3>
-                  <div className="h-px w-full bg-gradient-to-r from-slate-100 to-transparent"></div>
+                  <div className={`text-slate-400 group-hover:text-slate-800 transition-all duration-300 ${openSubcategory === sub ? 'rotate-180' : ''}`}>
+                    <ChevronDown size={22} strokeWidth={2.5} />
+                  </div>
                 </div>
               )}
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 md:gap-y-12">
-                {groupedItems[sub].map((item) => (
-                  <MenuItem
-                    key={item.id || item.sku}
-                    name={item.name}
-                    description={
-                      item.description ||
-                      "Premium selection with handpicked ingredients and artisanal seasoning."
-                    }
-                    price={item.price}
-                    image={
-                      item.image ||
-                      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop"
-                    }
-                    onAdd={() => handleItemAdd(item)}
-                    isAdding={
-                      addingToCart[item.sku] ||
-                      item.variants?.some((v) => addingToCart[v.sku])
-                    }
-                    is_veg={item.is_veg}
-                  />
-                ))}
-              </div>
+              {openSubcategory === sub && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 md:gap-y-12 pt-4 pb-12 animate-in fade-in slide-in-from-top-1 duration-300 px-1 md:px-2">
+                  {groupedItems[sub].map((item) => (
+                    <MenuItem
+                      key={item.id || item.sku}
+                      name={item.name}
+                      description={
+                        item.description ||
+                        "Premium selection with handpicked ingredients and artisanal seasoning."
+                      }
+                      price={item.price}
+                      image={
+                        item.image ||
+                        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop"
+                      }
+                      onAdd={() => handleItemAdd(item)}
+                      isAdding={
+                        addingToCart[item.sku] ||
+                        item.variants?.some((v) => addingToCart[v.sku])
+                      }
+                      is_veg={item.is_veg}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>
