@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Search, Loader2 } from "lucide-react";
 import MenuItem from "../menuItem";
+import VariantModal from "../modals/variantModal";
 
 const RestaurantMenuItems = ({
   menuItems,
@@ -12,11 +13,28 @@ const RestaurantMenuItems = ({
   onAddToCart,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedItemForVariant, setSelectedItemForVariant] = useState(null);
+  const [isVariantModalOpen, setIsVariantModalOpen] = useState(false);
+
+  const handleItemAdd = (item) => {
+    if (item.has_variants && item.variants && item.variants.length > 0) {
+      setSelectedItemForVariant(item);
+      setIsVariantModalOpen(true);
+    } else {
+      onAddToCart(item);
+    }
+  };
+
+  const handleVariantConfirm = (item, quantity, variantSku) => {
+    onAddToCart(item, quantity, variantSku);
+    setIsVariantModalOpen(false);
+  };
 
   const filteredItems = menuItems
     .filter((item) => {
       const matchesCategory =
-        selectedCategory === "All" || item.resolvedCategoryId === selectedCategory;
+        selectedCategory === "All" ||
+        item.resolvedCategoryId === selectedCategory;
       const matchesSearch = item.name
         .toLowerCase()
         .includes(searchQuery.toLowerCase());
@@ -37,11 +55,15 @@ const RestaurantMenuItems = ({
   const subcategories = Object.keys(groupedItems).sort((a, b) => {
     if (a === "Other") return 1;
     if (b === "Other") return -1;
-    
+
     // Get highest rating in each subcategory
-    const aHighestRating = Math.max(...groupedItems[a].map(item => item.rating || 0));
-    const bHighestRating = Math.max(...groupedItems[b].map(item => item.rating || 0));
-    
+    const aHighestRating = Math.max(
+      ...groupedItems[a].map((item) => item.rating || 0),
+    );
+    const bHighestRating = Math.max(
+      ...groupedItems[b].map((item) => item.rating || 0),
+    );
+
     // Sort by highest rating descending
     return bHighestRating - aHighestRating;
   });
@@ -50,8 +72,13 @@ const RestaurantMenuItems = ({
     <div className="lg:col-span-9 space-y-12 md:space-y-16">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-6 gap-4">
         <h2 className="text-lg md:text-xl font-black text-slate-800 tracking-tight flex items-center gap-2">
-          {selectedCategory === "All" ? "Menu Items" : categories.find(c => String(c.id) === String(selectedCategory))?.name || "Menu Items"}
-          <span className="text-slate-300 font-bold ml-1">({filteredItems.length})</span>
+          {selectedCategory === "All"
+            ? "Menu Items"
+            : categories.find((c) => String(c.id) === String(selectedCategory))
+                ?.name || "Menu Items"}
+          <span className="text-slate-300 font-bold ml-1">
+            ({filteredItems.length})
+          </span>
         </h2>
         <div className="relative w-full sm:w-auto">
           <Search
@@ -90,7 +117,8 @@ const RestaurantMenuItems = ({
           {subcategories.map((sub) => (
             <div key={sub} className="space-y-8">
               {/* Only show subcategory title if there are multiple subcategories or if it's not "Other" */}
-              {(subcategories.length > 1 || (sub !== "Other" && sub !== "")) && (
+              {(subcategories.length > 1 ||
+                (sub !== "Other" && sub !== "")) && (
                 <div className="flex items-center gap-4">
                   <h3 className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.3em] whitespace-nowrap bg-slate-50 px-3 py-1 rounded-full">
                     {sub} • {groupedItems[sub].length}
@@ -98,7 +126,7 @@ const RestaurantMenuItems = ({
                   <div className="h-px w-full bg-gradient-to-r from-slate-100 to-transparent"></div>
                 </div>
               )}
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 md:gap-y-12">
                 {groupedItems[sub].map((item) => (
                   <MenuItem
@@ -113,8 +141,11 @@ const RestaurantMenuItems = ({
                       item.image ||
                       "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop"
                     }
-                    onAdd={() => onAddToCart(item)}
-                    isAdding={addingToCart[item.sku]}
+                    onAdd={() => handleItemAdd(item)}
+                    isAdding={
+                      addingToCart[item.sku] ||
+                      item.variants?.some((v) => addingToCart[v.sku])
+                    }
                     is_veg={item.is_veg}
                   />
                 ))}
@@ -122,12 +153,22 @@ const RestaurantMenuItems = ({
             </div>
           ))}
         </div>
-
       ) : (
         <div className="text-center py-20 text-slate-400 font-bold">
           No items found matching your criteria.
         </div>
       )}
+
+      {/* Variant Selection Modal */}
+      <VariantModal
+        isOpen={isVariantModalOpen}
+        onClose={() => setIsVariantModalOpen(false)}
+        item={selectedItemForVariant}
+        onConfirm={handleVariantConfirm}
+        isAdding={selectedItemForVariant?.variants?.some(
+          (v) => addingToCart[v.sku],
+        )}
+      />
     </div>
   );
 };

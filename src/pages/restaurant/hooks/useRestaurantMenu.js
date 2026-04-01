@@ -9,16 +9,19 @@ import { useUserLocation } from "../../../context/locationContext";
 
 export const useRestaurantMenu = (id, initialRestaurant = null) => {
   const [restaurantData, setRestaurantData] = useState(initialRestaurant);
+  console.log("initialRestaurant", initialRestaurant);
   const [menuItems, setMenuItems] = useState([]);
+  console.log("restaurantData", menuItems);
   const [categories, setCategories] = useState([{ id: "All", name: "All" }]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [addingToCart, setAddingToCart] = useState({});
 
-  const { refreshCartCount, addToGuestCart, cartCount, guestCartCount } = useCart();
+  const { refreshCartCount, addToGuestCart, cartCount, guestCartCount } =
+    useCart();
   const { isAuthenticated } = useAuth();
   const { coords } = useUserLocation();
-  
+
   const displayCount = isAuthenticated ? cartCount : guestCartCount;
 
   useEffect(() => {
@@ -27,6 +30,7 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
       try {
         setLoading(true);
         const responseData = await getProductsByPartner(id);
+        console.log("responseData", responseData);
 
         let menuItemsData = [];
         let rData = null;
@@ -51,7 +55,10 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
 
         let allCategories = [];
         try {
-          allCategories = await fetchCategories(coords?.latitude, coords?.longitude);
+          allCategories = await fetchCategories(
+            coords?.latitude,
+            coords?.longitude,
+          );
         } catch (catErr) {
           console.error("Failed to fetch categories metadata:", catErr);
         }
@@ -65,19 +72,22 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
               allCategories.find(
                 (c) =>
                   c.id === item.category.id ||
-                  c.name?.toLowerCase() === item.category.name?.toLowerCase()
+                  c.name?.toLowerCase() === item.category.name?.toLowerCase(),
               ) || item.category;
           } else if (item.category_id) {
-            catEntity = allCategories.find((c) => String(c.id) === String(item.category_id));
+            catEntity = allCategories.find(
+              (c) => String(c.id) === String(item.category_id),
+            );
           } else if (item.category) {
             catEntity = allCategories.find(
               (c) =>
                 String(c.id) === String(item.category) ||
-                c.name?.toLowerCase() === String(item.category).toLowerCase()
+                c.name?.toLowerCase() === String(item.category).toLowerCase(),
             );
           }
 
-          const catId = catEntity?.id || item.category_id || item.category?.id || "Other";
+          const catId =
+            catEntity?.id || item.category_id || item.category?.id || "Other";
           const catName = catEntity?.name || "Other";
 
           if (!categoryMap.has(catId)) {
@@ -85,7 +95,7 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
               catId,
               catEntity && typeof catEntity === "object"
                 ? { ...catEntity, id: catId, name: catName }
-                : { id: catId, name: catName }
+                : { id: catId, name: catName },
             );
           }
 
@@ -93,12 +103,19 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
         });
 
         setMenuItems(enrichedItems);
-        const EnrichedCats = [{ id: "All", name: "All" }, ...Array.from(categoryMap.values())];
+        const EnrichedCats = [
+          { id: "All", name: "All" },
+          ...Array.from(categoryMap.values()),
+        ];
         setCategories(EnrichedCats);
 
         if (rData) {
           setRestaurantData(rData);
-        } else if (!restaurantData && menuItemsData.length > 0 && menuItemsData[0].partner) {
+        } else if (
+          !restaurantData &&
+          menuItemsData.length > 0 &&
+          menuItemsData[0].partner
+        ) {
           const p = menuItemsData[0].partner;
           setRestaurantData({
             ...p,
@@ -122,23 +139,39 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
     fetchMenu();
   }, [id, coords]);
 
-  const handleAddToCart = async (item) => {
+  const handleAddToCart = async (item, quantity = 1, variantSku = null) => {
     try {
-      setAddingToCart((prev) => ({ ...prev, [item.sku]: true }));
+      const skuToUse = variantSku || item.sku;
+      setAddingToCart((prev) => ({ ...prev, [skuToUse]: true }));
+
       if (isAuthenticated) {
-        await apiAddToCart(item.sku, 1);
+        await apiAddToCart(skuToUse, quantity);
         refreshCartCount();
       } else {
         const partnerId = restaurantData?.id || item.partner_id || null;
-        addToGuestCart(item.sku, item.name, item.price, 1, String(partnerId));
+        const itemName = variantSku
+          ? `${item.name} (${item.variants.find((v) => v.sku === variantSku)?.name || ""})`
+          : item.name;
+        const itemPrice = variantSku
+          ? item.variants.find((v) => v.sku === variantSku)?.price || item.price
+          : item.price;
+
+        addToGuestCart(
+          skuToUse,
+          itemName,
+          itemPrice,
+          quantity,
+          String(partnerId),
+        );
       }
-      
+
       // Track AddToCart event with Meta Pixel
-      trackAddToCart(item, 1);
+      trackAddToCart(item, quantity);
     } catch (err) {
       console.error("Failed to add to cart:", err);
     } finally {
-      setAddingToCart((prev) => ({ ...prev, [item.sku]: false }));
+      const skuToUse = variantSku || item.sku;
+      setAddingToCart((prev) => ({ ...prev, [skuToUse]: false }));
     }
   };
 
