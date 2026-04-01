@@ -37,7 +37,13 @@ const RestaurantMenuItems = ({
   const subcategories = Object.keys(groupedItems).sort((a, b) => {
     if (a === "Other") return 1;
     if (b === "Other") return -1;
-    return a.localeCompare(b);
+    
+    // Get highest rating in each subcategory
+    const aHighestRating = Math.max(...groupedItems[a].map(item => item.rating || 0));
+    const bHighestRating = Math.max(...groupedItems[b].map(item => item.rating || 0));
+    
+    // Sort by highest rating descending
+    return bHighestRating - aHighestRating;
   });
 
   return (
