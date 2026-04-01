@@ -48,7 +48,7 @@ const RestaurantChainCard = ({
         {!is_active && (
           <div className="absolute inset-0 bg-white/70 flex items-center justify-center">
             <span className="text-red-500 font-bold text-sm sm:text-base">
-              Currently Unavailable
+              Store is currently closed
             </span>
           </div>
         )}

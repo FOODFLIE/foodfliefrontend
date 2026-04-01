@@ -81,7 +81,7 @@ const ProductCard = ({
           {!is_active && (
             <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
               <span className="text-red-500 font-bold text-sm">
-                Currently Unavailable
+                Store is currently closed
               </span>
             </div>
           )}
