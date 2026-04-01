@@ -10,7 +10,6 @@ const RestaurantMenuItems = ({
   addingToCart,
   onAddToCart,
 }) => {
-  console.log("Menu items received in RestaurantMenuItems component:", menuItems);
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredItems = menuItems
@@ -24,11 +23,28 @@ const RestaurantMenuItems = ({
     })
     .sort((a, b) => (b.rating || 0) - (a.rating || 0));
 
+  // Group items by subcategory
+  const groupedItems = filteredItems.reduce((acc, item) => {
+    const sub = item.subcategory || "Other";
+    if (!acc[sub]) {
+      acc[sub] = [];
+    }
+    acc[sub].push(item);
+    return acc;
+  }, {});
+
+  const subcategories = Object.keys(groupedItems).sort((a, b) => {
+    if (a === "Other") return 1;
+    if (b === "Other") return -1;
+    return a.localeCompare(b);
+  });
+
   return (
-    <div className="lg:col-span-9 space-y-8 md:space-y-12">
+    <div className="lg:col-span-9 space-y-12 md:space-y-16">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-6 gap-4">
-        <h2 className="text-lg md:text-xl font-black text-slate-800 tracking-tight">
-          Menu Items
+        <h2 className="text-lg md:text-xl font-black text-slate-800 tracking-tight flex items-center gap-2">
+          {selectedCategory === "All" ? "Menu Items" : categories.find(c => String(c.id) === String(selectedCategory))?.name || "Menu Items"}
+          <span className="text-slate-300 font-bold ml-1">({filteredItems.length})</span>
         </h2>
         <div className="relative w-full sm:w-auto">
           <Search
@@ -63,26 +79,43 @@ const RestaurantMenuItems = ({
           </button>
         </div>
       ) : filteredItems.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {filteredItems.map((item) => (
-            <MenuItem
-              key={item.id || item.sku}
-              name={item.name}
-              description={
-                item.description ||
-                "Premium selection with handpicked ingredients and artisanal seasoning."
-              }
-              price={item.price}
-              image={
-                item.image ||
-                "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop"
-              }
-              onAdd={() => onAddToCart(item)}
-              isAdding={addingToCart[item.sku]}
-              is_veg={item.is_veg}
-            />
+        <div className="space-y-12 md:space-y-16">
+          {subcategories.map((sub) => (
+            <div key={sub} className="space-y-8">
+              {/* Only show subcategory title if there are multiple subcategories or if it's not "Other" */}
+              {(subcategories.length > 1 || (sub !== "Other" && sub !== "")) && (
+                <div className="flex items-center gap-4">
+                  <h3 className="text-[10px] md:text-xs font-black text-slate-400 uppercase tracking-[0.3em] whitespace-nowrap bg-slate-50 px-3 py-1 rounded-full">
+                    {sub} • {groupedItems[sub].length}
+                  </h3>
+                  <div className="h-px w-full bg-gradient-to-r from-slate-100 to-transparent"></div>
+                </div>
+              )}
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10 md:gap-y-12">
+                {groupedItems[sub].map((item) => (
+                  <MenuItem
+                    key={item.id || item.sku}
+                    name={item.name}
+                    description={
+                      item.description ||
+                      "Premium selection with handpicked ingredients and artisanal seasoning."
+                    }
+                    price={item.price}
+                    image={
+                      item.image ||
+                      "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop"
+                    }
+                    onAdd={() => onAddToCart(item)}
+                    isAdding={addingToCart[item.sku]}
+                    is_veg={item.is_veg}
+                  />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
+
       ) : (
         <div className="text-center py-20 text-slate-400 font-bold">
           No items found matching your criteria.

@@ -8,7 +8,6 @@ import OrderCard from "./orderCard";
 export default function Orders() {
   const [activeTab, setActiveTab] = useState("New");
   const [orders, setOrders] = useState([]);
-  console.log("Orders component rendered with orders:", orders);  
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [checkedItems, setCheckedItems] = useState({});

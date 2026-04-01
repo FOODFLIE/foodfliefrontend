@@ -5,6 +5,7 @@ import { addToCart as apiAddToCart } from "../../../services/cartService";
 import { useCart } from "../../../context/cartContext";
 import { useAuth } from "../../../context/authContext";
 import { trackAddToCart } from "../../../utils/metaPixel";
+import { useUserLocation } from "../../../context/locationContext";
 
 export const useRestaurantMenu = (id, initialRestaurant = null) => {
   const [restaurantData, setRestaurantData] = useState(initialRestaurant);
@@ -16,6 +17,7 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
 
   const { refreshCartCount, addToGuestCart, cartCount, guestCartCount } = useCart();
   const { isAuthenticated } = useAuth();
+  const { coords } = useUserLocation();
   
   const displayCount = isAuthenticated ? cartCount : guestCartCount;
 
@@ -49,7 +51,7 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
 
         let allCategories = [];
         try {
-          allCategories = await fetchCategories();
+          allCategories = await fetchCategories(coords?.latitude, coords?.longitude);
         } catch (catErr) {
           console.error("Failed to fetch categories metadata:", catErr);
         }

@@ -22,7 +22,6 @@ const RestaurantChainSection = ({ title }) => {
           coords.latitude,
           coords.longitude
         );
-        console.log("data", data);
 
         const storesList = Array.isArray(data) ? data : data?.data || [];
 

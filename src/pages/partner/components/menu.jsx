@@ -26,7 +26,8 @@ const Menu = () => {
     category_id: "",
     is_veg: true,
     description: "",
-    preparation_time: 30, // Default prep time
+    subcategory: "",
+    preparation_time: 3, // Default prep time
   });
 
   const [newCategory, setNewCategory] = useState("");
@@ -113,6 +114,7 @@ const Menu = () => {
         description: newItem.description,
         price: parseFloat(newItem.price),
         category_id: newItem.category_id || selectedCategory,
+        subcategory: newItem.subcategory,
         is_veg: newItem.is_veg,
         preparation_time: newItem.preparation_time,
         is_available: newItem.is_available !== undefined ? newItem.is_available : true,
@@ -138,6 +140,7 @@ const Menu = () => {
         name: item.name,
         price: item.price,
         category_id: item.category_id,
+        subcategory: item.subcategory,
         is_veg: item.is_veg,
         description: item.description || "",
         preparation_time: item.preparation_time || 30,
@@ -149,6 +152,7 @@ const Menu = () => {
         name: "",
         price: "",
         category_id: selectedCategory,
+        subcategory: "",
         is_veg: true,
         description: "",
         preparation_time: 30,
@@ -165,6 +169,7 @@ const Menu = () => {
       name: "",
       price: "",
       category_id: selectedCategory,
+      subcategory: "",
       is_veg: true,
       description: "",
       preparation_time: 30,
@@ -411,24 +416,41 @@ const Menu = () => {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">
-                  Category
-                </label>
-                <select
-                  className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand"
-                  value={newItem.category_id}
-                  onChange={(e) =>
-                    setNewItem({ ...newItem, category_id: Number(e.target.value) })
-                  }
-                  disabled={editingItem} // Disable changing category while editing for simplicity
-                >
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">
+                    Category
+                  </label>
+                  <select
+                    className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand"
+                    value={newItem.category_id}
+                    onChange={(e) =>
+                      setNewItem({ ...newItem, category_id: Number(e.target.value) })
+                    }
+                    disabled={editingItem}
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">
+                    Subcategory
+                  </label>
+                  <input
+                    type="text"
+                    className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand"
+                    placeholder="e.g. Starters"
+                    value={newItem.subcategory || ""}
+                    onChange={(e) =>
+                      setNewItem({ ...newItem, subcategory: e.target.value })
+                    }
+                  />
+                </div>
               </div>
 
               <div>

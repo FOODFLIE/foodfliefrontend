@@ -16,7 +16,6 @@ const CategoryProduct = () => {
   const { coords } = useUserLocation();
   const [realCategory, setRealCategory] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
-console.log("restaurants", restaurants);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
