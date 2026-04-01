@@ -136,6 +136,7 @@ const RestaurantDetail = () => {
           <RestaurantMenuItems
             menuItems={menuItems}
             selectedCategory={selectedCategory}
+            categories={categories}
             loading={loading}
             error={error}
             addingToCart={addingToCart}

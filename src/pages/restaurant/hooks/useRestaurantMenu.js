@@ -120,7 +120,7 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
     };
 
     fetchMenu();
-  }, [id]);
+  }, [id, coords]);
 
   const handleAddToCart = async (item) => {
     try {
@@ -145,7 +145,7 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
   return {
     restaurantData,
     menuItems,
-    categories,
+    categories: categories || [{ id: "All", name: "All" }],
     loading,
     error,
     addingToCart,

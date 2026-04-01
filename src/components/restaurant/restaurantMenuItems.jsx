@@ -5,6 +5,7 @@ import MenuItem from "../menuItem";
 const RestaurantMenuItems = ({
   menuItems,
   selectedCategory,
+  categories,
   loading,
   error,
   addingToCart,
