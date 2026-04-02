@@ -1,5 +1,5 @@
 import React from "react";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus, Minus, Loader2 } from "lucide-react";
 
 const MenuItem = ({
   name,
@@ -7,6 +7,8 @@ const MenuItem = ({
   price,
   image,
   onAdd,
+  onUpdateQuantity,
+  quantity,
   isAdding,
   is_veg,
 }) => {
@@ -48,18 +50,55 @@ const MenuItem = ({
 
         {/* Add Button - Positioned over bottom edge of image */}
         <div className="absolute -bottom-3 w-[85%]">
-          <button
-            onClick={onAdd}
-            disabled={isAdding}
-            className="w-full bg-white border border-slate-200 text-brand py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest hover:bg-slate-50 hover:border-brand hover:shadow-md transition-all flex items-center justify-center gap-1 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isAdding ? (
-              <Loader2 className="animate-spin text-brand" size={14} />
-            ) : (
-              <span className="text-xl leading-none mr-1">+</span>
-            )}
-            {isAdding ? "Adding" : "Add"}
-          </button>
+          {quantity > 0 ? (
+            <div className="w-full bg-white border border-brand text-brand py-1 rounded-lg flex items-center justify-between shadow-md overflow-hidden">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onUpdateQuantity(-1);
+                }}
+                disabled={isAdding}
+                className="flex-1 flex items-center justify-center py-1 sm:py-1.5 hover:bg-slate-50 transition-colors disabled:opacity-50"
+              >
+                <Minus size={14} strokeWidth={3} />
+              </button>
+              
+              <div className="w-8 flex items-center justify-center">
+                {isAdding ? (
+                  <Loader2 className="animate-spin text-brand" size={14} />
+                ) : (
+                  <span className="text-xs font-black">{quantity}</span>
+                )}
+              </div>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onUpdateQuantity(1);
+                }}
+                disabled={isAdding}
+                className="flex-1 flex items-center justify-center py-1 sm:py-1.5 hover:bg-slate-50 transition-colors disabled:opacity-50"
+              >
+                <Plus size={14} strokeWidth={3} />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onAdd();
+              }}
+              disabled={isAdding}
+              className="w-full bg-white border border-slate-200 text-brand py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-black uppercase tracking-widest hover:bg-slate-50 hover:border-brand hover:shadow-md transition-all flex items-center justify-center gap-1 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isAdding ? (
+                <Loader2 className="animate-spin text-brand" size={14} />
+              ) : (
+                <span className="text-xl leading-none mr-1">+</span>
+              )}
+              {isAdding ? "Adding" : "Add"}
+            </button>
+          )}
         </div>
       </div>
     </div>

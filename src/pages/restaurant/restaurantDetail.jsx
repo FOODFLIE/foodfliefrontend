@@ -29,8 +29,9 @@ const RestaurantDetail = () => {
     loading,
     error,
     addingToCart,
+    quantities,
     cartCount,
-    handleAddToCart,
+    onUpdateQuantity,
   } = useRestaurantMenu(id, localRestaurant);
 
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -140,7 +141,8 @@ const RestaurantDetail = () => {
             loading={loading}
             error={error}
             addingToCart={addingToCart}
-            onAddToCart={handleAddToCart}
+            quantities={quantities}
+            onUpdateQuantity={onUpdateQuantity}
           />
         </div>
       </main>

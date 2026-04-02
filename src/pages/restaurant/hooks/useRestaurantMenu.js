@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { getProductsByPartner } from "../../../services/productService";
 import { fetchCategories } from "../../../services/categoryServices";
-import { addToCart as apiAddToCart } from "../../../services/cartService";
+import { addToCart as apiAddToCart, updateCartItem, removeFromCart, getCart } from "../../../services/cartService";
+import { getGuestCart } from "../../../services/guestCartService";
 import { useCart } from "../../../context/cartContext";
 import { useAuth } from "../../../context/authContext";
 import { trackAddToCart } from "../../../utils/metaPixel";
@@ -9,13 +10,13 @@ import { useUserLocation } from "../../../context/locationContext";
 
 export const useRestaurantMenu = (id, initialRestaurant = null) => {
   const [restaurantData, setRestaurantData] = useState(initialRestaurant);
-  console.log("initialRestaurant", initialRestaurant);
   const [menuItems, setMenuItems] = useState([]);
-  console.log("restaurantData", menuItems);
   const [categories, setCategories] = useState([{ id: "All", name: "All" }]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [addingToCart, setAddingToCart] = useState({});
+  const [quantities, setQuantities] = useState({});
+  const [cartItemsMap, setCartItemsMap] = useState({});
 
   const { refreshCartCount, addToGuestCart, cartCount, guestCartCount } =
     useCart();
@@ -25,12 +26,37 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
   const displayCount = isAuthenticated ? cartCount : guestCartCount;
 
   useEffect(() => {
-    const fetchMenu = async () => {
+    const fetchMenuAndCart = async () => {
       if (!id) return;
       try {
         setLoading(true);
         const responseData = await getProductsByPartner(id);
         console.log("responseData", responseData);
+
+        // Fetch Cart Items to initialize quantities and map
+        let currentCartItems = [];
+        if (isAuthenticated) {
+          try {
+            const cartRes = await getCart();
+            currentCartItems = cartRes?.items || [];
+          } catch (err) {
+            console.error("Failed to fetch authenticated cart:", err);
+          }
+        } else {
+          currentCartItems = getGuestCart();
+        }
+
+        // Initialize state from cart
+        const initQuantities = {};
+        const initCartMap = {};
+        currentCartItems.forEach((item) => {
+          initQuantities[item.sku] = item.quantity;
+          if (item.id) {
+            initCartMap[item.sku] = item.id;
+          }
+        });
+        setQuantities(initQuantities);
+        setCartItemsMap(initCartMap);
 
         let menuItemsData = [];
         let rData = null;
@@ -136,44 +162,92 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
       }
     };
 
-    fetchMenu();
-  }, [id, coords]);
+    fetchMenuAndCart();
+  }, [id, coords, isAuthenticated]);
 
-  const handleAddToCart = async (item, quantity = 1, variantSku = null) => {
-    try {
-      const skuToUse = variantSku || item.sku;
-      setAddingToCart((prev) => ({ ...prev, [skuToUse]: true }));
+const handleUpdateQuantity = async (item, change, variantSku = null) => {
+  const sku = variantSku || item.sku;
+  const currentQty = quantities[sku] || 0;
+  const newQty = currentQty + change;
 
-      if (isAuthenticated) {
-        await apiAddToCart(skuToUse, quantity);
+  if (newQty < 0) return;
+
+  setAddingToCart(prev => ({ ...prev, [sku]: true }));
+
+  try {
+    if (isAuthenticated) {
+      // 🔥 FIRST TIME ADD (or adding again if somehow map was lost)
+      if (!cartItemsMap[sku] && change > 0) {
+        const res = await apiAddToCart(sku, change);
+
+        setCartItemsMap(prev => ({
+          ...prev,
+          [sku]: res.cart_item_id || res.id // Handle potential backend naming variations
+        }));
+
+        setQuantities(prev => ({
+          ...prev,
+          [sku]: change
+        }));
+
         refreshCartCount();
-      } else {
-        const partnerId = restaurantData?.id || item.partner_id || null;
-        const itemName = variantSku
-          ? `${item.name} (${item.variants.find((v) => v.sku === variantSku)?.name || ""})`
-          : item.name;
-        const itemPrice = variantSku
-          ? item.variants.find((v) => v.sku === variantSku)?.price || item.price
-          : item.price;
-
-        addToGuestCart(
-          skuToUse,
-          itemName,
-          itemPrice,
-          quantity,
-          String(partnerId),
-        );
+        if (currentQty === 0) trackAddToCart(item, change);
       }
+      // 🔥 UPDATE EXISTING ITEM
+      else if (cartItemsMap[sku]) {
+        const itemId = cartItemsMap[sku];
 
-      // Track AddToCart event with Meta Pixel
-      trackAddToCart(item, quantity);
-    } catch (err) {
-      console.error("Failed to add to cart:", err);
-    } finally {
-      const skuToUse = variantSku || item.sku;
-      setAddingToCart((prev) => ({ ...prev, [skuToUse]: false }));
+        if (newQty === 0) {
+          await removeFromCart(itemId);
+
+          setCartItemsMap(prev => {
+            const copy = { ...prev };
+            delete copy[sku];
+            return copy;
+          });
+
+          setQuantities(prev => ({
+            ...prev,
+            [sku]: 0
+          }));
+        } else {
+          await updateCartItem(itemId, newQty);
+
+          setQuantities(prev => ({
+            ...prev,
+            [sku]: newQty
+          }));
+        }
+
+        refreshCartCount();
+      }
+    } else {
+      // Guest cart handling
+      const partnerId = restaurantData?.id || item.partner_id || null;
+      if (newQty === 0) {
+        // We'll treat 0 as removing from guest cart
+        addToGuestCart(sku, item.name, item.price, -currentQty, String(partnerId));
+        setQuantities(prev => ({
+          ...prev,
+          [sku]: 0
+        }));
+      } else {
+        addToGuestCart(sku, item.name, item.price, change, String(partnerId));
+        setQuantities(prev => ({
+          ...prev,
+          [sku]: newQty
+        }));
+        if (change === 1 && currentQty === 0) {
+          trackAddToCart(item, 1);
+        }
+      }
     }
-  };
+  } catch (err) {
+    console.error("Cart error:", err);
+  } finally {
+    setAddingToCart(prev => ({ ...prev, [sku]: false }));
+  }
+};
 
   return {
     restaurantData,
@@ -182,7 +256,8 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
     loading,
     error,
     addingToCart,
+    quantities,
     cartCount: displayCount,
-    handleAddToCart,
+    onUpdateQuantity: handleUpdateQuantity,
   };
 };

@@ -10,7 +10,8 @@ const RestaurantMenuItems = ({
   loading,
   error,
   addingToCart,
-  onAddToCart,
+  quantities,
+  onUpdateQuantity,
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [openSubcategory, setOpenSubcategory] = useState(null);
@@ -23,13 +24,23 @@ const RestaurantMenuItems = ({
       setSelectedItemForVariant(item);
       setIsVariantModalOpen(true);
     } else {
-      onAddToCart(item);
+      onUpdateQuantity(item, 1);
     }
   };
 
   const handleVariantConfirm = (item, quantity, variantSku) => {
-    onAddToCart(item, quantity, variantSku);
+    onUpdateQuantity(item, quantity, variantSku);
     setIsVariantModalOpen(false);
+  };
+
+  const getItemQuantity = (item) => {
+    let total = quantities[item.sku] || 0;
+    if (item.variants && item.variants.length > 0) {
+      item.variants.forEach((v) => {
+        total += quantities[v.sku] || 0;
+      });
+    }
+    return total;
   };
 
   const filteredItems = menuItems
@@ -160,6 +171,20 @@ const RestaurantMenuItems = ({
                         "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop"
                       }
                       onAdd={() => handleItemAdd(item)}
+                      onUpdateQuantity={(change) => {
+                        if (item.has_variants && item.variants?.length > 0) {
+                          // Find the first variant that is already in the cart to update
+                          const activeVariant = item.variants.find(v => (quantities[v.sku] || 0) > 0);
+                          if (activeVariant) {
+                            onUpdateQuantity(item, change, activeVariant.sku);
+                          } else {
+                            handleItemAdd(item);
+                          }
+                        } else {
+                          onUpdateQuantity(item, change);
+                        }
+                      }}
+                      quantity={getItemQuantity(item)}
                       isAdding={
                         addingToCart[item.sku] ||
                         item.variants?.some((v) => addingToCart[v.sku])
@@ -184,6 +209,7 @@ const RestaurantMenuItems = ({
         onClose={() => setIsVariantModalOpen(false)}
         item={selectedItemForVariant}
         onConfirm={handleVariantConfirm}
+        quantities={quantities}
         isAdding={selectedItemForVariant?.variants?.some(
           (v) => addingToCart[v.sku],
         )}
