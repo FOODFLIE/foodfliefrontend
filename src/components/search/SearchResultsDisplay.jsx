@@ -102,19 +102,8 @@ const SearchResultsDisplay = ({ results, query }) => {
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
             {results.products.map((product) => (
-              <div key={product.id} className="h-full">
+              <div key={product.id} className="flex flex-col h-full">
                 <ProductCard {...product} />
-                {product.partner && (
-                  <Link
-                    to={`/restaurant/${product.partner_id}`}
-                    className="mt-2 block text-[10px] font-bold text-slate-400 hover:text-brand transition-colors truncate"
-                  >
-                    from{" "}
-                    <span className="text-slate-600 font-black">
-                      {product.partner.store_name}
-                    </span>
-                  </Link>
-                )}
               </div>
             ))}
           </div>
