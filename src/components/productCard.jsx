@@ -21,7 +21,7 @@ const ProductCard = ({
   const displayCuisines = Array.isArray(cuisines) ? cuisines.join(", ") : (cuisines || "Delicious Choice");
 
   return (
-    <div className={`group h-full flex flex-col bg-white transition-all duration-300 ${!is_active ? "opacity-60 grayscale pointer-events-none" : ""}`}>
+    <div className={`group h-full  flex flex-col bg-white transition-all duration-300 ${!is_active ? "opacity-60 grayscale pointer-events-none" : ""}`}>
       {/* Image Container with specific branding placement */}
       <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-sm bg-slate-100">
         <Link to={is_active ? `/restaurant/${id}` : "#"} className="block w-full h-full">
@@ -43,7 +43,7 @@ const ProductCard = ({
       </div>
 
       {/* Content Section */}
-      <div className="pt-2.5 px-0.5 flex-1 flex flex-col">
+      <div className="pt-2.5 shadow-sm rounded-b-xl  px-0.5 flex-1 flex flex-col">
         {/* Title */}
         <h3 className="font-black text-slate-800 text-[15px] group-hover:text-brand transition-colors truncate capitalize leading-tight mb-1">
           {displayName}
@@ -55,7 +55,7 @@ const ProductCard = ({
              <Star size={9} fill="currentColor" strokeWidth={0} />
           </div>
           <span className="text-[13px] font-black text-slate-700 tracking-tight">
-            {rating} • {time || "30-35 mins"}
+            {rating} • {time || "13 mins"}
           </span>
         </div>
 
