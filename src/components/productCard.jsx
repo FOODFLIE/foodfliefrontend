@@ -45,7 +45,7 @@ const ProductCard = ({
       {/* Content Section */}
       <div className="pt-2.5 shadow-sm rounded-b-xl  px-0.5 flex-1 flex flex-col">
         {/* Title */}
-        <h3 className="font-black text-slate-800 text-[15px] group-hover:text-brand transition-colors truncate capitalize leading-tight mb-1">
+        <h3 className="font-black text-slate-800 text-[15px] group-hover:text-brand transition-colors line-clamp-2 capitalize leading-tight mb-1">
           {displayName}
         </h3>
 

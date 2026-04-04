@@ -64,7 +64,7 @@ const SearchResultsDisplay = ({ results, query }) => {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-black text-slate-800 truncate group-hover:text-brand transition-colors">
+                  <h3 className="font-black text-slate-800 line-clamp-2 group-hover:text-brand transition-colors">
                     {partner.store_name}
                   </h3>
                   <p className="text-xs font-bold text-slate-400 truncate mb-1">

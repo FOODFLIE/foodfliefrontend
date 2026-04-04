@@ -25,7 +25,7 @@ const MenuItem = ({
               ></div>
             </div>
           )}
-          <h4 className="font-black text-slate-800 text-base sm:text-lg tracking-tight group-hover:text-brand transition-colors font-poppins truncate pb-1">
+          <h4 className="font-black text-slate-800 text-base sm:text-lg tracking-tight group-hover:text-brand transition-colors font-poppins line-clamp-2 pb-1">
             {name}
           </h4>
         </div>
@@ -36,7 +36,7 @@ const MenuItem = ({
         <div className="flex-1"></div>
 
         <div className="pt-2 flex items-center justify-between gap-2 mt-auto">
-          <span className="text-lg sm:text-xl font-black text-slate-800 font-display truncate">
+          <span className="text-lg sm:text-xl font-black text-slate-800 font-display">
             ₹{price}
           </span>
         </div>
