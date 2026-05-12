@@ -31,7 +31,7 @@ export const LocationFallback = ({ onSelectLocation }) => {
 
         {/* Help Text */}
         <p className="mt-4 text-[10px] text-slate-400 font-medium">
-          13-minute delivery • Menu prices only
+          15-minute delivery • Menu prices only
         </p>
       </div>
     </div>

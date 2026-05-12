@@ -22,7 +22,7 @@ const OrderConfirmation = () => {
   useEffect(() => {
     // Refresh cart count when order confirmation loads
     refreshCartCount();
-    
+
     if (id) {
       getOrderById(id)
         .then(setOrder)
@@ -75,7 +75,7 @@ const OrderConfirmation = () => {
           </h1>
           <p className="text-sm sm:text-base text-slate-600 font-medium">
             Your food will arrive in{" "}
-            <span className="font-black text-green-600">13 minutes</span>
+            <span className="font-black text-green-600">15 minutes</span>
           </p>
         </div>
 

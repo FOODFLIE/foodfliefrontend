@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import AuthModal from "./authModal";
 import LocationModal from "./modals/locationModal";
 import MobileBottomNav from "./navigation/mobileBottomNav";
@@ -14,8 +14,12 @@ const Navbar = () => {
   const { user, isAuthenticated } = useAuth();
   const { address, loading: locationLoading } = useUserLocation();
   const navigate = useNavigate();
+  const location = useLocation();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+
+  // Check if we're on the home page
+  const isHomePage = location.pathname === '/' || location.pathname === '/home';
 
   useEffect(() => {
     const handleOpenLocationModal = () => {
@@ -60,6 +64,7 @@ const Navbar = () => {
       <LocationModal
         isOpen={isLocationModalOpen}
         onClose={() => setIsLocationModalOpen(false)}
+        hideAddNewAddress={isHomePage}
       />
 
       <MobileBottomNav

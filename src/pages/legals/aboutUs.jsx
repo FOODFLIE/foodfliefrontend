@@ -69,8 +69,8 @@ const AboutUs = () => {
               <p className="text-xl text-slate-600 leading-relaxed mb-10 font-medium">
                 For years, I faced the same problems many people deal with every
                 day — high delivery charges, long waiting times, and food that
-                arrives late. I spent a lot of money on food delivery,
-                and every time I felt the same frustration.
+                arrives late. I spent a lot of money on food delivery, and every
+                time I felt the same frustration.
               </p>
 
               <div className="bg-white rounded-4xl p-8 md:p-12 shadow-[0_8px_40px_-12px_rgba(220,38,38,0.08)] border border-brand-muted hover:shadow-[0_12px_44px_-12px_rgba(220,38,38,0.12)] transition-shadow duration-500 relative overflow-hidden group">
@@ -95,7 +95,7 @@ const AboutUs = () => {
                 how Food Flie was born. I started working on low‑price food
                 delivery with a very human promise:{" "}
                 <strong className="text-brand font-bold bg-brand-muted/80 px-3 py-1.5 rounded-xl border border-brand-light inline-block mt-2">
-                  fast delivery in just 13 minutes, without compromising
+                  fast delivery in just 15 minutes, without compromising
                   quality.
                 </strong>
               </p>
