@@ -26,7 +26,7 @@ const CategoryProduct = () => {
         setLoading(true);
 
         // Always fetch categories to get metadata (time, type)
-        const cats = await fetchCategories();
+        const cats = await fetchCategories(coords?.latitude, coords?.longitude);
         const cat = cats.find((c) => String(c.id) === String(id));
         if (cat) setRealCategory(cat);
 
