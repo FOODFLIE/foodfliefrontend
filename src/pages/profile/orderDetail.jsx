@@ -26,7 +26,7 @@ const OrderDetail = () => {
     const fetchOrder = async () => {
       try {
         const data = await getOrderById(id);
-       
+
         setOrder(data);
       } catch (error) {
         console.error("Error fetching order details:", error);
@@ -142,7 +142,7 @@ const OrderDetail = () => {
                 Arrived in
               </span>
               <div className="bg-brand-muted text-brand px-3 py-1 rounded-lg text-xs font-black italic mt-1">
-                ⚡ +13 MINS
+                ⚡ +15 mins
               </div>
             </div>
           </div>
@@ -298,10 +298,7 @@ const OrderDetail = () => {
                 Delivery Address
               </p>
               <p className="text-sm font-bold text-slate-700 flex items-start gap-2 leading-relaxed">
-                <MapPin
-                  size={14}
-                  className="text-slate-300 mt-0.5 shrink-0"
-                />
+                <MapPin size={14} className="text-slate-300 mt-0.5 shrink-0" />
                 {order.address && order.address !== "undefined, undefined"
                   ? order.address
                   : "Address not provided"}

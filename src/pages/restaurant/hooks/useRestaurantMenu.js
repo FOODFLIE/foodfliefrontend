@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { getProductsByPartner } from "../../../services/productService";
 import { fetchCategories } from "../../../services/categoryServices";
-import { addToCart as apiAddToCart, updateCartItem, removeFromCart, getCart } from "../../../services/cartService";
+import {
+  addToCart as apiAddToCart,
+  updateCartItem,
+  removeFromCart,
+  getCart,
+} from "../../../services/cartService";
 import { getGuestCart } from "../../../services/guestCartService";
 import { useCart } from "../../../context/cartContext";
 import { useAuth } from "../../../context/authContext";
@@ -68,7 +73,7 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
               ...responseData,
               name: responseData.store_name || responseData.name,
               rating: responseData.rating || 4.0,
-              time: responseData.time || "13 MINS",
+              time: responseData.time || "15 mins",
               cuisines: responseData.cuisines || ["Restaurant"],
               offer: responseData.offer || "Special Offer",
             };
@@ -147,7 +152,7 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
             ...p,
             name: p.store_name || p.name,
             rating: p.rating || 4.0,
-            time: p.time || "13 MINS",
+            time: p.time || "15 mins",
             cuisines: p.cuisines || ["Restaurant"],
             offer: p.offer || "Special Offer",
           });
@@ -165,89 +170,95 @@ export const useRestaurantMenu = (id, initialRestaurant = null) => {
     fetchMenuAndCart();
   }, [id, coords, isAuthenticated]);
 
-const handleUpdateQuantity = async (item, change, variantSku = null) => {
-  const sku = variantSku || item.sku;
-  const currentQty = quantities[sku] || 0;
-  const newQty = currentQty + change;
+  const handleUpdateQuantity = async (item, change, variantSku = null) => {
+    const sku = variantSku || item.sku;
+    const currentQty = quantities[sku] || 0;
+    const newQty = currentQty + change;
 
-  if (newQty < 0) return;
+    if (newQty < 0) return;
 
-  setAddingToCart(prev => ({ ...prev, [sku]: true }));
+    setAddingToCart((prev) => ({ ...prev, [sku]: true }));
 
-  try {
-    if (isAuthenticated) {
-      // 🔥 FIRST TIME ADD (or adding again if somehow map was lost)
-      if (!cartItemsMap[sku] && change > 0) {
-        const res = await apiAddToCart(sku, change);
+    try {
+      if (isAuthenticated) {
+        // 🔥 FIRST TIME ADD (or adding again if somehow map was lost)
+        if (!cartItemsMap[sku] && change > 0) {
+          const res = await apiAddToCart(sku, change);
 
-        setCartItemsMap(prev => ({
-          ...prev,
-          [sku]: res.cart_item_id || res.id // Handle potential backend naming variations
-        }));
-
-        setQuantities(prev => ({
-          ...prev,
-          [sku]: change
-        }));
-
-        refreshCartCount();
-        if (currentQty === 0) trackAddToCart(item, change);
-      }
-      // 🔥 UPDATE EXISTING ITEM
-      else if (cartItemsMap[sku]) {
-        const itemId = cartItemsMap[sku];
-
-        if (newQty === 0) {
-          await removeFromCart(itemId);
-
-          setCartItemsMap(prev => {
-            const copy = { ...prev };
-            delete copy[sku];
-            return copy;
-          });
-
-          setQuantities(prev => ({
+          setCartItemsMap((prev) => ({
             ...prev,
-            [sku]: 0
+            [sku]: res.cart_item_id || res.id, // Handle potential backend naming variations
+          }));
+
+          setQuantities((prev) => ({
+            ...prev,
+            [sku]: change,
+          }));
+
+          refreshCartCount();
+          if (currentQty === 0) trackAddToCart(item, change);
+        }
+        // 🔥 UPDATE EXISTING ITEM
+        else if (cartItemsMap[sku]) {
+          const itemId = cartItemsMap[sku];
+
+          if (newQty === 0) {
+            await removeFromCart(itemId);
+
+            setCartItemsMap((prev) => {
+              const copy = { ...prev };
+              delete copy[sku];
+              return copy;
+            });
+
+            setQuantities((prev) => ({
+              ...prev,
+              [sku]: 0,
+            }));
+          } else {
+            await updateCartItem(itemId, newQty);
+
+            setQuantities((prev) => ({
+              ...prev,
+              [sku]: newQty,
+            }));
+          }
+
+          refreshCartCount();
+        }
+      } else {
+        // Guest cart handling
+        const partnerId = restaurantData?.id || item.partner_id || null;
+        if (newQty === 0) {
+          // We'll treat 0 as removing from guest cart
+          addToGuestCart(
+            sku,
+            item.name,
+            item.price,
+            -currentQty,
+            String(partnerId),
+          );
+          setQuantities((prev) => ({
+            ...prev,
+            [sku]: 0,
           }));
         } else {
-          await updateCartItem(itemId, newQty);
-
-          setQuantities(prev => ({
+          addToGuestCart(sku, item.name, item.price, change, String(partnerId));
+          setQuantities((prev) => ({
             ...prev,
-            [sku]: newQty
+            [sku]: newQty,
           }));
-        }
-
-        refreshCartCount();
-      }
-    } else {
-      // Guest cart handling
-      const partnerId = restaurantData?.id || item.partner_id || null;
-      if (newQty === 0) {
-        // We'll treat 0 as removing from guest cart
-        addToGuestCart(sku, item.name, item.price, -currentQty, String(partnerId));
-        setQuantities(prev => ({
-          ...prev,
-          [sku]: 0
-        }));
-      } else {
-        addToGuestCart(sku, item.name, item.price, change, String(partnerId));
-        setQuantities(prev => ({
-          ...prev,
-          [sku]: newQty
-        }));
-        if (change === 1 && currentQty === 0) {
-          trackAddToCart(item, 1);
+          if (change === 1 && currentQty === 0) {
+            trackAddToCart(item, 1);
+          }
         }
       }
+    } catch (err) {
+      console.error("Cart error:", err);
+    } finally {
+      setAddingToCart((prev) => ({ ...prev, [sku]: false }));
     }
-  } catch (err) {
-    console.error("Cart error:", err);
-  } finally {
-    setAddingToCart(prev => ({ ...prev, [sku]: false }));
-  }
-};
+  };
 
   return {
     restaurantData,

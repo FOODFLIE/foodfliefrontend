@@ -18,10 +18,7 @@ const RestaurantChainSection = ({ title }) => {
       try {
         setLoading(true);
 
-        const data = await getAllStores(
-          coords.latitude,
-          coords.longitude
-        );
+        const data = await getAllStores(coords.latitude, coords.longitude);
 
         const storesList = Array.isArray(data) ? data : data?.data || [];
 
@@ -31,7 +28,7 @@ const RestaurantChainSection = ({ title }) => {
             name: item.store_name || item.name,
             location: item.area || item.address || "Local",
             rating: item.rating || 4.2,
-            time: item.time || "13 mins",
+            time: item.time || "15 mins",
             cuisine: item.cuisine || "Indian, Fast Food",
             image:
               item.image ||
@@ -75,7 +72,13 @@ const RestaurantChainSection = ({ title }) => {
   }
 
   if (restaurants.length === 0) {
-    return <NoStoresFound compact title="No Restaurants Nearby" description="We couldn't find any restaurants serving your area. Try changing your location." />;
+    return (
+      <NoStoresFound
+        compact
+        title="No Restaurants Nearby"
+        description="We couldn't find any restaurants serving your area. Try changing your location."
+      />
+    );
   }
 
   return (

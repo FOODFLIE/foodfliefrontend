@@ -41,8 +41,6 @@ const Cart = () => {
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [cookingInstructions, setCookingInstructions] = useState("");
 
-
-
   useEffect(() => {
     fetchCart();
   }, []);
@@ -51,7 +49,8 @@ const Cart = () => {
   useEffect(() => {
     if (cart && cart.items && cart.items.length > 0) {
       trackInitiateCheckout({
-        totalAmount: parseFloat(cart.subtotal) + parseFloat(cart.delivery_fee || 0),
+        totalAmount:
+          parseFloat(cart.subtotal) + parseFloat(cart.delivery_fee || 0),
         items: cart.items,
       });
     }
@@ -101,8 +100,12 @@ const Cart = () => {
         latitude: coords?.latitude || null,
         longitude: coords?.longitude || null,
       };
-      
-      const response = await placeOrder(orderPayload, "COD", cookingInstructions.trim() || null);
+
+      const response = await placeOrder(
+        orderPayload,
+        "COD",
+        cookingInstructions.trim() || null,
+      );
       const redirectUrl = response?.redirect_url;
       const orderId = response?.order_id;
 
@@ -160,8 +163,8 @@ const Cart = () => {
 
   return (
     <>
-      <SEO 
-        title="Review Your Cart" 
+      <SEO
+        title="Review Your Cart"
         description="Review your order and proceed to checkout. Fast 15-minute delivery with menu prices only."
       />
       <div className="min-h-screen bg-[#fafafa] pb-32 pt-8 md:pt-14 relative z-0">
@@ -191,7 +194,7 @@ const Cart = () => {
               {/* Optional delivery timeline or similar badge */}
               <div className="bg-brand-muted/80 border border-brand-light text-brand px-3 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex items-center gap-2 font-semibold shadow-sm backdrop-blur-md self-start md:self-auto text-xs md:text-sm">
                 <div className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse"></div>
-                Delivery in 13 mins
+                Delivery in 15 mins
               </div>
             </div>
 
@@ -309,10 +312,7 @@ const Cart = () => {
                 <div className="bg-gradient-to-br from-white to-brand-muted/30 rounded-2xl md:rounded-[2rem] p-4 md:p-6 border border-brand-light/60 shadow-[0_8px_20px_rgb(0,0,0,0.02)] flex items-center justify-between gap-3 md:gap-4 group cursor-pointer hover:border-brand-light hover:shadow-[0_8px_30px_rgb(0,0,0,0.05)] transition-all">
                   <div className="flex items-center gap-3 md:gap-4">
                     <div className="w-10 h-10 md:w-12 md:h-12 bg-brand-light/50 rounded-xl md:rounded-2xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform shrink-0">
-                      <Tag
-                        size={20}
-                        className="text-brand md:w-[22px]"
-                      />
+                      <Tag size={20} className="text-brand md:w-[22px]" />
                     </div>
                     <div>
                       <h4 className="font-bold text-slate-800 text-base md:text-lg">
