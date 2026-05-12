@@ -30,7 +30,7 @@ const CategoryProduct = () => {
         const cat = cats.find((c) => String(c.id) === String(id));
         if (cat) setRealCategory(cat);
 
-        const responseData = await getProductsByCategory(id);
+        const responseData = await getProductsByCategory(id, coords?.latitude, coords?.longitude);
         const restaurantList = Array.isArray(responseData)
           ? responseData
           : responseData?.data || [];

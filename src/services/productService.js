@@ -1,9 +1,13 @@
 import apiClient from "../utils/apiClient";
 
-export const getProductsByCategory = async (categoryId) => {
+export const getProductsByCategory = async (categoryId, userLat, userLng) => {
   try {
-    const response = await apiClient.get(
-      `/api/customer-product/by-category?category_id=${categoryId}`,
+    const response = await apiClient.post(
+      `/api/customer-product/by-category/${categoryId}`,
+      {
+        userLat,
+        userLng,
+      }
     );
     return response.data;
   } catch (error) {
