@@ -37,7 +37,7 @@ const Preloader = ({ onFinish }) => {
 
       <div className="brand-info">
         <h1 className="brand-name">FoodFlie</h1>
-        <p className="brand-tagline">13 Minute Food Delivery</p>
+        <p className="brand-tagline">15 Minute Food Delivery</p>
 
         <div className="progress-container">
           <div className="progress-bar"></div>

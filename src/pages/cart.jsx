@@ -162,7 +162,7 @@ const Cart = () => {
     <>
       <SEO 
         title="Review Your Cart" 
-        description="Review your order and proceed to checkout. Fast 13-minute delivery with menu prices only."
+        description="Review your order and proceed to checkout. Fast 15-minute delivery with menu prices only."
       />
       <div className="min-h-screen bg-[#fafafa] pb-32 pt-8 md:pt-14 relative z-0">
         {/* Background Soft Gradients */}

@@ -113,7 +113,7 @@ const AboutUs = () => {
               Time Respected
             </h3>
             <p className="text-slate-500 leading-relaxed text-lg">
-              We know you're hungry. 13-minute delivery ensures your food is
+              We know you're hungry. 15-minute delivery ensures your food is
               fresh, hot, and arrives right when you need it.
             </p>
           </div>
