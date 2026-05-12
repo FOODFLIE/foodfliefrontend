@@ -88,7 +88,7 @@ const CategorySection = () => {
               {/* Delivery Badge */}
               {category.delivery_type === "fast" && (
                 <div className="absolute bottom-1 inset-x-2 bg-brand/90 text-white text-[7px] sm:text-[9px] font-black py-0.5 sm:py-1 rounded-full flex items-center justify-center gap-0.5 backdrop-blur-sm shadow-sm">
-                  <Zap size={8} fill="currentColor" className="sm:w-2.5 sm:h-2.5" /> {category.delivery_time || 13}m
+                  <Zap size={8} fill="currentColor" className="sm:w-2.5 sm:h-2.5" /> {category.delivery_time || 15}m
                 </div>
               )}
             </div>

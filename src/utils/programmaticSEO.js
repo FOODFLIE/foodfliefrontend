@@ -5,7 +5,7 @@ export const generateLocationSEO = (
   cuisines = [],
   restaurants = [],
 ) => {
-  const title = `Food Delivery in ${location} | 13 Min Delivery | FoodFlie`;
+  const title = `Food Delivery in ${location} | 15 Min Delivery | FoodFlie`;
   const description = `Order food online in ${location} and get delivery in just 15 minutes. ${cuisines.length > 0 ? cuisines.slice(0, 3).join(", ") + " and more." : "Top restaurants available."} Menu prices guaranteed, no hidden charges.`;
   const keywords = [
     `food delivery in ${location}`,
@@ -54,7 +54,7 @@ export const generateCuisineSEO = (
   location = "Hyderabad",
   restaurants = [],
 ) => {
-  const title = `${cuisine} Food Delivery in ${location} | 13 Min Delivery | FoodFlie`;
+  const title = `${cuisine} Food Delivery in ${location} | 15 Min Delivery | FoodFlie`;
   const description = `Order authentic ${cuisine} food in ${location}. ${
     restaurants.length > 0
       ? `Choose from ${restaurants.length}+ restaurants including ${restaurants

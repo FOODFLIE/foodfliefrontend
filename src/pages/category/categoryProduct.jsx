@@ -83,7 +83,7 @@ const CategoryProduct = () => {
               <div className="flex items-center gap-2">
                 <span className="bg-brand text-white text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 shadow-sm uppercase tracking-wider">
                   <Zap size={10} fill="currentColor" />{" "}
-                  {realCategory?.delivery_time || 13} MINS DELIVERY
+                  {realCategory?.delivery_time || 15} MINS DELIVERY
                 </span>
               </div>
             )}
