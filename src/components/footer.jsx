@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Rocket, Instagram, Twitter, Linkedin, Facebook } from "lucide-react";
-import logo from "../assets/food_trans.svg";
+import logo from "../assets/logo4.png";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -24,14 +24,14 @@ const Footer = () => {
                 className="h-12 object-contain group-hover:rotate-12 transition-transform duration-300"
               />
             </Link>
-            <p className="text-slate-300 text-sm leading-relaxed mb-6">
+            <p className=" text-sm leading-relaxed mb-6">
               Experience the fastest delivery service in town. Fresh groceries,
               delicious meals, and essentials delivered to your doorstep in
               minutes.
             </p>
             <div className="flex items-center gap-4">
               <a
-                href="#"
+                href="https://www.instagram.com/foodflie/"
                 className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand transition-colors duration-300 group"
               >
                 <Instagram className="w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -60,7 +60,7 @@ const Footer = () => {
           {/* Quick Links */}
           <div>
             <h4 className="font-bold text-lg mb-6">Quick Links</h4>
-            <ul className="space-y-4 text-slate-400 text-sm">
+            <ul className="space-y-4  text-sm">
               <li>
                 <Link to="/" className="hover:text-white transition-colors">
                   Home
@@ -93,7 +93,7 @@ const Footer = () => {
           {/* Contact */}
           <div>
             <h4 className="font-bold text-lg mb-6">Support</h4>
-            <ul className="space-y-4 text-slate-400 text-sm">
+            <ul className="space-y-4  text-sm">
               <li>
                 <a href="/about" className="hover:text-white transition-colors">
                   About Us
@@ -135,7 +135,7 @@ const Footer = () => {
             </div>
 
             <h4 className="font-bold text-xl mb-3">Shape the Future</h4>
-            <p className="text-slate-300 text-xs leading-relaxed mb-4">
+            <p className=" text-xs leading-relaxed mb-4">
               You're among the first to experience the new Foodflie. Your
               feedback is crucial for our evolution.
             </p>
