@@ -11,6 +11,7 @@ import AuthModalFooter from "./auth/authModalFooter";
 
 const AuthModal = ({ isOpen, onClose }) => {
   const { login } = useAuth();
+  const [isPhoneValid, setIsPhoneValid] = React.useState(false);
 
   // Use custom hook for all authentication logic
   const {
@@ -104,6 +105,7 @@ const AuthModal = ({ isOpen, onClose }) => {
               <PhoneInput
                 value={formData.phone}
                 onChange={handleInputChange}
+                onValidation={setIsPhoneValid}
                 disabled={step === "verify"}
               />
 
@@ -153,7 +155,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
             {/* Submit Button - Larger touch target on mobile */}
             <button
-              disabled={loading}
+              disabled={loading || (step === "send" && !isPhoneValid)}
               type="submit"
               className="w-full bg-brand text-white h-14 sm:h-12 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-brand/20 hover:bg-brand-dark active:scale-[0.98] disabled:opacity-70 disabled:active:scale-100 transition-all font-bold text-sm mt-6 group"
             >
