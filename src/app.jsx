@@ -26,6 +26,7 @@ import { CartProvider } from "./context/cartContext";
 import ProtectedRoute from "./components/common/protectedRoute";
 import ScrollToTop from "./components/common/scrollToTop";
 import { usePageTracking } from "./hooks/usePageTracking";
+import WhatsAppButton from "./components/whatsappButton";
 
 import InstallPrompt from "./components/InstallPrompt";
 
@@ -98,6 +99,8 @@ const App = () => {
               </Route>
             </Routes>
             <InstallPrompt />
+            {/* WhatsApp Support Button - Show on all pages except partner routes */}
+            {!isPartnerRoute && <WhatsAppButton />}
           </div>
         </CartProvider>
       </AuthProvider>
