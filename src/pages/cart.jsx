@@ -36,6 +36,7 @@ const Cart = () => {
   } = useCartLocation();
   const { refreshCartCount } = useCart();
   const [cart, setCart] = useState(null);
+  console.log("Cart data:", cart);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
