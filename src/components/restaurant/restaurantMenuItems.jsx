@@ -34,13 +34,16 @@ const RestaurantMenuItems = ({
   };
 
   const getItemQuantity = (item) => {
-    let total = quantities[item.sku] || 0;
-    if (item.variants && item.variants.length > 0) {
+    if (item.has_variants && item.variants && item.variants.length > 0) {
+      // For items with variants, only count variant quantities
+      let total = 0;
       item.variants.forEach((v) => {
         total += quantities[v.sku] || 0;
       });
+      return total;
     }
-    return total;
+    // For items without variants, count the main item quantity
+    return quantities[item.sku] || 0;
   };
 
   const filteredItems = menuItems
