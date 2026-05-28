@@ -1,7 +1,21 @@
-import React from "react";
-import { Clock, MapPin, Phone, CheckCircle2, Circle, Package, AlertCircle, CreditCard, Check } from "lucide-react";
+import React, { useState } from "react";
+import { Clock, MapPin, Phone, CheckCircle2, Circle, Package, AlertCircle, CreditCard, Check, Printer, Loader2 } from "lucide-react";
+import { printKOT } from "../../../services/partnerKotService";
 
 export default function OrderCard({ order, activeTab, isChecked, toggleItemCheck }) {
+  const [printing, setPrinting] = useState(false);
+
+  const handlePrintKOT = async () => {
+    setPrinting(true);
+    try {
+      await printKOT(order.id);
+    } catch (error) {
+      console.error('Print failed:', error);
+      alert('Failed to print KOT. Please try again.');
+    } finally {
+      setPrinting(false);
+    }
+  };
   const formatTimeAgo = (dateString) => {
     if (!dateString) return "Unknown";
     const then = new Date(dateString);
@@ -126,7 +140,20 @@ export default function OrderCard({ order, activeTab, isChecked, toggleItemCheck
             </div>
           </div>
 
-          <div className="mt-1">
+          <div className="mt-1 space-y-3">
+            <button
+              onClick={handlePrintKOT}
+              disabled={printing}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-brand text-white rounded-lg font-medium hover:bg-brand-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+            >
+              {printing ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Printer className="w-4 h-4" />
+              )}
+              {printing ? 'Printing...' : 'Print KOT'}
+            </button>
+            
             {activeTab === "New" && (
               <button className="w-full bg-[#fc8019] hover:bg-[#e67315] transition-colors text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md">
                 <Check className="w-5 h-5" /> Accept Order

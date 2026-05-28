@@ -12,15 +12,31 @@ import {
   MapPin,
   Phone,
   User,
+  Printer,
+  Loader2,
 } from "lucide-react";
 import { getOrderById } from "../../services/orderService";
 import SEO from "../../components/common/seo";
+import { printKOT } from "../../services/partnerKotService";
 
 const OrderDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [printing, setPrinting] = useState(false);
+
+  const handlePrintKOT = async () => {
+    setPrinting(true);
+    try {
+      await printKOT(id);
+    } catch (error) {
+      console.error('Print failed:', error);
+      alert('Failed to print KOT. Please try again.');
+    } finally {
+      setPrinting(false);
+    }
+  };
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -231,7 +247,19 @@ const OrderDetail = () => {
               </div>
             </div>
           </div>
-          <div className="p-4 bg-brand-muted/30 border-t border-slate-50">
+          <div className="p-4 bg-brand-muted/30 border-t border-slate-50 space-y-3">
+            <button
+              onClick={handlePrintKOT}
+              disabled={printing}
+              className="w-full flex items-center justify-center gap-2 py-3 bg-brand text-white rounded-2xl font-medium hover:bg-brand-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs"
+            >
+              {printing ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Printer className="w-4 h-4" />
+              )}
+              {printing ? 'Printing...' : 'Print KOT'}
+            </button>
             <button className="w-full flex items-center justify-center gap-2 py-3 text-brand font-black text-[10px] uppercase tracking-widest hover:bg-brand-muted transition-colors rounded-2xl border border-brand/10">
               Download Invoice / Credit Note
             </button>

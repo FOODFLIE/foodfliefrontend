@@ -17,7 +17,7 @@ export default function Orders() {
 
   useEffect(() => {
     fetchOrders();
-    const interval = setInterval(() => fetchOrders(false), 30000); // 30s auto-refresh
+    const interval = setInterval(() => fetchOrders(false), 3000); // 30s auto-refresh
     return () => clearInterval(interval);
   }, [notifyOnNewOrders]);
 
