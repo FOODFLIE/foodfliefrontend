@@ -2,7 +2,20 @@ import apiClient from "../utils/apiClient";
 
 // --- Seller Authentication ---
 
-// Send Seller OTP
+// Login Seller with Password
+export const loginSeller = async (phone, password) => {
+  try {
+    const response = await apiClient.post("/api/partner/login", {
+      phone,
+      password,
+    });
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Failed to login");
+  }
+};
+
+// Send Seller OTP (for registration only)
 export const sendSellerOTP = async (phone) => {
   try {
     const response = await apiClient.post("/api/partner/send-otp", {
@@ -14,7 +27,7 @@ export const sendSellerOTP = async (phone) => {
   }
 };
 
-// Verify Seller OTP
+// Verify Seller OTP (for registration only)
 export const verifySellerOTP = async (phone, otp) => {
   try {
     const response = await apiClient.post("/api/partner/verify-otp", {

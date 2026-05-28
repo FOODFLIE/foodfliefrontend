@@ -25,6 +25,7 @@ import SEO from "../../components/common/seo";
 const SellerAuth = () => {
   const {
     step,
+    isLogin,
     registrationStep,
     nextRegistrationStep,
     prevRegistrationStep,
@@ -34,10 +35,11 @@ const SellerAuth = () => {
     formData,
     handleInputChange,
     toggleWorkingDay,
-    handleSendOTP,
+    handleSubmitAuth,
     handleVerifyOTP,
     handleRegister,
     resetStep,
+    toggleAuthMode,
   } = useSellerAuth();
 
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -663,17 +665,23 @@ const SellerAuth = () => {
             <div className="flex flex-col justify-center max-w-md mx-auto w-full lg:px-8">
               {step === 1 && (
                 <form
-                  onSubmit={handleSendOTP}
+                  onSubmit={handleSubmitAuth}
                   className="space-y-8 animate-in fade-in slide-in-from-bottom-8 duration-500"
                 >
                   <div>
                     <h2 className="text-3xl font-bold text-slate-900 tracking-tight">
-                      Welcome Partner!
+                      {isLogin ? 'Welcome Back!' : 'Join FoodFlie!'}
                     </h2>
                     <p className="text-slate-500 mt-2 font-medium">
-                      Enter your mobile number to get started
+                      {isLogin ? 'Login to your partner account' : 'Create your partner account'}
                     </p>
                   </div>
+
+                  {error && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm font-medium">
+                      {error}
+                    </div>
+                  )}
 
                   <div className="space-y-6">
                     <div className="relative group">
@@ -695,6 +703,20 @@ const SellerAuth = () => {
                       />
                     </div>
 
+                    {isLogin && (
+                      <div className="relative group">
+                        <input
+                          type="password"
+                          name="password"
+                          className="block w-full text-lg font-medium border-2 border-slate-100 rounded-2xl py-4 px-4 focus:ring-4 focus:ring-brand/10 focus:border-brand transition-all outline-none bg-slate-50 focus:bg-white"
+                          placeholder="Enter your password"
+                          value={formData.password}
+                          onChange={handleInputChange}
+                          required
+                        />
+                      </div>
+                    )}
+
                     <button
                       type="submit"
                       disabled={loading}
@@ -704,7 +726,7 @@ const SellerAuth = () => {
                         <Loader2 className="animate-spin" />
                       ) : (
                         <>
-                          Get OTP{" "}
+                          {isLogin ? 'Login' : 'Get OTP'}
                           <ArrowRight
                             size={20}
                             className="group-hover:translate-x-1 transition-transform"
@@ -714,7 +736,15 @@ const SellerAuth = () => {
                     </button>
                   </div>
 
-                  <div className="text-center">
+                  <div className="text-center space-y-4">
+                    <button
+                      type="button"
+                      onClick={toggleAuthMode}
+                      className="text-brand font-bold hover:underline"
+                    >
+                      {isLogin ? "New partner? Register here" : "Already have an account? Login"}
+                    </button>
+                    
                     <p className="text-xs text-slate-400 font-medium">
                       By continuing, you agree to our{" "}
                       <a href="#" className="underline hover:text-brand">
