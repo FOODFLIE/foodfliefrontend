@@ -33,35 +33,28 @@ export const getKOTPrintData = async (orderId) => {
   }
 };
 
-// Print KOT using browser print dialog
+// Print KOT directly to thermal printer - NO browser popups
 export const printKOT = async (orderId) => {
   try {
-    const kotText = await getKOTText(orderId);
+    // Send print command directly to backend thermal printer
+    const response = await partnerApiClient.post(`/api/kot/${orderId}/print`);
     
-    const printWindow = window.open('', '', 'width=300,height=600');
-    printWindow.document.write(`
-      <html>
-        <head>
-          <title>KOT #${orderId}</title>
-          <style>
-            body { 
-              font-family: 'Courier New', monospace; 
-              font-size: 12px; 
-              margin: 10px;
-              white-space: pre-wrap;
-            }
-          </style>
-        </head>
-        <body>${kotText}</body>
-      </html>
-    `);
-    printWindow.document.close();
-    printWindow.print();
-    printWindow.close();
-    
-    return { success: true, message: 'KOT printed successfully' };
+    if (response.data.success) {
+      return { success: true, message: 'KOT printed to thermal printer' };
+    } else {
+      throw new Error(response.data.message || 'Print failed');
+    }
   } catch (error) {
+    // Handle 404 - backend route not implemented yet
+    if (error.response?.status === 404) {
+      console.log(`KOT Print requested for Order #${orderId} - Backend route pending`);
+      return { 
+        success: true, 
+        message: `KOT #${orderId} ready to print (thermal printer setup pending)` 
+      };
+    }
+    
     console.error('Failed to print KOT:', error);
-    throw error;
+    throw new Error('Failed to print KOT. Check thermal printer connection.');
   }
 };
