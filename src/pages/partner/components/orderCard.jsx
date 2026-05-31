@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Clock, MapPin, Phone, CheckCircle2, Circle, Package, AlertCircle, CreditCard, Check, Printer, Loader2 } from "lucide-react";
-import { printKOT } from "../../../services/partnerKotService";
+import { printKOTSimple } from "../../../services/simpleKotPrint";
 
 export default function OrderCard({ order, activeTab, isChecked, toggleItemCheck }) {
   const [printing, setPrinting] = useState(false);
@@ -8,7 +8,8 @@ export default function OrderCard({ order, activeTab, isChecked, toggleItemCheck
   const handlePrintKOT = async () => {
     setPrinting(true);
     try {
-      await printKOT(order.id);
+      const result = await printKOTSimple(order.id);
+      console.log('✅ Print result:', result.message);
     } catch (error) {
       console.error('Print failed:', error);
       alert('Failed to print KOT. Please try again.');
@@ -154,11 +155,11 @@ export default function OrderCard({ order, activeTab, isChecked, toggleItemCheck
               {printing ? 'Printing...' : 'Print KOT'}
             </button>
             
-            {activeTab === "New" && (
+            {/* {activeTab === "New" && (
               <button className="w-full bg-[#fc8019] hover:bg-[#e67315] transition-colors text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md">
                 <Check className="w-5 h-5" /> Accept Order
               </button>
-            )}
+            )} */}
             {activeTab === "Preparing" && (
               <button className="w-full bg-emerald-500 hover:bg-emerald-600 transition-colors text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md">
                  <Package className="w-5 h-5" /> Mark Ready
