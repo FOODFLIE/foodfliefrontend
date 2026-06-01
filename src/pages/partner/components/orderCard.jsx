@@ -12,7 +12,6 @@ export default function OrderCard({ order, activeTab, isChecked, toggleItemCheck
       console.log('✅ Print result:', result.message);
     } catch (error) {
       console.error('Print failed:', error);
-      alert('Failed to print KOT. Please try again.');
     } finally {
       setPrinting(false);
     }
