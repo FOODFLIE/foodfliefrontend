@@ -7,13 +7,14 @@ import {
   Tag,
   MapPin,
   Navigation,
+  QrCode,
 } from "lucide-react";
 import {
   getCart,
   updateCartItem,
   removeFromCart,
 } from "../services/cartService";
-import { placeOrder } from "../services/orderService";
+import { placeOrder, submitPayment } from "../services/orderService";
 import { useCartLocation } from "../context/cartLocationContext";
 import { useCart } from "../context/cartContext";
 import { useAuth } from "../context/authContext";
@@ -36,13 +37,30 @@ const Cart = () => {
   } = useCartLocation();
   const { refreshCartCount } = useCart();
   const [cart, setCart] = useState(null);
-  console.log("Cart data:", cart);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [cookingInstructions, setCookingInstructions] = useState("");
 
+  // --- PAYMENT STATE MANAGEMENT ---
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [createdOrderId, setCreatedOrderId] = useState(null);
+  const [utrDigits, setUtrDigits] = useState("");
+  const [submittingUtr, setSubmittingUtr] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  // ---------------------------------
+
+  // Check device type on mount to handle desktop vs mobile layouts
   useEffect(() => {
+    const checkDevice = () => {
+      const isMobileDevice =
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent,
+        );
+      setIsMobile(isMobileDevice);
+    };
+
+    checkDevice();
     fetchCart();
   }, []);
 
@@ -102,44 +120,53 @@ const Cart = () => {
         longitude: coords?.longitude || null,
       };
 
+      const currentSubtotal = parseFloat(cart?.subtotal) || 0;
+      const currentDeliveryFee = parseFloat(cart?.delivery_fee) || 0;
+      const calculatedTotal = currentSubtotal + currentDeliveryFee;
+
       const response = await placeOrder(
         orderPayload,
-        "COD",
+        "UPI",
         cookingInstructions.trim() || null,
       );
-      const redirectUrl = response?.redirect_url;
-      const orderId = response?.order_id;
 
-      // Track Purchase event with Meta Pixel
+      const orderId = response?.order_id;
+      setCreatedOrderId(orderId);
+
       if (orderId) {
         trackPurchase({
           orderId: orderId,
-          totalAmount: totalAmount,
+          totalAmount: calculatedTotal,
           items: cart.items,
         });
       }
 
-      // Clear cart after successful order
-      await refreshCartCount();
-
-      setTimeout(() => {
-        if (redirectUrl) {
-          try {
-            const url = new URL(redirectUrl, window.location.origin);
-            if (url.origin === window.location.origin) {
-              navigate(url.pathname, { state: { orderId } });
-            } else {
-              navigate(`/orders/${orderId}`, { state: { orderId } });
-            }
-          } catch {
-            navigate(redirectUrl, { state: { orderId } });
-          }
-        } else {
-          navigate(`/order-confirmation`, { state: { orderId } });
-        }
-      }, 400);
+      setShowPaymentModal(true);
     } catch (err) {
       setError("Failed to place order: " + err.message);
+    }
+  };
+
+  const handleUtrSubmit = async (e) => {
+    e.preventDefault();
+    if (utrDigits.trim().length !== 4) {
+      setError("Please input exactly 4 digits.");
+      return;
+    }
+
+    setSubmittingUtr(true);
+    setError("");
+
+    try {
+      const data = await submitPayment(createdOrderId, utrDigits.trim());
+
+      await refreshCartCount();
+      setShowPaymentModal(false);
+      navigate(`/orderConfirmation/${createdOrderId}`);
+    } catch (err) {
+      setError(err.message || "Something went wrong verifying the token.");
+    } finally {
+      setSubmittingUtr(false);
     }
   };
 
@@ -156,11 +183,15 @@ const Cart = () => {
   if (loading) return <LoadingCart />;
   if (!cart || !cart.items || cart.items.length === 0) return <EmptyCart />;
 
-  // Calculate taxes/fees nicely
   const subtotal = parseFloat(cart.subtotal) || 0;
   const deliveryFee = parseFloat(cart.delivery_fee) || 0;
-  // const handlingFee = 5.0; // Mock fixed handling/platform fee
   const totalAmount = subtotal + deliveryFee;
+
+  const businessUpi = "nanduboda@ibl";
+  const upiIntentString = `upi://pay?pa=${businessUpi}&pn=FoodFlie&am=${totalAmount.toFixed(2)}&cu=INR&tn=FoodFlie_Order_${createdOrderId || ""}`;
+
+  // URL safe encoding for the dynamic QR code generation
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiIntentString)}`;
 
   return (
     <>
@@ -168,13 +199,14 @@ const Cart = () => {
         title="Review Your Cart"
         description="Review your order and proceed to checkout. Fast 15-minute delivery with menu prices only."
       />
-      <div className="min-h-screen bg-[#fafafa] pb-32 pt-8 md:pt-14 relative z-0">
-        {/* Background Soft Gradients */}
+
+      <div
+        className={`min-h-screen bg-[#fafafa] pb-32 pt-8 md:pt-14 relative z-0 transition-all duration-200 ${showPaymentModal ? "blur-md select-none pointer-events-none" : ""}`}
+      >
         <div className="absolute top-0 left-0 w-full h-[30vh] bg-gradient-to-b from-brand-muted/70 via-white/40 to-transparent -z-10" />
 
         <div className="responsive-container">
           <div className="max-w-[1080px] mx-auto">
-            {/* Header Title Layer */}
             <div className="mb-8 md:mb-12 flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
                 <h1 className="text-2xl md:text-4xl leading-none font-bold text-slate-900 tracking-tighter mb-2 md:mb-3">
@@ -192,14 +224,13 @@ const Cart = () => {
                 </div>
               </div>
 
-              {/* Optional delivery timeline or similar badge */}
               <div className="bg-brand-muted/80 border border-brand-light text-brand px-3 py-1.5 md:px-4 md:py-2 rounded-xl md:rounded-2xl flex items-center gap-2 font-semibold shadow-sm backdrop-blur-md self-start md:self-auto text-xs md:text-sm">
                 <div className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse"></div>
                 Delivery in 15 mins
               </div>
             </div>
 
-            {error && (
+            {error && !showPaymentModal && (
               <div className="mb-8 bg-rose-50 border border-rose-100 rounded-2xl p-4 flex items-center gap-3 shadow-sm animate-fade-in">
                 <AlertCircle size={22} className="text-rose-500" />
                 <p className="text-sm font-semibold text-rose-700">{error}</p>
@@ -207,9 +238,7 @@ const Cart = () => {
             )}
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10">
-              {/* Left Column - Delivery Address & Cart Items */}
               <div className="lg:col-span-7 space-y-6">
-                {/* Delivery Address Section */}
                 <div className="bg-white rounded-[1.5rem] md:rounded-[2rem] border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.03)] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_40px_rgb(0,0,0,0.06)]">
                   <div className="p-5 md:p-8">
                     <div className="flex items-start justify-between gap-3 md:gap-4">
@@ -256,7 +285,6 @@ const Cart = () => {
                       </button>
                     </div>
 
-                    {/* Quick Location Badge if available */}
                     {!address && (
                       <button
                         onClick={() => setIsLocationModalOpen(true)}
@@ -273,7 +301,6 @@ const Cart = () => {
                 </div>
 
                 <div className="bg-white rounded-[1.5rem] md:rounded-[2rem] border border-slate-200/60 shadow-[0_8px_30px_rgb(0,0,0,0.03)] overflow-hidden transition-all duration-300 hover:shadow-[0_8px_40px_rgb(0,0,0,0.06)] relative">
-                  {/* Decorative top accent */}
                   <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-brand to-brand-dark"></div>
 
                   <div className="p-5 md:p-8 bg-gradient-to-b from-slate-50/50 to-white border-b border-slate-100 flex items-center justify-between gap-4">
@@ -309,7 +336,6 @@ const Cart = () => {
                   </div>
                 </div>
 
-                {/* Promo Offer Banner */}
                 <div className="bg-gradient-to-br from-white to-brand-muted/30 rounded-2xl md:rounded-[2rem] p-4 md:p-6 border border-brand-light/60 shadow-[0_8px_20px_rgb(0,0,0,0.02)] flex items-center justify-between gap-3 md:gap-4 group cursor-pointer hover:border-brand-light hover:shadow-[0_8px_30px_rgb(0,0,0,0.05)] transition-all">
                   <div className="flex items-center gap-3 md:gap-4">
                     <div className="w-10 h-10 md:w-12 md:h-12 bg-brand-light/50 rounded-xl md:rounded-2xl flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform shrink-0">
@@ -331,7 +357,6 @@ const Cart = () => {
                   />
                 </div>
 
-                {/* Cooking Notes Banner */}
                 <div className="bg-white rounded-2xl md:rounded-[2rem] p-4 md:p-6 border border-slate-200/60 shadow-[0_8px_20px_rgb(0,0,0,0.02)] cursor-text transition-all focus-within:border-slate-300 focus-within:shadow-md">
                   <textarea
                     placeholder="Any cooking instructions? (e.g. Less spicy, extra sauce)"
@@ -349,12 +374,10 @@ const Cart = () => {
                 </div>
               </div>
 
-              {/* Right Column - Bill Details & Call to Action */}
               <div className="lg:col-span-5 relative mt-4 lg:mt-0">
                 <BillSummary
                   subtotal={subtotal}
                   deliveryFee={deliveryFee}
-                  // handlingFee={handlingFee}
                   totalAmount={totalAmount}
                   onOrderComplete={handleOrderComplete}
                   isAddressSelected={!!address}
@@ -364,6 +387,111 @@ const Cart = () => {
           </div>
         </div>
       </div>
+
+      {/* --- FLOATING LIGHTWEIGHT UPI HANDSHAKE OVERLAY MODAL --- */}
+      {showPaymentModal && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white w-full max-w-md rounded-[2rem] p-6 shadow-2xl border border-slate-100 animate-scale-up flex flex-col justify-between">
+            <div>
+              <div className="text-center pb-5 border-b border-slate-100">
+                <span className="text-[10px] uppercase font-black tracking-widest bg-emerald-50 border border-emerald-200/60 text-emerald-600 px-3 py-1 rounded-full">
+                  Complete Your Payment
+                </span>
+                <h3 className="text-4xl font-black text-slate-900 tracking-tight mt-4">
+                  ₹{totalAmount.toFixed(2)}
+                </h3>
+                <p className="text-xs text-slate-400 font-bold tracking-wide uppercase mt-1">
+                  Order ID Reference: #{createdOrderId}
+                </p>
+              </div>
+
+              {error && (
+                <div className="mt-4 p-3 bg-rose-50 border border-rose-100 rounded-xl text-rose-600 text-xs font-semibold text-center">
+                  {error}
+                </div>
+              )}
+
+              {/* DYNAMIC LAYOUT BASED ON DEVICE ENVIRONMENT */}
+              <div className="mt-6 px-2 w-full flex flex-col items-center justify-center">
+                {isMobile ? (
+                  <>
+                    <a
+                      href={upiIntentString}
+                      style={{
+                        display: "flex",
+                        width: "100%",
+                        minWidth: "100%",
+                        boxSizing: "border-box",
+                      }}
+                      className="items-center justify-center gap-3 bg-slate-950 hover:bg-slate-800 text-white font-bold py-4 px-6 rounded-2xl text-sm tracking-wider uppercase shadow-xl shadow-slate-200 transition-all duration-150 active:scale-[0.98] text-center"
+                    >
+                      <span className="text-base shrink-0">📱</span>
+                      <span className="shrink-0">Pay via UPI Mobile App</span>
+                    </a>
+                    <p className="text-center text-[11px] text-slate-400 font-bold tracking-wide uppercase mt-3">
+                      Launches PhonePe, GPay, Paytm, or BHIM instantly.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 shadow-inner flex flex-col items-center justify-center gap-2">
+                      <img
+                        src={qrCodeUrl}
+                        alt="UPI Payment QR Code"
+                        className="w-[160px] h-[160px] object-contain mix-blend-multiply"
+                      />
+                      <div className="flex items-center gap-1.5 text-slate-600 font-bold text-[11px] tracking-wide uppercase mt-1">
+                        <QrCode size={14} className="text-slate-400" />
+                        Scan QR with any UPI App
+                      </div>
+                    </div>
+                    <p className="text-center text-[11px] text-slate-400 font-bold tracking-wide uppercase mt-3">
+                      Open PhonePe, GPay, or Paytm on your phone to scan.
+                    </p>
+                  </>
+                )}
+              </div>
+
+              <div className="relative flex py-4 items-center justify-center text-[10px] text-slate-400 font-black uppercase tracking-[0.18em]">
+                <span className="bg-white px-3 z-10">Verification Step</span>
+                <div className="absolute w-full border-t border-slate-100"></div>
+              </div>
+
+              {/* INPUT BOX CONTROL FOR TRANSMITTING MANUALLY PARSED METADATA FROM DEPOSITS */}
+              <form onSubmit={handleUtrSubmit} className="space-y-4">
+                <p className="text-xs text-center text-slate-500 font-medium leading-relaxed px-2">
+                  Once your transfer is complete, enter the **last 4 digits** of
+                  your UTR / Transaction ID below:
+                </p>
+
+                <input
+                  type="text"
+                  pattern="[0-9]*"
+                  inputMode="numeric"
+                  maxLength={4}
+                  placeholder="0000"
+                  value={utrDigits}
+                  onChange={(e) =>
+                    setUtrDigits(e.target.value.replace(/\D/g, ""))
+                  }
+                  disabled={submittingUtr}
+                  className="w-full text-center text-3xl font-mono tracking-[0.4em] p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition bg-slate-50/50"
+                />
+
+                <button
+                  type="submit"
+                  disabled={submittingUtr || utrDigits.length !== 4}
+                  className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-100 disabled:text-slate-400 text-white font-bold py-4 rounded-xl transition text-sm uppercase tracking-wider shadow-md shadow-emerald-50"
+                >
+                  {submittingUtr
+                    ? "Linking Reference..."
+                    : "Confirm Payment & Place Order"}
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
 
       <LocationModal
         isOpen={isLocationModalOpen}

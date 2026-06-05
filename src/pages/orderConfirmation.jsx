@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import {
   CheckCircle2,
   Clock,
@@ -7,6 +7,7 @@ import {
   Phone,
   Package,
   Store,
+  CreditCard,
 } from "lucide-react";
 import { getOrderById } from "../services/orderService";
 import { useCart } from "../context/cartContext";
@@ -15,6 +16,8 @@ import SEO from "../components/common/seo";
 const OrderConfirmation = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const location = useLocation();
+  const actualId = id || location.state?.orderId;
   const { refreshCartCount } = useCart();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -23,15 +26,15 @@ const OrderConfirmation = () => {
     // Refresh cart count when order confirmation loads
     refreshCartCount();
 
-    if (id) {
-      getOrderById(id)
+    if (actualId) {
+      getOrderById(actualId)
         .then(setOrder)
         .catch(console.error)
         .finally(() => setLoading(false));
     } else {
       setLoading(false);
     }
-  }, [id, refreshCartCount]);
+  }, [actualId, refreshCartCount]);
 
   if (loading) {
     return (
@@ -62,6 +65,25 @@ const OrderConfirmation = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white pb-20 pt-6">
       <SEO title="Order Confirmed | FoodFlie" />
+      
+      {/* TOP PAYMENT STATUS BANNER */}
+      <div className="responsive-container max-w-2xl mx-auto px-4 mb-6">
+        <div 
+          className={`w-full rounded-2xl py-3 px-4 flex items-center justify-center gap-2 text-xs sm:text-sm font-black uppercase tracking-widest shadow-md ${
+            order.payment_status?.toUpperCase() === "COMPLETED" 
+              ? "bg-green-500 text-white" 
+              : order.payment_status?.toUpperCase() === "FAILED"
+              ? "bg-rose-500 text-white"
+              : "bg-amber-500 text-white"
+          }`}
+        >
+          <CreditCard size={18} className={order.payment_status?.toUpperCase() === "PENDING_VERIFICATION" ? "animate-pulse" : ""} />
+          {order.payment_status === "pending_verification" || order.payment_status === "PENDING_VERIFICATION"
+            ? "Payment Pending Verification"
+            : order.payment_status || "Payment Pending"}
+        </div>
+      </div>
+
       <div className="responsive-container max-w-2xl mx-auto px-4">
         <div className="text-center mb-6">
           <div className="w-20 h-20 sm:w-24 sm:h-24 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -97,7 +119,7 @@ const OrderConfirmation = () => {
                 Order ID
               </span>
               <span className="text-sm font-black text-slate-900">
-                {order.order_id || id}
+                {order.order_id || actualId}
               </span>
             </div>
             <div className="flex justify-between items-center">
@@ -183,7 +205,7 @@ const OrderConfirmation = () => {
 
         <div className="grid grid-cols-2 gap-3 mb-4">
           <button
-            onClick={() => navigate(`/profile/order/${order.id || id}`)}
+            onClick={() => navigate(`/profile/order/${order.id || actualId}`)}
             className="bg-brand text-white py-3 sm:py-4 rounded-xl font-bold text-sm sm:text-base hover:bg-brand-dark transition-colors shadow-lg"
           >
             Track Order

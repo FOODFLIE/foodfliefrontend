@@ -14,6 +14,11 @@ export const placeOrder = async (address, payment_method, cookingInstructions = 
   return response.data;
 };
 
+export const submitPayment = async (orderId, utr) => {
+  const response = await apiClient.post(`/api/order/${orderId}/submit-payment`, { utr });
+  return response.data;
+};
+
 export const getCustomerOrders = async () => {
   const response = await apiClient.get("/api/order/");
   return response.data;

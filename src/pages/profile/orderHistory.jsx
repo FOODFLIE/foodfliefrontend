@@ -132,7 +132,22 @@ const OrderHistory = () => {
                 onClick={() => navigate(`/profile/order/${order.id}`)}
                 className="bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-300 overflow-hidden cursor-pointer group"
               >
-                <div className="p-6">
+                {/* TOP PAYMENT STATUS BANNER PER CARD */}
+                <div 
+                  className={`w-full py-1.5 px-4 text-[10px] font-black uppercase tracking-widest text-center ${
+                    order.payment_status?.toUpperCase() === "COMPLETED" 
+                      ? "bg-green-100 text-green-700" 
+                      : order.payment_status?.toUpperCase() === "FAILED"
+                      ? "bg-rose-100 text-rose-700"
+                      : "bg-amber-100 text-amber-700"
+                  }`}
+                >
+                  {order.payment_status === "pending_verification" || order.payment_status === "PENDING_VERIFICATION"
+                    ? "Payment Pending Verification"
+                    : order.payment_status || "Payment Pending"}
+                </div>
+
+                <div className="p-6 pt-4">
                   {/* Order Items Preview */}
                   <div className="flex gap-4 mb-4 overflow-x-auto pb-2 scrollbar-hide">
                     {order.items?.map((item, idx) => (

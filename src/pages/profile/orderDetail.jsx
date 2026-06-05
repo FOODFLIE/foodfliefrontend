@@ -14,6 +14,7 @@ import {
   User,
   Printer,
   Loader2,
+  CreditCard,
 } from "lucide-react";
 import { getOrderById } from "../../services/orderService";
 import SEO from "../../components/common/seo";
@@ -31,8 +32,8 @@ const OrderDetail = () => {
     try {
       await printKOT(id);
     } catch (error) {
-      console.error('Print failed:', error);
-      alert('Failed to print KOT. Please try again.');
+      console.error("Print failed:", error);
+      alert("Failed to print KOT. Please try again.");
     } finally {
       setPrinting(false);
     }
@@ -42,7 +43,6 @@ const OrderDetail = () => {
     const fetchOrder = async () => {
       try {
         const data = await getOrderById(id);
-
         setOrder(data);
       } catch (error) {
         console.error("Error fetching order details:", error);
@@ -72,7 +72,20 @@ const OrderDetail = () => {
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    // Could add a toast here
+  };
+
+  // HELPER FUNCTION: Maps structural statuses to localized client text and colors cleanly
+  const getPaymentStatusBadgeStyles = (status) => {
+    switch (status?.toUpperCase()) {
+      case "COMPLETED":
+        return "bg-green-100 text-green-700 border border-green-200";
+      case "PENDING_VERIFICATION":
+        return "bg-amber-100 text-amber-700 border border-amber-200 font-bold animate-pulse";
+      case "FAILED":
+        return "bg-rose-100 text-rose-700 border border-rose-200";
+      default:
+        return "bg-slate-100 text-slate-700 border border-slate-200";
+    }
   };
 
   if (loading) {
@@ -112,8 +125,9 @@ const OrderDetail = () => {
   return (
     <div className="min-h-screen bg-slate-50/50 pb-24">
       <SEO title="Order Details" />
+
       {/* Header */}
-      <div className="glass-morphism sticky top-0 z-30 bg-white">
+      <div className="glass-morphism sticky top-0 z-30 bg-white shadow-sm">
         <div className="responsive-container py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
@@ -137,6 +151,22 @@ const OrderDetail = () => {
             Get Help
           </button>
         </div>
+
+        {/* TOP PAYMENT STATUS BANNER */}
+        <div 
+          className={`w-full py-2 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-widest transition-colors ${
+            order.payment_status?.toUpperCase() === "COMPLETED" 
+              ? "bg-green-500 text-white" 
+              : order.payment_status?.toUpperCase() === "FAILED"
+              ? "bg-rose-500 text-white"
+              : "bg-amber-500 text-white"
+          }`}
+        >
+          <CreditCard size={14} className={order.payment_status?.toUpperCase() === "PENDING_VERIFICATION" ? "animate-pulse" : ""} />
+          {order.payment_status === "pending_verification" || order.payment_status === "PENDING_VERIFICATION"
+            ? "Payment Pending Verification"
+            : order.payment_status || "Payment Pending"}
+        </div>
       </div>
 
       <div className="responsive-container py-6 space-y-6">
@@ -148,17 +178,19 @@ const OrderDetail = () => {
             </div>
             <div>
               <h2 className="text-lg font-black text-slate-900 capitalize">
-                {order.status || "Delivered"}
+                {order.status === "payment_pending"
+                  ? "Awaiting Payment"
+                  : order.status || "Placed"}
               </h2>
             </div>
           </div>
           <div className="text-right">
             <div className="inline-flex flex-col items-end">
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">
-                Arrived in
+                Timeline
               </span>
               <div className="bg-brand-muted text-brand px-3 py-1 rounded-lg text-xs font-black italic mt-1">
-                ⚡ +15 mins
+                ⚡ 15 mins Delivery
               </div>
             </div>
           </div>
@@ -175,13 +207,6 @@ const OrderDetail = () => {
           <div className="divide-y divide-slate-50">
             {order.items?.map((item, idx) => (
               <div key={idx} className="p-6 flex gap-4 group">
-                {/* <div className="w-16 h-16 rounded-2xl overflow-hidden border border-slate-100 shrink-0 group-hover:scale-105 transition-transform duration-300">
-                  <img
-                    src={item.item_image || "/placeholder-food.png"}
-                    alt={item.item_name}
-                    className="w-full h-full object-cover"
-                  />
-                </div> */}
                 <div className="flex-1 min-w-0 py-1">
                   <h4 className="text-xs font-bold text-slate-900 leading-tight">
                     {item.item_name}
@@ -247,23 +272,7 @@ const OrderDetail = () => {
               </div>
             </div>
           </div>
-          <div className="p-4 bg-brand-muted/30 border-t border-slate-50 space-y-3">
-            <button
-              onClick={handlePrintKOT}
-              disabled={printing}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-brand text-white rounded-2xl font-medium hover:bg-brand-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-xs"
-            >
-              {printing ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Printer className="w-4 h-4" />
-              )}
-              {printing ? 'Printing...' : 'Print KOT'}
-            </button>
-            <button className="w-full flex items-center justify-center gap-2 py-3 text-brand font-black text-[10px] uppercase tracking-widest hover:bg-brand-muted transition-colors rounded-2xl border border-brand/10">
-              Download Invoice / Credit Note
-            </button>
-          </div>
+     
         </div>
 
         {/* Order Details Grid */}
@@ -303,22 +312,36 @@ const OrderDetail = () => {
               </p>
             </div>
 
-            <div className="space-y-1">
+            {/* EXPANDED SYSTEM BLOCK FOR RECORDING HARDENED ONLINE HANDSHAKE METADATA */}
+            <div className="space-y-2">
               <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
                 Payment Details
               </p>
-              <p className="text-sm font-bold text-slate-700 uppercase">
-                {order.payment_method || "N/A"}{" "}
-                <span
-                  className={`ml-2 text-[10px] px-2 py-0.5 rounded-full ${
-                    order.payment_status === "completed"
-                      ? "bg-green-100 text-green-700"
-                      : "bg-amber-100 text-amber-700"
-                  }`}
-                >
-                  {order.payment_status || "Pending"}
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="text-sm font-bold text-slate-700 uppercase flex items-center gap-1.5">
+                  <CreditCard size={14} className="text-slate-400" />
+                  {order.payment_method || "UPI"}
                 </span>
-              </p>
+                <span
+                  className={`text-[10px] px-2.5 py-0.5 rounded-full capitalize font-bold ${getPaymentStatusBadgeStyles(order.payment_status)}`}
+                >
+                  {order.payment_status === "pending_verification"
+                    ? "Pending Verification"
+                    : order.payment_status || "Pending"}
+                </span>
+              </div>
+
+              {/* DISPLAY PARSED UTR REFERENCE STRING SNIPPETS */}
+              {order.payment_utr && (
+                <div className="mt-2 bg-slate-50 border border-slate-100 rounded-xl p-3 flex items-center justify-between">
+                  <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                    Verification UTR Token (Last 4)
+                  </span>
+                  <span className="text-sm font-mono font-black text-slate-800 tracking-widest bg-white border border-slate-200/60 px-2 py-0.5 rounded-md">
+                    {order.payment_utr}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="space-y-1">
