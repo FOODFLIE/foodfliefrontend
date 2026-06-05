@@ -42,7 +42,7 @@ export function useKitchenAlert() {
       // Repeat every time the audio ends, for 8 seconds total
       const startTime = Date.now();
       const repeatInterval = setInterval(() => {
-        if (Date.now() - startTime >= 8000) {
+        if (Date.now() - startTime >= 5000) {
           clearInterval(repeatInterval);
           if (audioRef.current) {
             audioRef.current.pause();
@@ -60,7 +60,7 @@ export function useKitchenAlert() {
           audioRef.current.pause();
           audioRef.current.currentTime = 0;
         }
-      }, 8000);
+      }, 5000);
     } catch (err) {
       console.warn("Could not play alert sound, trying fallback", err);
       playFallbackSound();
@@ -75,7 +75,7 @@ export function useKitchenAlert() {
       // Create continuous beeping for 8 seconds
       const beepDuration = 0.3;
       const pauseDuration = 0.2;
-      const totalDuration = 8; // 8 seconds
+      const totalDuration = 5; // 5 seconds
       const patternDuration = beepDuration + pauseDuration;
       const numberOfBeeps = Math.floor(totalDuration / patternDuration);
       
@@ -103,11 +103,11 @@ export function useKitchenAlert() {
       
     } catch (err) {
       console.warn("Fallback sound also failed", err);
-      // Last resort: vibration pattern for 8 seconds
+      // Last resort: vibration pattern for 5 seconds
       if (window.navigator && window.navigator.vibrate) {
         // Vibrate pattern: 300ms on, 200ms off, repeated
         const vibrationPattern = [];
-        for (let i = 0; i < 16; i++) {
+        for (let i = 0; i < 10; i++) {
           vibrationPattern.push(300, 200);
         }
         window.navigator.vibrate(vibrationPattern);
@@ -118,7 +118,7 @@ export function useKitchenAlert() {
   const notifyOnNewOrders = useCallback(
     (orders) => {
       const pendingIds = orders
-        .filter((o) => o.status === "placed")
+        .filter((o) => ["placed", "assigned"].includes(o.status))
         .map((o) => o.id);
 
       let hasNewOrder = false;
