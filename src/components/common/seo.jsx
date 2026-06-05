@@ -1,24 +1,26 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
 
-const SEO = ({ 
-  title, 
-  description, 
+const SEO = ({
+  title,
+  description,
   keywords,
   image,
   url,
   type = "website",
   schema,
   noindex = false,
-  canonical
+  canonical,
 }) => {
   const siteTitle = "FoodFlie";
-  const siteName = "FoodFlie - 13 Minute Food Delivery";
-  const defaultDescription = "Order food online from your favorite restaurants. Get lightning-fast delivery in just 13 minutes. Fresh food, hot meals, delivered to your doorstep. Menu prices guaranteed, no hidden charges.";
-  const defaultKeywords = "food delivery, online food order, restaurant delivery, fast food delivery, 13 minute delivery, quick food delivery, food delivery near me, menu price food delivery, instant food delivery";
+  const siteName = "FoodFlie - 15 Minute Food Delivery";
+  const defaultDescription =
+    "Order food online from your favorite restaurants. Get lightning-fast delivery in just 15 minutes. Fresh food, hot meals, delivered to your doorstep. Menu prices guaranteed, no hidden charges.";
+  const defaultKeywords =
+    "food delivery, online food order, restaurant delivery, fast food delivery, 15 Minute delivery, quick food delivery, food delivery near me, menu price food delivery, instant food delivery";
   const defaultImage = "https://foodflie.com/og-image.jpg";
   const siteUrl = "https://foodflie.com";
-  
+
   const fullTitle = title ? `${title} | ${siteTitle}` : siteName;
   const metaDescription = description || defaultDescription;
   const metaKeywords = keywords || defaultKeywords;
@@ -33,12 +35,15 @@ const SEO = ({
       <meta name="keywords" content={metaKeywords} />
       <meta name="author" content="FoodFlie" />
       <link rel="canonical" href={metaUrl} />
-      
+
       {/* Robots */}
       {noindex ? (
         <meta name="robots" content="noindex, nofollow" />
       ) : (
-        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+        <meta
+          name="robots"
+          content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        />
       )}
 
       {/* Open Graph Meta Tags */}
@@ -65,7 +70,7 @@ const SEO = ({
       <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
-      
+
       {/* Geo Tags for Local SEO */}
       <meta name="geo.region" content="IN-TG" />
       <meta name="geo.placename" content="Hyderabad" />
@@ -74,9 +79,7 @@ const SEO = ({
 
       {/* Schema.org JSON-LD */}
       {schema && (
-        <script type="application/ld+json">
-          {JSON.stringify(schema)}
-        </script>
+        <script type="application/ld+json">{JSON.stringify(schema)}</script>
       )}
     </Helmet>
   );

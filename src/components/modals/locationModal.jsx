@@ -25,12 +25,12 @@ const googleMapsApiKey = flies.googleMapsApiKey;
 const libraries = ["places"];
 
 
-const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartContext = false }) => {
+const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartContext = false, hideAddNewAddress = false }) => {
   // Use different context based on prop
   let locationContext;
   try {
     locationContext = useCartContext ? useCartLocation() : useUserLocation();
-  } catch (error) {
+  } catch (error) { 1``
     // Fallback to regular location context if cart context is not available
     locationContext = useUserLocation();
   }
@@ -317,22 +317,24 @@ const LocationModal = ({ isOpen, onClose, hideCurrentLocation = false, useCartCo
               )}
 
               {/* Add New Address */}
-              <button
-                onClick={() => setShowMapPicker(true)}
-                className="w-full bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex items-center justify-between"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-xl bg-pink-50 text-pink-500">
-                    <Plus size={20} />
+              {!hideAddNewAddress && (
+                <button
+                  onClick={() => setShowMapPicker(true)}
+                  className="w-full bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-xl bg-pink-50 text-pink-500">
+                      <Plus size={20} />
+                    </div>
+
+                    <span className="text-[13px] font-semibold text-pink-500">
+                      Add New Address
+                    </span>
                   </div>
 
-                  <span className="text-[13px] font-semibold text-pink-500">
-                    Add New Address
-                  </span>
-                </div>
-
-                <ChevronRight size={18} />
-              </button>
+                  <ChevronRight size={18} />
+                </button>
+              )}
 
               {/* Saved Addresses */}
               <div className="space-y-4">

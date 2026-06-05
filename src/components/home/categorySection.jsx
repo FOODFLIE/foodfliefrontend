@@ -3,6 +3,8 @@ import { ChevronRight, Zap } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { getCategories } from "../../services/categoryServices";
 import { useUserLocation } from "../../context/locationContext";
+import { LocationFallback } from "./locationFallback";
+
 
 const CategorySection = () => {
   const navigate = useNavigate();
@@ -11,10 +13,11 @@ const CategorySection = () => {
   const {coords} = useUserLocation();
   useEffect(() => {
     fetchCategories();
-  }, []);
+  }, [coords?.latitude, coords?.longitude]);
 
   const fetchCategories = async () => {
     if(!coords.latitude || !coords.longitude) {
+      setLoading(false);
       return;
     }
     try {
@@ -31,6 +34,15 @@ const CategorySection = () => {
   const handleCategoryClick = (id, name) => {
     navigate(`/category/${id}`, { state: { categoryName: name } });
   };
+  if(!loading && (!coords?.latitude )) {
+    return(
+    <LocationFallback
+    onSelectLocation={() => {
+      window.dispatchEvent(new Event("open-location-modal"));
+    }}
+    />
+    )
+  }
 
   if (loading) {
     return (
@@ -76,7 +88,7 @@ const CategorySection = () => {
               {/* Delivery Badge */}
               {category.delivery_type === "fast" && (
                 <div className="absolute bottom-1 inset-x-2 bg-brand/90 text-white text-[7px] sm:text-[9px] font-black py-0.5 sm:py-1 rounded-full flex items-center justify-center gap-0.5 backdrop-blur-sm shadow-sm">
-                  <Zap size={8} fill="currentColor" className="sm:w-2.5 sm:h-2.5" /> {category.delivery_time || 13}m
+                  <Zap size={8} fill="currentColor" className="sm:w-2.5 sm:h-2.5" /> {category.delivery_time || 15}m
                 </div>
               )}
             </div>

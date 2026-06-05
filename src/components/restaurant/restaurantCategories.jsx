@@ -25,7 +25,7 @@ const RestaurantCategories = ({ categories, selectedCategory, onSelectCategory }
                     : "bg-brand text-white"
                 }`}
               >
-                <Zap size={8} fill="currentColor" /> {cat.delivery_time || 13}m
+                <Zap size={8} fill="currentColor" /> {cat.delivery_time || 15}m
               </span>
             )}
           </button>
@@ -57,7 +57,7 @@ const RestaurantCategories = ({ categories, selectedCategory, onSelectCategory }
                       : "bg-brand/10 text-brand"
                   }`}
                 >
-                  <Zap size={10} fill="currentColor" /> {cat.delivery_time || 13}m
+                  <Zap size={10} fill="currentColor" /> {cat.delivery_time || 15}m
                 </span>
               )}
             </li>

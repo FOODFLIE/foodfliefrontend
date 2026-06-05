@@ -12,7 +12,6 @@ import SEO from "../../components/common/seo";
 
 const SellerDashboard = () => {
   const { partner, partnerLogout } = useAuth();
-  console.log("Authenticated Partner:", partner);
   const [isOnline, setIsOnline] = useState(false);
   const [isToggling, setIsToggling] = useState(false);
   const location = useLocation();
@@ -114,11 +113,11 @@ const SellerDashboard = () => {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 ml-20 lg:ml-24 flex flex-col h-screen overflow-hidden">
+      <main className="flex-1 ml-20 lg:ml-24 flex flex-col h-screen">
         {/* Header - Dark Bar */}
         <header className="bg-[#282c3f] text-white h-16 flex items-center justify-between px-6 shrink-0 z-20 shadow-md">
           <div className="flex items-center gap-6">
-            <h1 className="text-base font-bold uppercase tracking-wider">
+            <h1 className="text-base text-white font-bold uppercase tracking-wider">
               {location.pathname.includes("menu") ? "Menu" : "Manage Orders"}
             </h1>
             <div className="h-6 w-px bg-slate-600 mx-2"></div>
@@ -152,7 +151,7 @@ const SellerDashboard = () => {
         </header>
 
         {/* Page Content */}
-        <div className="flex-1 overflow-hidden bg-slate-100 relative">
+        <div className="flex-1 bg-slate-100 overflow-y-scroll partner-scroll">
           <Outlet />
         </div>
       </main>

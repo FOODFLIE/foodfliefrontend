@@ -1,5 +1,6 @@
 import { useState } from "react";
 import {
+  loginSeller,
   sendSellerOTP,
   verifySellerOTP,
   registerSeller,
@@ -11,7 +12,8 @@ import { useNavigate } from "react-router-dom";
  * Custom hook for Seller Authentication
  */
 export const useSellerAuth = () => {
-  const [step, setStep] = useState(1); // 1: Phone, 2: OTP, 3: Register
+  const [step, setStep] = useState(1); // 1: Phone/Password, 2: OTP (registration), 3: Register
+  const [isLogin, setIsLogin] = useState(true); // true: Login, false: Register
   const [registrationStep, setRegistrationStep] = useState(1); // 1: Info, 2: Docs, 3: Menu/Ops, 4: Contract
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -21,11 +23,12 @@ export const useSellerAuth = () => {
 
   const [formData, setFormData] = useState({
     phone: "",
+    password: "",
     otp: "",
     name: "",
-    email: "", // Added email
+    email: "",
     store_name: "",
-    outlet_type: "", // Added outlet type
+    outlet_type: "",
     address: "",
     area: "",
     pan_number: "",
@@ -37,9 +40,9 @@ export const useSellerAuth = () => {
     whatsapp_updates: true,
     opening_time: "09:00",
     closing_time: "21:00",
-    working_days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], // Default all days
+    working_days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     menu_file: null,
-    terms_accepted: false, // Added terms
+    terms_accepted: false,
   });
 
   // Handle Input Change
@@ -73,17 +76,30 @@ export const useSellerAuth = () => {
   const prevRegistrationStep = () =>
     setRegistrationStep((prev) => Math.max(prev - 1, 1));
 
-  // Step 1: Send OTP
-  const handleSendOTP = async (e) => {
+  // Step 1: Login or Send OTP for Registration
+  const handleSubmitAuth = async (e) => {
     e.preventDefault();
     if (formData.phone.length < 10) {
       setError("Please enter a valid phone number");
       return;
     }
+    
     setLoading(true);
     try {
-      await sendSellerOTP(formData.phone);
-      setStep(2);
+      if (isLogin) {
+        // Login with password
+        if (!formData.password) {
+          setError("Please enter your password");
+          return;
+        }
+        const response = await loginSeller(formData.phone, formData.password);
+        partnerLogin(response.seller, response.token);
+        navigate("/partner/dashboard");
+      } else {
+        // Send OTP for registration
+        await sendSellerOTP(formData.phone);
+        setStep(2);
+      }
     } catch (err) {
       setError(err.message);
     } finally {
@@ -153,10 +169,18 @@ export const useSellerAuth = () => {
     setStep(1);
     setRegistrationStep(1);
     setError("");
+    setFormData(prev => ({ ...prev, password: "", otp: "" }));
+  };
+
+  const toggleAuthMode = () => {
+    setIsLogin(!isLogin);
+    setError("");
+    setFormData(prev => ({ ...prev, password: "", otp: "" }));
   };
 
   return {
     step,
+    isLogin,
     registrationStep,
     nextRegistrationStep,
     prevRegistrationStep,
@@ -166,9 +190,10 @@ export const useSellerAuth = () => {
     formData,
     handleInputChange,
     toggleWorkingDay,
-    handleSendOTP,
+    handleSubmitAuth,
     handleVerifyOTP,
     handleRegister,
     resetStep,
+    toggleAuthMode,
   };
 };

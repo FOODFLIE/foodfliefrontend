@@ -5,28 +5,31 @@ import CategorySection from "../../components/home/categorySection";
 import RestaurantChainSection from "../../components/home/restaurantChainSection";
 import Footer from "../../components/footer";
 import SEO from "../../components/common/seo";
-import { 
-  generateOrganizationSchema, 
-  generateWebSiteSchema, 
+import {
+  generateOrganizationSchema,
+  generateWebSiteSchema,
   generateServiceSchema,
   generateLocalBusinessSchema,
-  generateFAQSchema
+  generateFAQSchema,
 } from "../../utils/seoSchemas";
 
 const Home = () => {
   const faqs = [
     {
       question: "How fast is FoodFlie delivery?",
-      answer: "FoodFlie delivers your food in just 13 minutes, making us one of the fastest food delivery services."
+      answer:
+        "FoodFlie delivers your food in just 15 minutes, making us one of the fastest food delivery services.",
     },
     {
       question: "Are there any hidden charges?",
-      answer: "No! We guarantee menu prices only. What you see on the restaurant menu is what you pay."
+      answer:
+        "No! We guarantee menu prices only. What you see on the restaurant menu is what you pay.",
     },
     {
       question: "Do you accept cash on delivery?",
-      answer: "Yes, we accept both online payments and cash on delivery for your convenience."
-    }
+      answer:
+        "Yes, we accept both online payments and cash on delivery for your convenience.",
+    },
   ];
 
   const schemas = [
@@ -34,15 +37,15 @@ const Home = () => {
     generateWebSiteSchema(),
     generateServiceSchema(),
     generateLocalBusinessSchema("Hyderabad"),
-    generateFAQSchema(faqs)
+    generateFAQSchema(faqs),
   ];
 
   return (
     <div>
       <SEO
-        title="13 Minute Food Delivery in Hyderabad | Menu Prices Guaranteed"
-        description="Order food online in Hyderabad and get delivery in just 13 minutes. Menu prices guaranteed, no hidden charges. Cash on delivery available. Order biryani, pizza, burgers & more from top restaurants near you."
-        keywords="food delivery near me, 13 minute food delivery, fast food delivery hyderabad, menu price food delivery, instant food delivery, biryani delivery, pizza delivery, online food order, restaurant delivery near me, quick food delivery"
+        title="15 Minute Food Delivery in Hyderabad | Menu Prices Guaranteed"
+        description="Order food online in Hyderabad and get delivery in just 15 minutes. Menu prices guaranteed, no hidden charges. Cash on delivery available. Order biryani, pizza, burgers & more from top restaurants near you."
+        keywords="food delivery near me, 15 Minute food delivery, fast food delivery hyderabad, menu price food delivery, instant food delivery, biryani delivery, pizza delivery, online food order, restaurant delivery near me, quick food delivery"
         schema={schemas}
         canonical="https://foodflie.com"
       />
@@ -51,7 +54,7 @@ const Home = () => {
           {/* Banner Section */}
           <Banner
             // image="https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=1200&h=400&fit=crop"
-            badgeText="13-Minute Delivery • Menu Prices Guaranteed • Cash on Delivery"
+            badgeText="15-Minute Delivery • Menu Prices Guaranteed • Cash on Delivery"
             title="HOT BIRYANI"
             titleHighlight="NO OVERPAYING"
             subtitle="Limited launch in KPHB.Get hot biryani delivered in minutes at menu prices."

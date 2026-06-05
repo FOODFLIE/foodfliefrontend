@@ -19,13 +19,16 @@ import OrderDetail from "./pages/profile/orderDetail";
 import Addresses from "./pages/profile/addresses";
 import AboutUs from "./pages/legals/aboutUs";
 import ContactUs from "./pages/legals/contactUs";
-import Search from "./pages/search";
+import Search from "./pages/home/search";
 import { Toaster } from "react-hot-toast";
 import Preloader from "./components/preloader";
 import { CartProvider } from "./context/cartContext";
 import ProtectedRoute from "./components/common/protectedRoute";
 import ScrollToTop from "./components/common/scrollToTop";
 import { usePageTracking } from "./hooks/usePageTracking";
+import WhatsAppButton from "./components/whatsappButton";
+
+import InstallPrompt from "./components/InstallPrompt";
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -95,6 +98,9 @@ const App = () => {
                 <Route path="menu" element={<Menu />} />
               </Route>
             </Routes>
+            <InstallPrompt />
+            {/* WhatsApp Support Button - Show on all pages except partner routes */}
+            {!isPartnerRoute && <WhatsAppButton />}
           </div>
         </CartProvider>
       </AuthProvider>

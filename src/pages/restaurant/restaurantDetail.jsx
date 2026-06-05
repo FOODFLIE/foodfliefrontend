@@ -29,8 +29,9 @@ const RestaurantDetail = () => {
     loading,
     error,
     addingToCart,
+    quantities,
     cartCount,
-    handleAddToCart,
+    onUpdateQuantity,
   } = useRestaurantMenu(id, localRestaurant);
 
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -41,7 +42,7 @@ const RestaurantDetail = () => {
       trackViewContent({
         name: restaurantData.name,
         id: id,
-        type: 'restaurant',
+        type: "restaurant",
       });
     }
   }, [restaurantData, loading, id]);
@@ -87,10 +88,10 @@ const RestaurantDetail = () => {
   return (
     <div className="bg-white min-h-screen pb-40">
       <SEO
-        title={`${restaurantData?.name || "Restaurant"} - Order Online in 13 Minutes`}
+        title={`${restaurantData?.name || "Restaurant"} - Order Online in 15 minutes`}
         description={`Order from ${
           restaurantData?.name || "restaurant"
-        } and get delivery in 13 minutes. ${
+        } and get delivery in 15 minutes. ${
           restaurantData?.cuisines?.join
             ? restaurantData.cuisines.join(", ")
             : "Delicious food"
@@ -108,38 +109,40 @@ const RestaurantDetail = () => {
         canonical={`https://foodflie.com/restaurant/${id}`}
         type="restaurant"
       />
-      
+
       <main className="responsive-container py-6 md:py-8">
         <RestaurantHeader restaurantData={restaurantData} />
 
         {/* Categories Horizontal Scroll (Mobile/Tablet Only) happens inside the component but it wraps the grid layout awkwardly in origin. We need a grid container. */}
-        
+
         {/* We place mobile scroll above grid for semantic mobile flow, and let CSS handle grid placement on desktop */}
         <div className="block lg:hidden">
-          <RestaurantCategories 
-            categories={categories} 
-            selectedCategory={selectedCategory} 
-            onSelectCategory={setSelectedCategory} 
+          <RestaurantCategories
+            categories={categories}
+            selectedCategory={selectedCategory}
+            onSelectCategory={setSelectedCategory}
           />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12">
           {/* Desktop Sidebar is part of RestaurantCategories but hidden on mobile via CSS */}
           <div className="hidden lg:block lg:col-span-3">
-             <RestaurantCategories 
-                categories={categories} 
-                selectedCategory={selectedCategory} 
-                onSelectCategory={setSelectedCategory} 
-              />
+            <RestaurantCategories
+              categories={categories}
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
+            />
           </div>
 
           <RestaurantMenuItems
             menuItems={menuItems}
             selectedCategory={selectedCategory}
+            categories={categories}
             loading={loading}
             error={error}
             addingToCart={addingToCart}
-            onAddToCart={handleAddToCart}
+            quantities={quantities}
+            onUpdateQuantity={onUpdateQuantity}
           />
         </div>
       </main>

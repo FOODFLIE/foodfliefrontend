@@ -26,7 +26,10 @@ const Menu = () => {
     category_id: "",
     is_veg: true,
     description: "",
-    preparation_time: 30, // Default prep time
+    subcategory: "",
+    preparation_time: 3, // Default prep time
+    has_variants: false,
+    variants: [],
   });
 
   const [newCategory, setNewCategory] = useState("");
@@ -35,6 +38,7 @@ const Menu = () => {
   const [categories, setCategories] = useState([]);
 
   const [menuItems, setMenuItems] = useState([]);
+  console.log(menuItems)
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   // --- Fetch Initial Data ---
@@ -103,7 +107,21 @@ const Menu = () => {
   };
 
   const handleSaveItem = async () => {
-    if (!newItem.name || !newItem.price) return;
+    // If has_variants is true, main price is typically set to the lowest or first variant price
+    const finalPrice = newItem.has_variants 
+      ? (newItem.variants.length > 0 ? parseFloat(newItem.variants[0].price) : 0)
+      : parseFloat(newItem.price);
+
+    if (!newItem.name || (isNaN(finalPrice) && !newItem.has_variants)) {
+      alert("Please enter item name and price.");
+      return;
+    }
+    
+    if (newItem.has_variants && newItem.variants.length === 0) {
+      alert("Please add at least one variant if 'Has Variants' is checked.");
+      return;
+    }
+
     const partnerId = partner?.id;
 
     try {
@@ -111,11 +129,17 @@ const Menu = () => {
         partner_id: partnerId,
         name: newItem.name,
         description: newItem.description,
-        price: parseFloat(newItem.price),
+        price: finalPrice,
         category_id: newItem.category_id || selectedCategory,
+        subcategory: newItem.subcategory,
         is_veg: newItem.is_veg,
         preparation_time: newItem.preparation_time,
         is_available: newItem.is_available !== undefined ? newItem.is_available : true,
+        has_variants: newItem.has_variants,
+        variants: newItem.variants.map(v => ({
+          ...v,
+          price: parseFloat(v.price)
+        })),
       };
 
       if (editingItem) {
@@ -138,10 +162,13 @@ const Menu = () => {
         name: item.name,
         price: item.price,
         category_id: item.category_id,
+        subcategory: item.subcategory,
         is_veg: item.is_veg,
         description: item.description || "",
         preparation_time: item.preparation_time || 30,
         is_available: item.is_available,
+        has_variants: item.has_variants || false,
+        variants: item.variants || [],
       });
     } else {
       setEditingItem(null);
@@ -149,10 +176,13 @@ const Menu = () => {
         name: "",
         price: "",
         category_id: selectedCategory,
+        subcategory: "",
         is_veg: true,
         description: "",
         preparation_time: 30,
         is_available: true,
+        has_variants: false,
+        variants: [],
       });
     }
     setShowItemModal(true);
@@ -165,9 +195,12 @@ const Menu = () => {
       name: "",
       price: "",
       category_id: selectedCategory,
+      subcategory: "",
       is_veg: true,
       description: "",
       preparation_time: 30,
+      has_variants: false,
+      variants: [],
     });
   };
 
@@ -198,7 +231,7 @@ const Menu = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col h-[calc(100vh-64px)] bg-slate-100 overflow-hidden">
+    <div className="flex-1 flex flex-col h-full bg-slate-100 overflow-hidden">
       <SEO title="Manage Menu" />
       {/* Toolbar */}
       <div className="bg-white p-4 border-b border-slate-200 flex flex-col md:flex-row items-center justify-between gap-4 shrink-0">
@@ -219,8 +252,8 @@ const Menu = () => {
       {/* Split View Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Categories Sidebar */}
-        <div className="w-80 bg-white border-r border-slate-200 flex flex-col overflow-y-auto">
-          <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10">
+        <div className="w-80 bg-white border-r border-slate-200 flex flex-col">
+          <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center shrink-0">
             <h3 className="font-bold text-slate-700 text-[11px] tracking-wider uppercase">
               Category ({categories.length})
             </h3>
@@ -231,7 +264,7 @@ const Menu = () => {
               + ADD NEW
             </button>
           </div>
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100 overflow-y-auto flex-1">
             {categories.map((cat) => (
               <div
                 key={cat.id}
@@ -255,8 +288,8 @@ const Menu = () => {
         </div>
 
         {/* Items List */}
-        <div className="flex-1 bg-white flex flex-col overflow-y-auto">
-          <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center sticky top-0 z-10">
+        <div className="flex-1 bg-white flex flex-col">
+          <div className="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center shrink-0">
             <h3 className="font-bold text-slate-700 text-[11px] uppercase tracking-wider">
               Item ({menuItems.length})
             </h3>
@@ -267,7 +300,7 @@ const Menu = () => {
               + ADD NEW
             </button>
           </div>
-          <div className="p-4 space-y-4">
+          <div className="p-4 space-y-4 overflow-y-auto flex-1">
             {isLoading ? (
               <div className="flex justify-center p-8 text-slate-400">Loading menu...</div>
             ) : menuItems.length === 0 ? (
@@ -290,9 +323,20 @@ const Menu = () => {
                         <h4 className="text-slate-900 font-bold text-[13px] tracking-tight">
                           {item.name}
                         </h4>
-                        <p className="text-[13px] font-semibold text-slate-700">
-                          ₹{item.price}
-                        </p>
+                        {item.has_variants ? (
+                          <div className="space-y-1 mt-1">
+                            {item.variants?.map((v, idx) => (
+                              <div key={idx} className="flex items-center gap-2">
+                                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-tight">{v.name}:</span>
+                                <span className="text-[12px] font-semibold text-slate-800">₹{v.price}</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-[13px] font-semibold text-slate-700">
+                            ₹{item.price}
+                          </p>
+                        )}
                         <span className="text-[11px] text-slate-400 font-medium block mt-1">
                           {item.description || "No description"}
                         </span>
@@ -395,40 +439,59 @@ const Menu = () => {
                     }
                   />
                 </div>
+                {!newItem.has_variants && (
+                  <div>
+                    <label className="block text-sm font-bold text-slate-700 mb-1">
+                      Price (₹)
+                    </label>
+                    <input
+                      type="number"
+                      className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand"
+                      placeholder="299"
+                      value={newItem.price}
+                      onChange={(e) =>
+                        setNewItem({ ...newItem, price: e.target.value })
+                      }
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-bold text-slate-700 mb-1">
-                    Price (₹)
+                    Category
+                  </label>
+                  <select
+                    className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand"
+                    value={newItem.category_id}
+                    onChange={(e) =>
+                      setNewItem({ ...newItem, category_id: Number(e.target.value) })
+                    }
+                    disabled={editingItem}
+                  >
+                    {categories.map((cat) => (
+                      <option key={cat.id} value={cat.id}>
+                        {cat.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">
+                    Subcategory
                   </label>
                   <input
-                    type="number"
+                    type="text"
                     className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand"
-                    placeholder="299"
-                    value={newItem.price}
+                    placeholder="e.g. Starters"
+                    value={newItem.subcategory || ""}
                     onChange={(e) =>
-                      setNewItem({ ...newItem, price: e.target.value })
+                      setNewItem({ ...newItem, subcategory: e.target.value })
                     }
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-bold text-slate-700 mb-1">
-                  Category
-                </label>
-                <select
-                  className="w-full p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand"
-                  value={newItem.category_id}
-                  onChange={(e) =>
-                    setNewItem({ ...newItem, category_id: Number(e.target.value) })
-                  }
-                  disabled={editingItem} // Disable changing category while editing for simplicity
-                >
-                  {categories.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
               </div>
 
               <div>
@@ -469,6 +532,83 @@ const Menu = () => {
                     <span className="text-sm font-medium">Non-Veg</span>
                   </label>
                 </div>
+              </div>
+
+              {/* Variants Section */}
+              <div className="space-y-3 pt-2 border-t border-slate-100">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                     <input 
+                       type="checkbox"
+                       id="hasVariants"
+                       checked={newItem.has_variants}
+                       onChange={(e) => setNewItem({ ...newItem, has_variants: e.target.checked })}
+                       className="w-4 h-4 text-brand rounded focus:ring-brand cursor-pointer"
+                     />
+                     <label htmlFor="hasVariants" className="text-sm font-bold text-slate-700 cursor-pointer">
+                       This item has variants (e.g. Full/Half)
+                     </label>
+                  </div>
+                </div>
+
+                {newItem.has_variants && (
+                  <div className="space-y-3 p-4 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                    {newItem.variants.map((v, idx) => (
+                      <div key={idx} className="grid grid-cols-12 gap-3 items-end">
+                        <div className="col-span-6">
+                           <label className="text-[10px] font-black text-slate-400 uppercase mb-1 block">Variant Name</label>
+                           <input 
+                             type="text"
+                             placeholder="Full"
+                             className="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                             value={v.name}
+                             onChange={(e) => {
+                               const updated = [...newItem.variants];
+                               updated[idx].name = e.target.value;
+                               setNewItem({ ...newItem, variants: updated });
+                             }}
+                           />
+                        </div>
+                        <div className="col-span-4">
+                           <label className="text-[10px] font-black text-slate-400 uppercase mb-1 block">Price (₹)</label>
+                           <input 
+                             type="number"
+                             placeholder="240"
+                             className="w-full p-2.5 bg-white border border-slate-200 rounded-lg text-xs font-bold"
+                             value={v.price}
+                             onChange={(e) => {
+                               const updated = [...newItem.variants];
+                               updated[idx].price = e.target.value;
+                               setNewItem({ ...newItem, variants: updated });
+                             }}
+                           />
+                        </div>
+                        <div className="col-span-2">
+                           <button 
+                             onClick={() => {
+                               const updated = newItem.variants.filter((_, i) => i !== idx);
+                               setNewItem({ ...newItem, variants: updated });
+                             }}
+                             className="p-2.5 text-slate-400 hover:text-red-500 transition-colors"
+                           >
+                             <Trash2 size={18} />
+                           </button>
+                        </div>
+                      </div>
+                    ))}
+                    <button 
+                      onClick={() => {
+                        setNewItem({ 
+                          ...newItem, 
+                          variants: [...newItem.variants, { name: "", price: "", is_available: true }] 
+                        });
+                      }}
+                      className="w-full py-2.5 bg-white border border-brand border-dashed text-brand text-xs font-black rounded-lg hover:bg-brand/5 transition-colors flex items-center justify-center gap-2"
+                    >
+                      <Plus size={14} /> ADD VARIANT
+                    </button>
+                  </div>
+                )}
               </div>
 
               <button

@@ -51,7 +51,6 @@ export const useOTPAuth = (onSuccess) => {
         formData.email
       );
     }
-    console.log("OTP Response:", response);
         // 🔥 NEW LOGIC: check if backend already returned token
     if (response?.token && response?.customer) {
       onSuccess(response.customer, response.token, isLogin);

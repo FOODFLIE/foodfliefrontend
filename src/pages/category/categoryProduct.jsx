@@ -6,14 +6,16 @@ import { getProductsByCategory } from "../../services/productService";
 import { fetchCategories } from "../../services/categoryServices";
 import { ChevronRight, Filter, Loader2, Zap } from "lucide-react";
 import SEO from "../../components/common/seo";
+import { useUserLocation } from "../../context/locationContext";
+import NoStoresFound from "../../components/common/NoStoresFound";
 
 const CategoryProduct = () => {
   const { id } = useParams();
   const location = useLocation();
   const categoryName = location.state?.categoryName;
+  const { coords } = useUserLocation();
   const [realCategory, setRealCategory] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
-console.log("restaurants", restaurants);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -24,11 +26,11 @@ console.log("restaurants", restaurants);
         setLoading(true);
 
         // Always fetch categories to get metadata (time, type)
-        const cats = await fetchCategories();
+        const cats = await fetchCategories(coords?.latitude, coords?.longitude);
         const cat = cats.find((c) => String(c.id) === String(id));
         if (cat) setRealCategory(cat);
 
-        const responseData = await getProductsByCategory(id);
+        const responseData = await getProductsByCategory(id, coords?.latitude, coords?.longitude);
         const restaurantList = Array.isArray(responseData)
           ? responseData
           : responseData?.data || [];
@@ -44,7 +46,7 @@ console.log("restaurants", restaurants);
     };
 
     fetchCategoryAndRestaurants();
-  }, [id, categoryName]);
+  }, [id, categoryName, coords?.latitude, coords?.longitude]);
 
   if (!loading && !categoryName && !realCategory)
     return (
@@ -81,7 +83,7 @@ console.log("restaurants", restaurants);
               <div className="flex items-center gap-2">
                 <span className="bg-brand text-white text-[10px] font-bold px-2 py-1 rounded-md flex items-center gap-1 shadow-sm uppercase tracking-wider">
                   <Zap size={10} fill="currentColor" />{" "}
-                  {realCategory?.delivery_time || 13} MINS DELIVERY
+                  {realCategory?.delivery_time || 15} MINS DELIVERY
                 </span>
               </div>
             )}
@@ -132,11 +134,10 @@ console.log("restaurants", restaurants);
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 text-slate-400 font-bold">
-            No restaurants currently serving{" "}
-            {categoryName || realCategory?.name || "this category"} in your
-            area.
-          </div>
+          <NoStoresFound 
+            title={`No ${categoryName || realCategory?.name || "Items"} Found`}
+            description={`We couldn't find any restaurants serving ${categoryName || realCategory?.name || "this category"} in your area. Try a different location.`}
+          />
         )}
       </main>
     </div>
