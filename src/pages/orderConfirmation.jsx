@@ -79,7 +79,7 @@ const OrderConfirmation = () => {
         >
           <CreditCard size={18} className={order.payment_status?.toUpperCase() === "PENDING_VERIFICATION" ? "animate-pulse" : ""} />
           {order.payment_status === "pending_verification" || order.payment_status === "PENDING_VERIFICATION"
-            ? "Payment Pending Verification"
+            ? "Payment is pending verification. Your order will be processed shortly."
             : order.payment_status || "Payment Pending"}
         </div>
       </div>

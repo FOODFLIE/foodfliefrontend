@@ -463,7 +463,7 @@ const Cart = () => {
                     }}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
                   >
-                    <span>📱</span>
+                    
                     <span>Open UPI App</span>
                   </button>
                   
