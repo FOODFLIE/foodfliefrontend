@@ -32,23 +32,24 @@ const Cart = () => {
   const {
     address,
     addressDetails,
-    loading: locationLoading,
     coords,
   } = useCartLocation();
   const { refreshCartCount } = useCart();
+  
+  // Core state
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [cookingInstructions, setCookingInstructions] = useState("");
 
-  // --- PAYMENT STATE MANAGEMENT ---
+  // Payment state
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [createdOrderId, setCreatedOrderId] = useState(null);
   const [utrDigits, setUtrDigits] = useState("");
   const [submittingUtr, setSubmittingUtr] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  // ---------------------------------
+  const [paymentMethod] = useState('UPI'); // Default payment method
 
   // Check device type on mount to handle desktop vs mobile layouts
   useEffect(() => {
@@ -126,7 +127,7 @@ const Cart = () => {
 
       const response = await placeOrder(
         orderPayload,
-        "UPI",
+        paymentMethod,
         cookingInstructions.trim() || null,
       );
 
@@ -141,6 +142,8 @@ const Cart = () => {
         });
       }
 
+
+
       setShowPaymentModal(true);
     } catch (err) {
       setError("Failed to place order: " + err.message);
@@ -149,8 +152,9 @@ const Cart = () => {
 
   const handleUtrSubmit = async (e) => {
     e.preventDefault();
-    if (utrDigits.trim().length !== 4) {
-      setError("Please input exactly 4 digits.");
+    
+    if (utrDigits.length !== 4) {
+      setError("Please enter exactly 4 digits from your UTR/Transaction ID.");
       return;
     }
 
@@ -164,11 +168,13 @@ const Cart = () => {
       setShowPaymentModal(false);
       navigate(`/orderConfirmation/${createdOrderId}`);
     } catch (err) {
-      setError(err.message || "Something went wrong verifying the token.");
+      setError(err.message || "Payment verification failed. Please try again.");
     } finally {
       setSubmittingUtr(false);
     }
   };
+
+
 
   const handleRemoveItem = async (itemId) => {
     try {
@@ -180,6 +186,20 @@ const Cart = () => {
     }
   };
 
+  // UPI Configuration
+  const UPI_ID = "nanduboda@ibl";
+  const MERCHANT_NAME = "FoodFlie";
+
+  // Generate UPI payment URL
+  const generateUpiUrl = (amount, orderId) => {
+    return `upi://pay?pa=${UPI_ID}&pn=${MERCHANT_NAME}&am=${amount.toFixed(2)}&cu=INR&tn=FoodFlie_Order_${orderId || 'NEW'}`;
+  };
+
+  // Generate QR Code URL
+  const generateQrCode = (upiUrl) => {
+    return `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiUrl)}`;
+  };
+
   if (loading) return <LoadingCart />;
   if (!cart || !cart.items || cart.items.length === 0) return <EmptyCart />;
 
@@ -187,11 +207,9 @@ const Cart = () => {
   const deliveryFee = parseFloat(cart.delivery_fee) || 0;
   const totalAmount = subtotal + deliveryFee;
 
-  const businessUpi = "nanduboda@ibl";
-  const upiIntentString = `upi://pay?pa=${businessUpi}&pn=FoodFlie&am=${totalAmount.toFixed(2)}&cu=INR&tn=FoodFlie_Order_${createdOrderId || ""}`;
-
-  // URL safe encoding for the dynamic QR code generation
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiIntentString)}`;
+  // Generate UPI URLs
+  const upiIntentString = generateUpiUrl(totalAmount, createdOrderId);
+  const qrCodeFallback = generateQrCode(upiIntentString);
 
   return (
     <>
@@ -388,106 +406,116 @@ const Cart = () => {
         </div>
       </div>
 
-      {/* --- FLOATING LIGHTWEIGHT UPI HANDSHAKE OVERLAY MODAL --- */}
+      {/* --- UPI PAYMENT MODAL --- */}
       {showPaymentModal && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in">
-          <div className="bg-white w-full max-w-md rounded-[2rem] p-6 shadow-2xl border border-slate-100 animate-scale-up flex flex-col justify-between">
-            <div>
-              <div className="text-center pb-5 border-b border-slate-100">
-                <span className="text-[10px] uppercase font-black tracking-widest bg-emerald-50 border border-emerald-200/60 text-emerald-600 px-3 py-1 rounded-full">
-                  Complete Your Payment
-                </span>
-                <h3 className="text-4xl font-black text-slate-900 tracking-tight mt-4">
-                  ₹{totalAmount.toFixed(2)}
-                </h3>
-                <p className="text-xs text-slate-400 font-bold tracking-wide uppercase mt-1">
-                  Order ID Reference: #{createdOrderId}
-                </p>
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl animate-scale-up">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 p-4 text-white text-center">
+              <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                <span className="text-xl">💳</span>
               </div>
+              <h3 className="text-lg font-bold mb-1">Pay ₹{totalAmount.toFixed(2)}</h3>
+              <p className="text-emerald-100 text-xs">Order #{createdOrderId}</p>
+            </div>
 
+            <div className="p-4">
               {error && (
-                <div className="mt-4 p-3 bg-rose-50 border border-rose-100 rounded-xl text-rose-600 text-xs font-semibold text-center">
-                  {error}
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
+                  <AlertCircle size={16} className="text-red-500 shrink-0" />
+                  <p className="text-xs text-red-700">{error}</p>
                 </div>
               )}
 
-              {/* DYNAMIC LAYOUT BASED ON DEVICE ENVIRONMENT */}
-              <div className="mt-6 px-2 w-full flex flex-col items-center justify-center">
-                {isMobile ? (
-                  <>
-                    <a
-                      href={upiIntentString}
-                      style={{
-                        display: "flex",
-                        width: "100%",
-                        minWidth: "100%",
-                        boxSizing: "border-box",
-                      }}
-                      className="items-center justify-center gap-3 bg-slate-950 hover:bg-slate-800 text-white font-bold py-4 px-6 rounded-2xl text-sm tracking-wider uppercase shadow-xl shadow-slate-200 transition-all duration-150 active:scale-[0.98] text-center"
-                    >
-                      <span className="text-base shrink-0">📱</span>
-                      <span className="shrink-0">Pay via UPI Mobile App</span>
-                    </a>
-                    <p className="text-center text-[11px] text-slate-400 font-bold tracking-wide uppercase mt-3">
-                      Launches PhonePe, GPay, Paytm, or BHIM instantly.
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100 shadow-inner flex flex-col items-center justify-center gap-2">
-                      <img
-                        src={qrCodeUrl}
-                        alt="UPI Payment QR Code"
-                        className="w-[160px] h-[160px] object-contain mix-blend-multiply"
-                      />
-                      <div className="flex items-center gap-1.5 text-slate-600 font-bold text-[11px] tracking-wide uppercase mt-1">
-                        <QrCode size={14} className="text-slate-400" />
-                        Scan QR with any UPI App
+              {/* Payment Options */}
+              {isMobile ? (
+                /* Mobile UPI Payment */
+                <div className="space-y-3">
+                  <button
+                    onClick={() => window.location.href = upiIntentString}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                  >
+                    <span>📱</span>
+                    <span>Open UPI App</span>
+                  </button>
+                  
+                  <div className="text-center">
+                    <p className="text-xs text-gray-500 mb-2">Or pay manually:</p>
+                    <div className="bg-gray-50 rounded-lg p-3 text-xs">
+                      <div className="flex justify-between items-center mb-1">
+                        <span>UPI ID:</span>
+                        <div className="flex items-center gap-1">
+                          <code className="bg-white px-1 rounded text-xs">{UPI_ID}</code>
+                          <button
+                            onClick={() => navigator.clipboard.writeText(UPI_ID)}
+                            className="px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
+                          >
+                            Copy
+                          </button>
+                        </div>
                       </div>
                     </div>
-                    <p className="text-center text-[11px] text-slate-400 font-bold tracking-wide uppercase mt-3">
-                      Open PhonePe, GPay, or Paytm on your phone to scan.
-                    </p>
-                  </>
-                )}
+                  </div>
+                </div>
+              ) : (
+                /* Desktop QR Code */
+                <div className="text-center space-y-3">
+                  <div className="inline-block bg-white p-2 rounded-lg border">
+                    <img
+                      src={qrCodeFallback}
+                      alt="UPI Payment QR Code"
+                      className="w-32 h-32 rounded"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-600">Scan with any UPI app</p>
+                  
+                  <div className="bg-gray-50 rounded-lg p-3 text-xs">
+                    <p className="font-medium mb-2">Manual Payment:</p>
+                    <div className="flex justify-between items-center">
+                      <span>UPI ID:</span>
+                      <div className="flex items-center gap-1">
+                        <code className="bg-white px-1 rounded text-xs">{UPI_ID}</code>
+                        <button
+                          onClick={() => navigator.clipboard.writeText(UPI_ID)}
+                          className="px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
+                        >
+                          Copy
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Verification */}
+              <div className="mt-4 pt-4 border-t">
+                <form onSubmit={handleUtrSubmit} className="space-y-3">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 text-center">
+                      Enter last 4 digits of UTR
+                    </label>
+                    <input
+                      type="text"
+                      pattern="[0-9]*"
+                      inputMode="numeric"
+                      maxLength={4}
+                      placeholder="1234"
+                      value={utrDigits}
+                      onChange={(e) => setUtrDigits(e.target.value.replace(/\D/g, ""))}
+                      disabled={submittingUtr}
+                      className="w-full text-center text-xl font-mono tracking-wider py-2 px-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-emerald-500 transition-colors disabled:bg-gray-50"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={submittingUtr || utrDigits.length !== 4}
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 text-white font-semibold py-3 rounded-lg transition-colors"
+                  >
+                    {submittingUtr ? "Verifying..." : "Complete Order"}
+                  </button>
+                </form>
               </div>
-
-              <div className="relative flex py-4 items-center justify-center text-[10px] text-slate-400 font-black uppercase tracking-[0.18em]">
-                <span className="bg-white px-3 z-10">Verification Step</span>
-                <div className="absolute w-full border-t border-slate-100"></div>
-              </div>
-
-              {/* INPUT BOX CONTROL FOR TRANSMITTING MANUALLY PARSED METADATA FROM DEPOSITS */}
-              <form onSubmit={handleUtrSubmit} className="space-y-4">
-                <p className="text-xs text-center text-slate-500 font-medium leading-relaxed px-2">
-                  Once your transfer is complete, enter the **last 4 digits** of
-                  your UTR / Transaction ID below:
-                </p>
-
-                <input
-                  type="text"
-                  pattern="[0-9]*"
-                  inputMode="numeric"
-                  maxLength={4}
-                  placeholder="0000"
-                  value={utrDigits}
-                  onChange={(e) =>
-                    setUtrDigits(e.target.value.replace(/\D/g, ""))
-                  }
-                  disabled={submittingUtr}
-                  className="w-full text-center text-3xl font-mono tracking-[0.4em] p-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition bg-slate-50/50"
-                />
-
-                <button
-                  type="submit"
-                  disabled={submittingUtr || utrDigits.length !== 4}
-                  className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-100 disabled:text-slate-400 text-white font-bold py-4 rounded-xl transition text-sm uppercase tracking-wider shadow-md shadow-emerald-50"
-                >
-                  {submittingUtr
-                    ? "Linking Reference..."
-                    : "Confirm Payment & Place Order"}
-                </button>
-              </form>
             </div>
           </div>
         </div>
