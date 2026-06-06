@@ -189,10 +189,21 @@ const Cart = () => {
   // UPI Configuration
   const UPI_ID = "nanduboda@ibl";
   const MERCHANT_NAME = "FoodFlie";
+  const MERCHANT_CODE = "1234"; // Add merchant code for better compatibility
 
-  // Generate UPI payment URL
+  // Generate UPI payment URL with proper parameters
   const generateUpiUrl = (amount, orderId) => {
-    return `upi://pay?pa=${UPI_ID}&pn=${MERCHANT_NAME}&am=${amount.toFixed(2)}&cu=INR&tn=FoodFlie_Order_${orderId || 'NEW'}`;
+    const params = new URLSearchParams({
+      pa: UPI_ID, // Payee Address
+      pn: MERCHANT_NAME, // Payee Name
+      am: amount.toFixed(2), // Amount
+      cu: "INR", // Currency
+      tn: `FoodFlie Order ${orderId || 'NEW'}`, // Transaction Note
+      mc: MERCHANT_CODE, // Merchant Code
+      tr: `FL${orderId || Date.now()}`, // Transaction Reference
+      url: "" // Leave empty for security
+    });
+    return `upi://pay?${params.toString()}`;
   };
 
   // Generate QR Code URL
@@ -432,7 +443,24 @@ const Cart = () => {
                 /* Mobile UPI Payment */
                 <div className="space-y-3">
                   <button
-                    onClick={() => window.location.href = upiIntentString}
+                    onClick={() => {
+                      // Try multiple UPI app schemes for better compatibility
+                      const upiUrl = upiIntentString;
+                      const fallbackUrls = [
+                        upiUrl,
+                        `phonepe://pay?${new URL(upiUrl).searchParams.toString()}`,
+                        `gpay://upi/pay?${new URL(upiUrl).searchParams.toString()}`,
+                        `paytmmp://pay?${new URL(upiUrl).searchParams.toString()}`,
+                        `bhim://pay?${new URL(upiUrl).searchParams.toString()}`
+                      ];
+                      
+                      // Try opening the UPI URL
+                      try {
+                        window.location.href = upiUrl;
+                      } catch (error) {
+                        console.log('Primary UPI URL failed, showing manual payment info');
+                      }
+                    }}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
                   >
                     <span>📱</span>
@@ -440,19 +468,33 @@ const Cart = () => {
                   </button>
                   
                   <div className="text-center">
-                    <p className="text-xs text-gray-500 mb-2">Or pay manually:</p>
-                    <div className="bg-gray-50 rounded-lg p-3 text-xs">
-                      <div className="flex justify-between items-center mb-1">
+                    <p className="text-xs text-gray-500 mb-2">If app doesn't open, pay manually:</p>
+                    <div className="bg-gray-50 rounded-lg p-3 text-xs space-y-2">
+                      <div className="flex justify-between items-center">
                         <span>UPI ID:</span>
                         <div className="flex items-center gap-1">
                           <code className="bg-white px-1 rounded text-xs">{UPI_ID}</code>
                           <button
-                            onClick={() => navigator.clipboard.writeText(UPI_ID)}
+                            onClick={() => {
+                              navigator.clipboard.writeText(UPI_ID);
+                              // Show feedback
+                              const btn = document.activeElement;
+                              const originalText = btn.textContent;
+                              btn.textContent = '✓';
+                              setTimeout(() => btn.textContent = originalText, 1000);
+                            }}
                             className="px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
                           >
                             Copy
                           </button>
                         </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Amount:</span>
+                        <span className="font-semibold">₹{totalAmount.toFixed(2)}</span>
+                      </div>
+                      <div className="text-center pt-2 border-t">
+                        <p className="text-gray-600 font-medium">Reference: FL{createdOrderId || Date.now()}</p>
                       </div>
                     </div>
                   </div>
@@ -469,18 +511,33 @@ const Cart = () => {
                   </div>
                   <p className="text-xs text-gray-600">Scan with any UPI app</p>
                   
-                  <div className="bg-gray-50 rounded-lg p-3 text-xs">
-                    <p className="font-medium mb-2">Manual Payment:</p>
-                    <div className="flex justify-between items-center">
-                      <span>UPI ID:</span>
-                      <div className="flex items-center gap-1">
-                        <code className="bg-white px-1 rounded text-xs">{UPI_ID}</code>
-                        <button
-                          onClick={() => navigator.clipboard.writeText(UPI_ID)}
-                          className="px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
-                        >
-                          Copy
-                        </button>
+                  <div className="bg-gray-50 rounded-lg p-3 text-xs space-y-2">
+                    <p className="font-medium mb-2 text-center">Manual Payment Details:</p>
+                    <div className="space-y-1">
+                      <div className="flex justify-between items-center">
+                        <span>UPI ID:</span>
+                        <div className="flex items-center gap-1">
+                          <code className="bg-white px-1 rounded text-xs">{UPI_ID}</code>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(UPI_ID);
+                              const btn = document.activeElement;
+                              const originalText = btn.textContent;
+                              btn.textContent = '✓';
+                              setTimeout(() => btn.textContent = originalText, 1000);
+                            }}
+                            className="px-2 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700"
+                          >
+                            Copy
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Amount:</span>
+                        <span className="font-semibold">₹{totalAmount.toFixed(2)}</span>
+                      </div>
+                      <div className="text-center pt-2 border-t">
+                        <p className="text-gray-600 font-medium">Ref: FL{createdOrderId || Date.now()}</p>
                       </div>
                     </div>
                   </div>
@@ -492,7 +549,7 @@ const Cart = () => {
                 <form onSubmit={handleUtrSubmit} className="space-y-3">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2 text-center">
-                      Enter last 4 digits of UTR
+                      Enter last 4 digits of UTR/Transaction ID
                     </label>
                     <input
                       type="text"
