@@ -56,7 +56,7 @@ const AboutUs = () => {
                 <Users className="w-6 h-6 text-brand" />
               </div>
               <h2 className="text-2xl md:text-3xl font-bold text-slate-900 leading-snug mb-4">
-                I’m Nandu Boda, 23 years old, and the story of Food Flie began
+                I’m Shaik Salam, 23 years old, and the story of Food Flie began
                 with my own struggles.
               </h2>
             </div>
